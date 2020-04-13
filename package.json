@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fast-csv/parse": "^4.1.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -16,6 +17,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
+    "ts-node": "^8.8.2",
     "typescript": "^3.7.5"
   },
   "scripts": {
@@ -23,6 +25,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "data": "ts-node --project data/tsconfig.json data/index.ts",
     "format": "prettier --write 'src/**/*.{ts,tsx,js}' 'data/**/*.{ts,tsx,js}'",
     "lint": "eslint --ignore-path .gitignore src data"
   },
