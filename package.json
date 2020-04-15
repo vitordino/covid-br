@@ -21,11 +21,12 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "data": "ts-node --project data/tsconfig.json data/index.ts",
+    "frontend:start": "react-scripts start",
+    "frontend:build": "react-scripts build",
+    "frontend:test": "react-scripts test",
+    "data:build": "ts-node --project data/tsconfig.json data/index.ts",
+    "start": "npm run data:build && npm run frontend:start",
+    "build": "npm run data:build && npm run frontend:build",
     "format": "prettier --write 'src/**/*.{ts,tsx,js}' 'data/**/*.{ts,tsx,js}'",
     "lint": "eslint --ignore-path .gitignore src data"
   },
