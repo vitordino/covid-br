@@ -4,4 +4,6 @@ const main = () => {
 	getStatesData()
 }
 
+main()
+
 module.exports = main

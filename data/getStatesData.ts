@@ -1,11 +1,29 @@
-const https = require('https')
-const fs = require('fs')
+const { get } = require('https')
+const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
+
+type ErrorType = Error | String
 
 const output: Array<Object> = []
 
+const destinies = [
+	`${__dirname}/../public/data/total.json`,
+	`${__dirname}/../src/data/total.json`,
+]
+
 const url =
 	'https://cdn.jsdelivr.net/gh/wcota/covid19br@master/cases-brazil-total.csv'
+
+const write = (
+	destinies: Array<string> = [],
+	content: any,
+	handle: Function,
+) => {
+	const json = JSON.stringify(content)
+	destinies.forEach((d, i) =>
+		writeFile(d, json, (x: ErrorType) => handle(x, d, i)),
+	)
+}
 
 const handleError = (err: string) => {
 	throw new Error(err)
@@ -13,24 +31,25 @@ const handleError = (err: string) => {
 
 const handleData = (data: object) => output.push(data)
 
-const handeWrite = (err: Error | String) => {
-	if (err) return console.error(err)
-	return console.log('file was saved')
+const handleWrite = (err: ErrorType, destiny: string) => {
+	if (err) {
+		console.error(destiny)
+		console.error(err)
+		return
+	}
+	return console.log(`file ${destiny} was saved`)
 }
 
-const handleEnd = async (rowCount: number) => {
+const handleEnd = (rowCount: number) => {
 	console.log(`Parsed ${rowCount} rows`)
-	fs.writeFile(
-		`${__dirname}/../public/data/total.json`,
-		JSON.stringify(output),
-		handeWrite,
-	)
+	write(destinies, output, handleWrite)
 }
 
-exports.default = https.get(url, (res: any) => {
-	res
-		.pipe(parse({ headers: true }))
-		.on('error', handleError)
-		.on('data', handleData)
-		.on('end', handleEnd)
-})
+module.exports = () =>
+	get(url, (res: any) =>
+		res
+			.pipe(parse({ headers: true }))
+			.on('error', handleError)
+			.on('data', handleData)
+			.on('end', handleEnd),
+	)
