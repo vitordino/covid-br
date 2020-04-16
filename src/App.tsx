@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
+import { useTable } from 'react-table'
+
 import data from './data/states.json'
 
-type State = {
+type StateEntry = {
 	date: string
 	st: string
 	td: string
@@ -10,16 +12,39 @@ type State = {
 	tc: string
 }
 
-interface States {
-	[key: string]: State[]
+type StateEntries = {
+	[key: string]: StateEntry[]
 }
 
-const main: States = data.main
+type Column = {
+	accessor: any
+	Header: string
+}
+
+type Columns = Column[]
+
+const main: StateEntries = data.main
 const dates: Array<string> = data.dates
+
+const columns: Columns = [
+	{ accessor: 'st', Header: 'State' },
+	{ accessor: 'td', Header: 'Deaths' },
+	{ accessor: 'nd', Header: 'New deaths' },
+	{ accessor: 'nc', Header: 'New cases' },
+	{ accessor: 'tc', Header: 'Cases' },
+]
 
 const App = () => {
 	const [index, setIndex] = useState(dates.length - 1)
-	const selectedData = main[dates[index]]
+	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
+
+	const {
+		getTableProps,
+		getTableBodyProps,
+		headerGroups,
+		rows,
+		prepareRow,
+	} = useTable({ columns, data })
 	return (
 		<>
 			<input
@@ -29,7 +54,30 @@ const App = () => {
 				value={index}
 				onChange={({ target }) => setIndex(parseInt(target.value))}
 			/>
-			<pre>{JSON.stringify(selectedData, null, 2)}</pre>
+			<pre>{dates[index]}</pre>
+			<table {...getTableProps()}>
+				<thead>
+					{headerGroups.map((headerGroup) => (
+						<tr {...headerGroup.getHeaderGroupProps()}>
+							{headerGroup.headers.map((column) => (
+								<th {...column.getHeaderProps()}>{column.render('Header')}</th>
+							))}
+						</tr>
+					))}
+				</thead>
+				<tbody {...getTableBodyProps()}>
+					{rows.map((row) => {
+						prepareRow(row)
+						return (
+							<tr {...row.getRowProps()}>
+								{row.cells.map((cell) => (
+									<td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+								))}
+							</tr>
+						)
+					})}
+				</tbody>
+			</table>
 		</>
 	)
 }
