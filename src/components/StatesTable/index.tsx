@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { useTable, useSortBy } from 'react-table'
 
@@ -17,7 +17,7 @@ type Accessor<T> = keyof T
 
 type Column = {
 	accessor: Accessor<StateEntry>
-	Header: string
+	Header: string | ReactNode
 	Cell?: any
 }
 
@@ -27,14 +27,20 @@ type CellProps = {
 	row: { values: StateEntry }
 }
 
+type HeaderProps = any
+
 const CasesCell = ({ row }: CellProps) => <strong>{row.values.tc}</strong>
+const CasesHeader = (x: HeaderProps) => <strong>{JSON.stringify(Object.keys(x.headers[0]), null, 2)}</strong>
 const DeathsCell = ({ row }: CellProps) => <strong>{row.values.td}</strong>
+// const DeathsHeader = (x: HeaderProps) => <strong>{JSON.stringify(Object.keys(x), null, 2)}</strong>
 const NewCasesCell = ({ row }: CellProps) => <small>{row.values.nc}</small>
+// const NewCasesHeader = (x: HeaderProps) => <small>{JSON.stringify(Object.keys(x), null, 2)}</small>
 const NewDeathsCell = ({ row }: CellProps) => <small>{row.values.nd}</small>
+// const NewDeathsHeader = (x: HeaderProps) => <small>{JSON.stringify(Object.keys(x), null, 2)}</small>
 
 const columns: Columns = [
 	{ accessor: 'st', Header: 'State' },
-	{ accessor: 'tc', Header: 'Cases', Cell: CasesCell },
+	{ accessor: 'tc', Header: 'Total Cases', Cell: CasesCell },
 	{ accessor: 'nc', Header: 'New cases', Cell: NewCasesCell },
 	{ accessor: 'td', Header: 'Deaths', Cell: DeathsCell },
 	{ accessor: 'nd', Header: 'New deaths', Cell: NewDeathsCell },

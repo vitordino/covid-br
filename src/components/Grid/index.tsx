@@ -1,11 +1,20 @@
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { mapTheme, mapBreakpoints } from 'etymos'
 
-const getColumnDisplay = ({ flex }) => (flex ? 'flex' : 'block')
+type GetColumnDisplay = {
+	flex: boolean | undefined
+}
+const getColumnDisplay = ({ flex }: GetColumnDisplay) => (flex ? 'flex' : 'block')
 
-const Column = styled.div`
+type ColumnProps = {
+	children: ReactNode
+	flex?: any
+	[key: string]: any
+}
+
+const Column = styled.div<ColumnProps>`
 	box-sizing: border-box;
-	display: ${getColumnDisplay};
 	${mapTheme(
 		({ gutter }) =>
 			gutter &&
@@ -15,14 +24,22 @@ const Column = styled.div`
 			`,
 	)}
 	${mapBreakpoints(
-		(value, props) => `
+		(value, props) => 
+		// @ts-ignore
+		`display: ${value > 0 ? getColumnDisplay(props) : 'none'};
 			width: ${(value / props.theme.columns || 1) * 100}%;
-			display: ${value > 0 ? getColumnDisplay(props) : 'none'};
 		`,
 	)}
 `
 
-const Row = styled.div`
+type RowProps = {
+	'vertical-gutter'?: any
+	children: ReactNode
+	[key: string]: any
+}
+
+
+const Row = styled.div<RowProps>`
 	box-sizing: border-box;
 	flex: 1;
 	display: flex;
