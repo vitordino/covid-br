@@ -16,10 +16,10 @@ export type Main = {
 	[key: string]: StateEntry[]
 }
 
-type Acessor<T> = keyof T
+type Accessor<T> = keyof T
 
 type Column = {
-	accessor: Acessor<StateEntry>
+	accessor: Accessor<StateEntry>
 	Header: string
 }
 
@@ -33,7 +33,9 @@ const columns: Columns = [
 	{ accessor: 'tc', Header: 'Cases' },
 ]
 
-const accessors: Acessor<StateEntry>[] = columns.map(({ accessor }) => accessor)
+const accessors: Accessor<StateEntry>[] = columns.map(
+	({ accessor }) => accessor,
+)
 
 type StatesTableProps = {
 	data: StateEntries
