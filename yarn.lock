@@ -11093,6 +11093,11 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
+wipe.css@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/wipe.css/-/wipe.css-1.3.0.tgz#2c10b5bca0b606a843f57ecd71b070a158028c31"
+  integrity sha512-X5uHi2eO6L5MXgpPehDwea+JfPG8E+lqOM2BdRwOZY8YGzB5+roudWDfcGa+iK8tFYP4oAd+70juEQFKWy8BjQ==
+
 word-wrap@~1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
