@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTable, useSortBy } from 'react-table'
 
-type StateEntry = {
+export type StateEntry = {
 	date: string
 	st: string
 	td: string
@@ -10,9 +10,9 @@ type StateEntry = {
 	tc: string
 }
 
-type StateEntries = StateEntry[]
+export type StateEntries = StateEntry[]
 
-type Main = {
+export type Main = {
 	[key: string]: StateEntry[]
 }
 

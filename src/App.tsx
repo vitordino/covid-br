@@ -1,23 +1,11 @@
 import React, { useState, useMemo } from 'react'
 import StatesTable from './components/StatesTable'
+import type { StateEntry, StateEntries, Main } from './components/StatesTable'
 
 import data from './data/states.json'
 
-type StateEntry = {
-	date: string
-	st: string
-	td: string
-	nd: string
-	nc: string
-	tc: string
-}
-
-type StateEntries = StateEntry[]
-
-type Main = { [key: string]: StateEntry[] }
-
 const main: Main = data.main
-const dates: Array<string> = data.dates
+const dates: string[] = data.dates
 
 const removeTotal = (lines: StateEntries) =>
 	lines.filter(({ st }) => st !== 'TOTAL')
