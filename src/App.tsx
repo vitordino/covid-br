@@ -1,5 +1,8 @@
 import React, { useState, useMemo } from 'react'
+
 import StatesTable from './components/StatesTable'
+import Layout from './components/Layout'
+
 import type { StateEntry, StateEntries } from './components/StatesTable'
 
 import data from './data/states.json'
@@ -27,7 +30,7 @@ const App = () => {
 	])
 
 	return (
-		<>
+		<Layout>
 			<input
 				type='range'
 				min='0'
@@ -37,7 +40,7 @@ const App = () => {
 			/>
 			<pre>{dates[index]}</pre>
 			<StatesTable data={data} total={total} />
-		</>
+		</Layout>
 	)
 }
 
