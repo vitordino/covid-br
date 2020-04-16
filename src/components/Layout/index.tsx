@@ -1,8 +1,10 @@
 import React, { ReactNode } from 'react'
 
+import { StoreProvider } from '../../store'
 import { ThemeProvider } from '../../theme'
 import SEO from './SEO'
 import GlobalStyle from './GlobalStyle'
+import ColorModeSwitcher from './ColorModeSwitcher'
 
 type LayoutProps = {
 	children?: ReactNode
@@ -24,13 +26,16 @@ const Layout = ({
 	const meta = { title, description, image, tags }
 
 	return (
-		<ThemeProvider>
-			<>
-				<SEO {...meta} lang={lang} />
-				<GlobalStyle />
-				{children}
-			</>
-		</ThemeProvider>
+		<StoreProvider>
+			<ThemeProvider>
+				<>
+					<SEO {...meta} lang={lang} />
+					<GlobalStyle />
+					{children}
+					{/* <ColorModeSwitcher /> */}
+				</>
+			</ThemeProvider>
+		</StoreProvider>
 	)
 }
 
