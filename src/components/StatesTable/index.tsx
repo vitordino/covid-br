@@ -23,10 +23,7 @@ type Column = {
 
 type Columns = Column[]
 
-type Cell = {
-	row: { values: StateEntry }
-}
-
+type Cell = { row: { values: StateEntry } }
 type CellProps = {
 	row: { values: StateEntry }
 	prop: keyof StateEntry
@@ -36,12 +33,22 @@ type CellProps = {
 type Header = any
 type HeaderProps = {
 	children?: ReactNode
+	column: {
+		isSorted: boolean
+		isSortedDesc: boolean
+	}
 	[key: string]: any
 }
 
 const Cell = ({ row, prop, children }: CellProps) => <strong>{row.values?.[prop]}{children}</strong>
 
-const Header = ({children}: HeaderProps) => <strong>{children}</strong>
+const Header = ({ children, column }: HeaderProps) => (
+	<div>
+		<strong>{children}</strong>
+		{' '}
+		{column.isSorted ? (column.isSortedDesc ? '↓' : '↑') : '↕'}
+	</div>
+)
 
 const columns: Columns = [
 	{ accessor: 'st', Header: (x: Header) => <Header {...x}>State</Header> },
