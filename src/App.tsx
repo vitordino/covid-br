@@ -23,16 +23,9 @@ const cleanData = data.map(
 	}),
 )
 
-const removeSlashes = (s: string) => s.replace(/-/g, '')
-const toInt = (s: string) => Number.parseInt(s)
-const dateToInt = (s: string) => toInt(removeSlashes(s))
-const toDate = (s: string) => s.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3')
-const IntToDate = (i: number) => toDate(String(i))
 const getDates = ({ date }: StateEntry) => date
 const dates = cleanData.map(getDates)
 const groupByDate = groupBy(getDates)
-const pickLatest = (acc: number, curr: string) => Math.max(dateToInt(curr), acc)
-const latestDate = IntToDate(dates.reduce(pickLatest, 0))
 const byDate = groupByDate(cleanData)
 
 const App = () => {
