@@ -17,16 +17,26 @@ type Accessor<T> = keyof T
 type Column = {
 	accessor: Accessor<StateEntry>
 	Header: string
+	Cell?: any
 }
 
 type Columns = Column[]
 
+type CellProps = {
+	row: { values: StateEntry }
+}
+
+const CasesCell = ({ row }: CellProps) => <strong>{row.values.tc}</strong>
+const DeathsCell = ({ row }: CellProps) => <strong>{row.values.td}</strong>
+const NewCasesCell = ({ row }: CellProps) => <small>{row.values.nc}</small>
+const NewDeathsCell = ({ row }: CellProps) => <small>{row.values.nd}</small>
+
 const columns: Columns = [
 	{ accessor: 'st', Header: 'State' },
-	{ accessor: 'td', Header: 'Deaths' },
-	{ accessor: 'nd', Header: 'New deaths' },
-	{ accessor: 'nc', Header: 'New cases' },
-	{ accessor: 'tc', Header: 'Cases' },
+	{ accessor: 'tc', Header: 'Cases', Cell: CasesCell },
+	{ accessor: 'nc', Header: 'New cases', Cell: NewCasesCell },
+	{ accessor: 'td', Header: 'Deaths', Cell: DeathsCell },
+	{ accessor: 'nd', Header: 'New deaths', Cell: NewDeathsCell },
 ]
 
 const accessors: Accessor<StateEntry>[] = columns.map(
