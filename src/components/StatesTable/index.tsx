@@ -12,10 +12,6 @@ export type StateEntry = {
 
 export type StateEntries = StateEntry[]
 
-export type Main = {
-	[key: string]: StateEntry[]
-}
-
 type Accessor<T> = keyof T
 
 type Column = {

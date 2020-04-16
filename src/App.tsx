@@ -1,8 +1,12 @@
 import React, { useState, useMemo } from 'react'
 import StatesTable from './components/StatesTable'
-import type { StateEntry, StateEntries, Main } from './components/StatesTable'
+import type { StateEntry, StateEntries } from './components/StatesTable'
 
 import data from './data/states.json'
+
+export type Main = {
+	[key: string]: StateEntry[]
+}
 
 const main: Main = data.main
 const dates: string[] = data.dates
