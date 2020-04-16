@@ -23,27 +23,48 @@ type Column = {
 
 type Columns = Column[]
 
-type CellProps = {
+type Cell = {
 	row: { values: StateEntry }
 }
 
-type HeaderProps = any
+type CellProps = {
+	row: { values: StateEntry }
+	prop: keyof StateEntry
+	children?: ReactNode
+}
 
-const CasesCell = ({ row }: CellProps) => <strong>{row.values.tc}</strong>
-const CasesHeader = (x: HeaderProps) => <strong>{JSON.stringify(Object.keys(x.headers[0]), null, 2)}</strong>
-const DeathsCell = ({ row }: CellProps) => <strong>{row.values.td}</strong>
-// const DeathsHeader = (x: HeaderProps) => <strong>{JSON.stringify(Object.keys(x), null, 2)}</strong>
-const NewCasesCell = ({ row }: CellProps) => <small>{row.values.nc}</small>
-// const NewCasesHeader = (x: HeaderProps) => <small>{JSON.stringify(Object.keys(x), null, 2)}</small>
-const NewDeathsCell = ({ row }: CellProps) => <small>{row.values.nd}</small>
-// const NewDeathsHeader = (x: HeaderProps) => <small>{JSON.stringify(Object.keys(x), null, 2)}</small>
+type Header = any
+type HeaderProps = {
+	children?: ReactNode
+	[key: string]: any
+}
+
+const Cell = ({ row, prop, children }: CellProps) => <strong>{row.values?.[prop]}{children}</strong>
+
+const Header = ({children}: HeaderProps) => <strong>{children}</strong>
 
 const columns: Columns = [
-	{ accessor: 'st', Header: 'State' },
-	{ accessor: 'tc', Header: 'Total Cases', Cell: CasesCell },
-	{ accessor: 'nc', Header: 'New cases', Cell: NewCasesCell },
-	{ accessor: 'td', Header: 'Deaths', Cell: DeathsCell },
-	{ accessor: 'nd', Header: 'New deaths', Cell: NewDeathsCell },
+	{ accessor: 'st', Header: (x: Header) => <Header {...x}>State</Header> },
+	{
+		accessor: 'tc',
+		Header: (x: Header) => <Header {...x}>Total cases</Header>,
+		Cell: ({ row }: Cell) => <Cell row={row} prop='tc' />,
+	},
+	{
+		accessor: 'nc',
+		Header: (x: Header) => <Header {...x}>New cases</Header>,
+		Cell: ({ row }: Cell) => <Cell row={row} prop='nc' />,
+	},
+	{
+		accessor: 'td',
+		Header: (x: Header) => <Header {...x}>Deaths</Header>,
+		Cell: ({ row }: Cell) => <Cell row={row} prop='td' />,
+	},
+	{
+		accessor: 'nd',
+		Header: (x: Header) => <Header {...x}>New deaths</Header>,
+		Cell: ({ row }: Cell) => <Cell row={row} prop='nd' />,
+	},
 ]
 
 const accessors: Accessor<StateEntry>[] = columns.map(
