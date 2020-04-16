@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState, useLayoutEffect } from 'react'
 import styled from 'styled-components'
+// import createPersistedState from 'use-persisted-state'
 
-import { useColorMode } from '../../store'
+// const useColorMode = createPersistedState()
 
 const Button = styled.button`
 	display: block;
@@ -83,8 +84,20 @@ const Inner = styled.svg<InnerProps>`
 	}
 `
 
+const KEY = 'theme:color-mode'
+const getTheme = () => window.localStorage.getItem(KEY) || 'light'
+const setTheme = (mode: string) => window.localStorage.setItem(KEY, mode)
+
 const ColorModeSwitcher = ({ size = 20, ...props }) => {
-	const [colorMode, setColorMode] = useColorMode()
+	const [colorMode, setColorMode] = useState(getTheme)
+	useLayoutEffect(() => {
+		setTheme(colorMode)
+		document.documentElement.dataset.theme = colorMode
+
+		// @ts-ignore
+		window?.__setTheme?.(colorMode)
+	}, [colorMode])
+
 	const colorSwitch = () =>
 		setColorMode(colorMode === 'light' ? 'dark' : 'light')
 
