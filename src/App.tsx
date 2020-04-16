@@ -19,7 +19,7 @@ type Main = {
 }
 
 type Column = {
-	accessor: any
+	accessor: keyof StateEntry
 	Header: string
 }
 
