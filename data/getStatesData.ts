@@ -1,14 +1,35 @@
 const { get } = require('https')
 const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
+const { groupBy } = require('ramda')
 
 type ErrorType = Error | String
 
-const output: Array<Object> = []
+type StateEntry = {
+	date: string
+	state: string
+	deaths: string
+	newDeaths: string
+	newCases: string
+	totalCases: string
+}
+
+type StateEntries = StateEntry[]
+
+type StateOutput = {
+	date: string
+	st: string
+	td: string
+	nd: string
+	nc: string
+	tc: string
+}
+
+const lines: StateEntries = []
 
 const destinies = [
-	`${__dirname}/../public/data/total.json`,
-	`${__dirname}/../src/data/total.json`,
+	`${__dirname}/../public/data/states.json`,
+	`${__dirname}/../src/data/states.json`,
 ]
 
 const url =
@@ -29,7 +50,7 @@ const handleError = (err: string) => {
 	throw new Error(err)
 }
 
-const handleData = (data: object) => output.push(data)
+const handleData = (data: StateEntry) => lines.push(data)
 
 const handleWrite = (err: ErrorType, destiny: string) => {
 	if (err) {
@@ -40,9 +61,31 @@ const handleWrite = (err: ErrorType, destiny: string) => {
 	return console.log(`file ${destiny} was saved`)
 }
 
+const renameData = (data: StateEntries) =>
+	data.map(({ date, state, deaths, newDeaths, newCases, totalCases }) => ({
+		date,
+		st: state,
+		td: deaths,
+		nd: newDeaths,
+		nc: newCases,
+		tc: totalCases,
+	}))
+
+const getDates = ({ date }: StateOutput) => date
+const getStates = ({ st }: StateOutput) => st
+const groupByDate = groupBy(getDates)
+
+const processLines = (input: StateEntries) => {
+	const renamedData = renameData(input)
+	const main = groupByDate(renamedData)
+	const dates = renamedData.map(getDates)
+	const states = renamedData.map(getStates)
+	return { main, dates, states }
+}
+
 const handleEnd = (rowCount: number) => {
 	console.log(`Parsed ${rowCount} rows`)
-	write(destinies, output, handleWrite)
+	write(destinies, processLines(lines), handleWrite)
 }
 
 module.exports = () =>

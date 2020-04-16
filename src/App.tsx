@@ -1,36 +1,25 @@
 import React, { useState } from 'react'
-import { groupBy } from 'ramda'
+import data from './data/states.json'
 
-import data from './data/total.json'
-
-type StateEntry = {
+type State = {
 	date: string
-	state: string
-	deaths: string
-	newDeaths: string
-	newCases: string
-	totalCases: string
+	st: string
+	td: string
+	nd: string
+	nc: string
+	tc: string
 }
 
-const cleanData = data.map(
-	({ date, state, deaths, newDeaths, newCases, totalCases }: StateEntry) => ({
-		date,
-		state,
-		deaths,
-		newDeaths,
-		newCases,
-		totalCases,
-	}),
-)
+interface States {
+	[key: string]: State[]
+}
 
-const getDates = ({ date }: StateEntry) => date
-const dates = cleanData.map(getDates)
-const groupByDate = groupBy(getDates)
-const byDate = groupByDate(cleanData)
+const main: States = data.main
+const dates: Array<string> = data.dates
 
 const App = () => {
 	const [index, setIndex] = useState(dates.length - 1)
-	const currentDate = dates[index]
+	const selectedData = main[dates[index]]
 	return (
 		<>
 			<input
@@ -40,7 +29,7 @@ const App = () => {
 				value={index}
 				onChange={({ target }) => setIndex(parseInt(target.value))}
 			/>
-			<pre>{JSON.stringify(byDate[currentDate], null, 2)}</pre>
+			<pre>{JSON.stringify(selectedData, null, 2)}</pre>
 		</>
 	)
 }
