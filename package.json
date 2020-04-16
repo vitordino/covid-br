@@ -14,6 +14,7 @@
     "@types/react-dom": "^16.9.6",
     "@types/react-table": "^7.0.16",
     "@types/styled-components": "^5.1.0",
+    "etymos": "^0.0.2",
     "husky": "^4.2.5",
     "lint-staged": "^10.1.3",
     "prettier": "^2.0.4",
