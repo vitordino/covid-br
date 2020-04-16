@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { useTable } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
 
 import data from './data/states.json'
 
@@ -18,8 +18,10 @@ type Main = {
 	[key: string]: StateEntry[]
 }
 
+type Acessor = keyof StateEntry
+
 type Column = {
-	accessor: keyof StateEntry
+	accessor: Acessor
 	Header: string
 }
 
@@ -36,9 +38,21 @@ const columns: Columns = [
 	{ accessor: 'tc', Header: 'Cases' },
 ]
 
+const accessors: Acessor[] = columns.map(({ accessor }) => accessor)
+
+const removeTotal = (lines: StateEntries) =>
+	lines.filter(({ st }) => st !== 'TOTAL')
+const findTotal = (lines: StateEntries) =>
+	lines.filter(({ st }) => st === 'TOTAL')[0]
+
 const App = () => {
 	const [index, setIndex] = useState(dates.length - 1)
-	const data: StateEntries = useMemo(() => main[dates[index]], [index])
+	const data: StateEntries = useMemo(() => removeTotal(main[dates[index]]), [
+		index,
+	])
+	const total: StateEntry = useMemo(() => findTotal(main[dates[index]]), [
+		index,
+	])
 
 	const {
 		getTableProps,
@@ -46,7 +60,7 @@ const App = () => {
 		headerGroups,
 		rows,
 		prepareRow,
-	} = useTable({ columns, data })
+	} = useTable({ columns, data }, useSortBy)
 	return (
 		<>
 			<input
@@ -62,7 +76,10 @@ const App = () => {
 					{headerGroups.map((headerGroup) => (
 						<tr {...headerGroup.getHeaderGroupProps()}>
 							{headerGroup.headers.map((column) => (
-								<th {...column.getHeaderProps()}>{column.render('Header')}</th>
+								// @ts-ignore
+								<th {...column.getHeaderProps(column.getSortByToggleProps())}>
+									{column.render('Header')}
+								</th>
 							))}
 						</tr>
 					))}
@@ -78,6 +95,14 @@ const App = () => {
 							</tr>
 						)
 					})}
+					<tr>
+						{Object.entries(total)
+							// @ts-ignore
+							.filter(([k]) => accessors.includes(k))
+							.map(([k, v]) => (
+								<td key={k}>{v}</td>
+							))}
+					</tr>
 				</tbody>
 			</table>
 		</>
