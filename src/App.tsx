@@ -12,7 +12,9 @@ type StateEntry = {
 	tc: string
 }
 
-type StateEntries = {
+type StateEntries = StateEntry[]
+
+type Main = {
 	[key: string]: StateEntry[]
 }
 
@@ -23,7 +25,7 @@ type Column = {
 
 type Columns = Column[]
 
-const main: StateEntries = data.main
+const main: Main = data.main
 const dates: Array<string> = data.dates
 
 const columns: Columns = [
@@ -36,7 +38,7 @@ const columns: Columns = [
 
 const App = () => {
 	const [index, setIndex] = useState(dates.length - 1)
-	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
+	const data: StateEntries = useMemo(() => main[dates[index]], [index])
 
 	const {
 		getTableProps,
