@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 import { useTable, useSortBy } from 'react-table'
 
 export type StateEntry = {
@@ -43,6 +44,15 @@ const accessors: Accessor<StateEntry>[] = columns.map(
 	({ accessor }) => accessor,
 )
 
+const Table = styled.table`
+	width: 100%;
+	text-align: right;
+	th:first-child,
+	td:first-child {
+		text-align: left;
+	}
+`
+
 type StatesTableProps = {
 	data: StateEntries
 	total: StateEntry
@@ -58,7 +68,7 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 		// @ts-ignore
 	} = useTable({ columns, data, autoResetSortBy: false }, useSortBy)
 	return (
-		<table {...getTableProps()}>
+		<Table {...getTableProps()}>
 			<thead>
 				{headerGroups.map((headerGroup: any) => (
 					<tr {...headerGroup.getHeaderGroupProps()}>
@@ -90,7 +100,7 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 						))}
 				</tr>
 			</tbody>
-		</table>
+		</Table>
 	)
 }
 
