@@ -12,7 +12,7 @@ const destinies = [
 ]
 
 const url =
-	'https://cdn.jsdelivr.net/gh/wcota/covid19br@master/cases-brazil-total.csv'
+	'https://cdn.jsdelivr.net/gh/wcota/covid19br@master/cases-brazil-states.csv'
 
 const write = (
 	destinies: Array<string> = [],
