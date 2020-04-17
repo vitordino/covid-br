@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import styled from 'styled-components'
 import { useTable, useSortBy } from 'react-table'
 
@@ -19,6 +19,7 @@ type Column = {
 	accessor: Accessor<StateEntry>
 	Header: string | ReactNode
 	Cell?: any
+	[key: string]: any
 }
 
 type Columns = Column[]
@@ -27,7 +28,9 @@ type Cell = { row: { values: StateEntry } }
 type CellProps = {
 	row: { values: StateEntry }
 	prop: keyof StateEntry
+	newProp?: keyof StateEntry
 	children?: ReactNode
+	toggleSortBy?: (id: string, desc?: boolean, isMulti?: boolean) => void
 }
 
 type Header = any
@@ -40,7 +43,20 @@ type HeaderProps = {
 	[key: string]: any
 }
 
-const Cell = ({ row, prop, children }: CellProps) => <strong>{row.values?.[prop]}{children}</strong>
+const noop = () => null
+
+const Cell = ({ row, prop, newProp, children, toggleSortBy = noop }: CellProps) => (
+	<div style={{ display: 'flex' }}>
+		{newProp && !!row.values?.[newProp] && (
+			<small onClick={() => toggleSortBy(newProp)} style={{ flex: 1 }}>+{row.values?.[newProp]}</small>
+		)}
+		{'\t'}
+		<strong style={{ flex: 1 }}>
+			{row.values?.[prop]}
+			{children}
+		</strong>
+	</div>
+)
 
 const Header = ({ children, column }: HeaderProps) => (
 	<div>
@@ -48,34 +64,6 @@ const Header = ({ children, column }: HeaderProps) => (
 		{' '}
 		{column.isSorted ? (column.isSortedDesc ? '↓' : '↑') : '↕'}
 	</div>
-)
-
-const columns: Columns = [
-	{ accessor: 'st', Header: (x: Header) => <Header {...x}>State</Header> },
-	{
-		accessor: 'tc',
-		Header: (x: Header) => <Header {...x}>Total cases</Header>,
-		Cell: ({ row }: Cell) => <Cell row={row} prop='tc' />,
-	},
-	{
-		accessor: 'nc',
-		Header: (x: Header) => <Header {...x}>New cases</Header>,
-		Cell: ({ row }: Cell) => <Cell row={row} prop='nc' />,
-	},
-	{
-		accessor: 'td',
-		Header: (x: Header) => <Header {...x}>Deaths</Header>,
-		Cell: ({ row }: Cell) => <Cell row={row} prop='td' />,
-	},
-	{
-		accessor: 'nd',
-		Header: (x: Header) => <Header {...x}>New deaths</Header>,
-		Cell: ({ row }: Cell) => <Cell row={row} prop='nd' />,
-	},
-]
-
-const accessors: Accessor<StateEntry>[] = columns.map(
-	({ accessor }) => accessor,
 )
 
 const Table = styled.table`
@@ -93,14 +81,48 @@ type StatesTableProps = {
 }
 
 const StatesTable = ({ data, total }: StatesTableProps) => {
+	const columns: Columns = useMemo(
+		() => [
+			{ accessor: 'st', Header: (x: Header) => <Header {...x}>State</Header> },
+			{
+				accessor: 'tc',
+				Header: (x: Header) => <Header {...x}>Confirmed</Header>,
+				Cell: ({ row }: Cell) => (
+					<Cell row={row} prop='tc' newProp='nc' toggleSortBy={toggleSortBy} />
+				),
+			},
+			{
+				accessor: 'td',
+				Header: (x: Header) => <Header {...x}>Deaths</Header>,
+				Cell: ({ row }: Cell) => (
+					<Cell row={row} prop='td' newProp='nd' toggleSortBy={toggleSortBy} />
+				),
+			},
+			{
+				accessor: 'nc',
+				Header: noop,
+				Cell: noop,
+			},
+			{
+				accessor: 'nd',
+				Header: noop,
+				Cell: noop,
+			},
+		],
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[],
+	)
+	
 	const {
 		getTableProps,
 		getTableBodyProps,
 		headerGroups,
 		rows,
 		prepareRow,
+		toggleSortBy,
 		// @ts-ignore
-	} = useTable({ columns, data, autoResetSortBy: false }, useSortBy)
+	} = useTable({ columns, data, footerGroups: total, autoResetSortBy: false }, useSortBy)
+
 	return (
 		<Table {...getTableProps()}>
 			<thead>
@@ -126,14 +148,12 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 					)
 				})}
 				<tr>
-					{Object.entries(total)
-						//@ts-ignore
-						.filter(([k]) => accessors.includes(k))
-						.map(([k, v]) => (
-							<td key={k}>{v}</td>
-						))}
+					<td><Cell row={{ values: total }} prop='st' /></td>
+					<td><Cell row={{ values: total }} prop='tc' newProp='nc' /></td>
+					<td><Cell row={{ values: total }} prop='td' newProp='nd' /></td>
 				</tr>
 			</tbody>
+			{/* <pre>{JSON.stringify(total, null, 2)}</pre> */}
 		</Table>
 	)
 }
