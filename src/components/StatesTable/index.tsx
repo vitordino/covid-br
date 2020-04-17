@@ -129,7 +129,11 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 				{headerGroups.map((headerGroup: any) => (
 					<tr {...headerGroup.getHeaderGroupProps()}>
 						{headerGroup.headers.map((column: any) => (
-							<th {...column.getHeaderProps(column.getSortByToggleProps())}>
+							<th
+								{...column.getHeaderProps(
+									column.getSortByToggleProps({ onClick: () => toggleSortBy(column.id, true) }),
+								)}
+							>
 								{column.render('Header')}
 							</th>
 						))}
