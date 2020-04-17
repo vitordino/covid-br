@@ -55,7 +55,7 @@ const Cell = ({
 }: CellProps) => (
 	<div style={{ display: 'flex' }}>
 		{newProp && !!row.values?.[newProp] && (
-			<small onClick={() => toggleSortBy(newProp)} style={{ flex: 1 }}>
+			<small onClick={() => toggleSortBy(newProp, true)} style={{ flex: 1 }}>
 				+{row.values?.[newProp]}
 			</small>
 		)}
@@ -88,18 +88,33 @@ type StatesTableProps = {
 	total: StateEntry
 }
 
+type SortByOptions = {
+	id: Accessor<StateEntry>
+	desc: boolean
+}
+
+type InitialTableState = {
+	sortBy: SortByOptions[]
+}
+
+const initialState: InitialTableState = {
+	sortBy: [{ id: 'tc', desc: true }],
+}
+
 const spring = {
 	type: 'spring',
 	damping: 50,
 	stiffness: 100,
 }
 
-const initialState = { sortBy: [{ id: 'tc', desc: true }] }
-
 const StatesTable = ({ data, total }: StatesTableProps) => {
 	const columns: Columns = useMemo(
 		() => [
-			{ accessor: 'st', Header: (x: Header) => <Header {...x}>State</Header> },
+			{
+				accessor: 'st',
+				Header: (x: Header) => <Header {...x}>State</Header>,
+				sortInverted: true,
+			},
 			{
 				accessor: 'tc',
 				Header: (x: Header) => <Header {...x}>Confirmed</Header>,
@@ -136,13 +151,14 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 		rows,
 		prepareRow,
 		toggleSortBy,
-		// @ts-ignore
 	} = useTable(
 		{
+			// @ts-ignore
 			columns,
+			// @ts-ignore
+			initialState,
 			data,
 			footerGroups: total,
-			initialState,
 			autoResetSortBy: false,
 		},
 		useSortBy,
@@ -184,20 +200,19 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 							</motion.tr>
 						)
 					})}
-					<motion.tr>
-						<td>
-							<Cell row={{ values: total }} prop='st' />
-						</td>
-						<td>
-							<Cell row={{ values: total }} prop='tc' newProp='nc' />
-						</td>
-						<td>
-							<Cell row={{ values: total }} prop='td' newProp='nd' />
-						</td>
-					</motion.tr>
 				</AnimatePresence>
+				<tr>
+					<td>
+						<Cell row={{ values: total }} prop='st' />
+					</td>
+					<td>
+						<Cell row={{ values: total }} prop='tc' newProp='nc' />
+					</td>
+					<td>
+						<Cell row={{ values: total }} prop='td' newProp='nd' />
+					</td>
+				</tr>
 			</tbody>
-			{/* <pre>{JSON.stringify(total, null, 2)}</pre> */}
 		</Table>
 	)
 }
