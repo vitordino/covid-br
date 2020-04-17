@@ -80,6 +80,8 @@ type StatesTableProps = {
 	total: StateEntry
 }
 
+const initialState = { sortBy: [{ id: 'tc', desc: true }] }
+
 const StatesTable = ({ data, total }: StatesTableProps) => {
 	const columns: Columns = useMemo(
 		() => [
@@ -121,7 +123,7 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 		prepareRow,
 		toggleSortBy,
 		// @ts-ignore
-	} = useTable({ columns, data, footerGroups: total, autoResetSortBy: false }, useSortBy)
+	} = useTable({ columns, data, footerGroups: total, initialState, autoResetSortBy: false }, useSortBy)
 
 	return (
 		<Table {...getTableProps()}>
