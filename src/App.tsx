@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
-import { scaleQuantize } from 'd3-scale'
+import { scaleLinear } from 'd3-scale'
+import { schemeOrRd } from 'd3-scale-chromatic'
 
 import BaseTrend from './components/Trend'
 import StatesTable from './components/StatesTable'
@@ -27,20 +28,8 @@ const highestCase = Object.values(main)
 	.map((x) => parseInt(x.tc))
 	.reduce((a: number, b: number) => (a > b ? a : b), 0)
 
-const colorArray = [
-	'#ffedea',
-	'#ffcec5',
-	'#ffad9f',
-	'#ff8a75',
-	'#ff5533',
-	'#e2492d',
-	'#be3d26',
-	'#9a311f',
-	'#782618',
-]
-
 // @ts-ignore
-const colorScale = scaleQuantize().domain([1, highestCase]).range(colorArray)
+const colorScale = scaleLinear([1, highestCase / 12], schemeOrRd[9])
 
 const Trend = (props: any) => (
 	<BaseTrend
