@@ -1,10 +1,6 @@
 import React, { useState, useMemo } from 'react'
-import {
-	ComposableMap,
-	Geographies,
-	Geography,
-	ZoomableGroup,
-} from 'react-simple-maps'
+import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
+import { scaleQuantize } from 'd3-scale'
 
 import BaseTrend from './components/Trend'
 import StatesTable from './components/StatesTable'
@@ -17,6 +13,34 @@ import type { StateEntry, StateEntries } from './components/StatesTable'
 import data from './data/states.json'
 
 const geography = '/topo/states.json'
+
+export type Main = {
+	[key: string]: StateEntry[]
+}
+
+const main: Main = data.main
+const dates: string[] = data.dates
+
+const highestCase = Object.values(main)
+	.flatMap((x) => x)
+	.filter((x) => x.st !== 'TOTAL')
+	.map((x) => parseInt(x.tc))
+	.reduce((a: number, b: number) => (a > b ? a : b), 0)
+
+const colorArray = [
+	'#ffedea',
+	'#ffcec5',
+	'#ffad9f',
+	'#ff8a75',
+	'#ff5533',
+	'#e2492d',
+	'#be3d26',
+	'#9a311f',
+	'#782618',
+]
+
+// @ts-ignore
+const colorScale = scaleQuantize().domain([1, highestCase]).range(colorArray)
 
 const Trend = (props: any) => (
 	<BaseTrend
@@ -31,13 +55,6 @@ const Trend = (props: any) => (
 	/>
 )
 
-export type Main = {
-	[key: string]: StateEntry[]
-}
-
-const main: Main = data.main
-const dates: string[] = data.dates
-
 const removeTotal = (lines: StateEntries) =>
 	lines.filter(({ st }) => st !== 'TOTAL')
 
@@ -45,40 +62,21 @@ const findTotal = (lines: StateEntries) =>
 	lines.filter(({ st }) => st === 'TOTAL')[0]
 
 const identity = (x: any) => x
-const x = Object.values(main)
+const trendData = Object.values(main)
 	.flatMap(identity)
 	.filter(({ st }) => st === 'TOTAL')
 	.map((x) => parseInt(x.tc))
 
-type Coords = [number, number]
-
-type MapConstraints = {
-	zoom: number
-	lat: number
-	long: number
-	coords: Coords
-}
-
-const mapConstraints: MapConstraints = {
-	zoom: 1,
-	lat: -54,
-	long: -14,
-	coords: [-54, -14],
-}
-
 const mapStyle = {
-	default: {
-		fill: '#D6D6DA',
-		outline: 'none',
-	},
-	hover: {
-		fill: '#E42',
-		outline: 'none',
-	},
-	pressed: {
-		fill: '#E42',
-		outline: 'none',
-	},
+	default: { outline: 'none' },
+	hover: { outline: 'none' },
+	pressed: { outline: 'none' },
+}
+
+const getFill = (data: StateEntries, id: string) => {
+	const { tc } = data.find(({ st }) => st === id) || { tc: '0' }
+	if (tc === '0') return '#eee'
+	return colorScale(parseInt(tc))
 }
 
 const App = () => {
@@ -103,7 +101,7 @@ const App = () => {
 							onChange={({ target }) => setIndex(parseInt(target.value))}
 						/>
 						<pre>{dates[index]}</pre>
-						<Trend data={x} />
+						<Trend data={trendData} />
 						<StatesTable data={data} total={total} />
 					</Grid.Column>
 					<Grid.Column xs={16} lg={8}>
@@ -122,6 +120,7 @@ const App = () => {
 											key={geo.rsmKey}
 											geography={geo}
 											style={mapStyle}
+											fill={getFill(data, geo.id)}
 										/>
 									))
 								}
