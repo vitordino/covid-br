@@ -1,7 +1,6 @@
 import React, { ReactNode, useMemo } from 'react'
 import styled from 'styled-components'
 import { useTable, useSortBy } from 'react-table'
-import { motion, AnimatePresence } from 'framer-motion'
 
 export type StateEntry = {
 	date: string
@@ -184,23 +183,21 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 				))}
 			</thead>
 			<tbody {...getTableBodyProps()}>
-				<AnimatePresence>
-					{rows.map((row: any) => {
-						prepareRow(row)
-						return (
-							<motion.tr
-								{...row.getRowProps({
-									layoutTransition: spring,
-									exit: { opacity: 0, maxHeight: 0 },
-								})}
-							>
-								{row.cells.map((cell: any) => (
-									<td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-								))}
-							</motion.tr>
-						)
-					})}
-				</AnimatePresence>
+				{rows.map((row: any) => {
+					prepareRow(row)
+					return (
+						<tr
+							{...row.getRowProps({
+								layoutTransition: spring,
+								exit: { opacity: 0, maxHeight: 0 },
+							})}
+						>
+							{row.cells.map((cell: any) => (
+								<td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+							))}
+						</tr>
+					)
+				})}
 				<tr>
 					<td>
 						<Cell row={{ values: total }} prop='st' />
