@@ -5,10 +5,10 @@ import { useTable, useSortBy } from 'react-table'
 export type StateEntry = {
 	date: string
 	st: string
-	td: string
-	nd: string
-	nc: string
-	tc: string
+	td: number
+	nd: number
+	nc: number
+	tc: number
 }
 
 export type StateEntries = StateEntry[]

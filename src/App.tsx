@@ -41,7 +41,7 @@ const identity = (x: any) => x
 const trendData = Object.values(main)
 	.flatMap(identity)
 	.filter(({ st }) => st === 'TOTAL')
-	.map((x) => parseInt(x.tc))
+	.map((x) => x.tc)
 
 const App = () => {
 	const [index, setIndex] = useState(dates.length - 1)
@@ -59,7 +59,7 @@ const App = () => {
 					<Grid.Column xs={16} lg={8}>
 						<input
 							type='range'
-							min='0'
+							min={0}
 							max={dates.length - 1}
 							value={index}
 							onChange={({ target }) => setIndex(parseInt(target.value))}

@@ -19,10 +19,10 @@ type StateEntries = StateEntry[]
 type StateOutput = {
 	date: string
 	st: string
-	td: string
-	nd: string
-	nc: string
-	tc: string
+	td: number
+	nd: number
+	nc: number
+	tc: number
 }
 
 const lines: StateEntries = []
@@ -65,19 +65,23 @@ const renameData = (data: StateEntries) =>
 	data.map(({ date, state, deaths, newDeaths, newCases, totalCases }) => ({
 		date,
 		st: state,
-		td: deaths,
-		nd: newDeaths,
-		nc: newCases,
-		tc: totalCases,
+		td: parseInt(deaths),
+		nd: parseInt(newDeaths),
+		nc: parseInt(newCases),
+		tc: parseInt(totalCases),
 	}))
 
 const getDates = ({ date }: StateOutput) => date
 const getStates = ({ st }: StateOutput) => st
 const groupByDate = groupBy(getDates)
 
+type Main = {
+	[key: string]: StateOutput[]
+}
+
 const processLines = (input: StateEntries) => {
 	const renamedData = renameData(input)
-	const main = groupByDate(renamedData)
+	const main: Main = groupByDate(renamedData)
 	const dates = renamedData.map(getDates)
 	const states = renamedData.map(getStates)
 	return { main, dates, states }

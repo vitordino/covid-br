@@ -18,7 +18,7 @@ const main: Main = data.main
 const highestCase = Object.values(main)
 	.flatMap((x) => x)
 	.filter((x) => x.st !== 'TOTAL')
-	.map((x) => parseInt(x.tc))
+	.map((x) => x.tc)
 	.reduce((a: number, b: number) => (a > b ? a : b), 0)
 
 // @ts-ignore
@@ -33,7 +33,7 @@ const mapStyle = {
 const getFill = (data: StateEntries, id: string) => {
 	const { tc } = data.find(({ st }) => st === id) || { tc: '0' }
 	if (tc === '0') return '#eee'
-	return colorScale(parseInt(tc))
+	return colorScale(tc)
 }
 
 type StatesMapProps = {
