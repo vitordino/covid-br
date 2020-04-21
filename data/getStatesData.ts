@@ -79,17 +79,27 @@ type Main = {
 	[key: string]: StateOutput[]
 }
 
-const getHighestStateCase = (x: StateOutput[]) =>
-	Object.values(x)
-		.filter((x) => x.st !== 'TOTAL')
-		.map((x) => x.tc)
-		.reduce((a: number, b: number) => (a > b ? a : b), 0)
+type StringPropertiesOf<T> = Pick<
+	T,
+	{
+		[K in keyof T]: T[K] extends number ? K : never
+	}[keyof T]
+>
 
-const getHighestTotalCase = (x: StateOutput[]) =>
+const defaultFilter = (x: StateOutput) => !!x
+
+const higher = (a: number, b: number) => (a > b ? a : b)
+
+const getHighest = (prop: keyof StringPropertiesOf<StateOutput>) => (
+	filter = defaultFilter,
+) => (x: StateOutput[]) =>
 	Object.values(x)
-		.filter((x) => x.st === 'TOTAL')
-		.map((x) => x.tc)
-		.reduce((a: number, b: number) => (a > b ? a : b), 0)
+		.filter(filter)
+		.map((x) => x[prop])
+		.reduce(higher, 0)
+
+const getHighestStateCase = getHighest('tc')((x) => x.st !== 'TOTAL')
+const getHighestTotalCase = getHighest('tc')((x) => x.st === 'TOTAL')
 
 const processLines = (input: StateEntries) => {
 	const renamedData = renameData(input)
