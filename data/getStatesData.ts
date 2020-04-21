@@ -1,7 +1,7 @@
 const { get } = require('https')
 const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
-const { groupBy } = require('ramda')
+const { groupBy, uniq } = require('ramda')
 
 type ErrorType = Error | String
 
@@ -136,8 +136,8 @@ const enhanceData: EnhanceDataFunction = (args) => (x) =>
 
 const processLines = (input: StateEntries) => {
 	const renamed: Outputs = renameData(input)
-	const dates = renamed.map(getDates)
-	const states = renamed.map(getStates)
+	const dates = uniq(renamed.map(getDates))
+	const states = uniq(renamed.map(getStates))
 	const highestStateCase = getHighestStateCase(renamed)
 	const highestTotalCase = getHighestTotalCase(renamed)
 	const highestStateDeath = getHighestStateDeath(renamed)
