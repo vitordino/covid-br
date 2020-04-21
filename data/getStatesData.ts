@@ -54,7 +54,7 @@ type TypePropertiesOf<T1, T2> = Pick<
 
 type NumericPropertiesOfStateOutput = TypePropertiesOf<StateOutput, number>
 
-type nums = keyof NumericPropertiesOfStateOutput
+type numericKeys = keyof NumericPropertiesOfStateOutput
 
 const lines: StateEntries = []
 
@@ -110,7 +110,9 @@ const defaultFilter = (x: StateOutput) => !!x
 
 const higher = (a: number, b: number) => (a > b ? a : b)
 
-const getHighest = (prop: nums) => (filter = defaultFilter) => (x: Outputs) =>
+const getHighest = (prop: numericKeys) => (filter = defaultFilter) => (
+	x: Outputs,
+) =>
 	Object.values(x)
 		.filter(filter)
 		.map((x) => x[prop])
@@ -121,28 +123,29 @@ const getHighestTotalCase = getHighest('tc')((x) => x.st === 'TOTAL')
 const getHighestStateDeath = getHighest('td')((x) => x.st !== 'TOTAL')
 const getHighestTotalDeath = getHighest('td')((x) => x.st === 'TOTAL')
 
-type KeyNumTuple = [nums, number]
-type KeyNumTuples = KeyNumTuple[]
-
-type EnhanceFunction = (
+type EnhanceReducerFn = (
 	arr: Outputs,
-) => (acc: StateOutput, k: nums, i: number) => EnhancedOutput
+) => (acc: StateOutput, k: numericKeys, i: number) => EnhancedOutput
 
-const enhance: EnhanceFunction = (arr) => (acc, k, i) => {
-	// if(arr[i].st === 'TOTAL') return arr[i]
-	return { ...acc, [`r${k}`]: acc[k] / getHighest(k)((x) => !!x)(arr) }
-}
+const enhance: EnhanceReducerFn = (arr) => (acc, k, i) => ({
+	...acc,
+	[`r${k}`]: acc[k] / getHighest(k)((x) => !!x)(arr),
+})
 
-type EnhanceDataFunction = (args: nums[]) => (x: Grouped) => GroupedEnhanced
+type EnhanceDataFunction = (
+	toEnhance: numericKeys[],
+) => (data: Grouped) => GroupedEnhanced
 
-const enhanceData: EnhanceDataFunction = (args) => (x) =>
-	Object.entries(x).reduce(
+const enhanceData: EnhanceDataFunction = (toEnhance) => (data) =>
+	Object.entries(data).reduce(
 		(acc, [k, v]) => ({
 			...acc,
-			[k]: v.map((x) => args.reduce(enhance(v), x)),
+			[k]: v.map((data) => toEnhance.reduce(enhance(v), data)),
 		}),
 		{},
 	)
+
+const toEnhance: numericKeys[] = ['tc', 'td']
 
 const processLines = (input: StateEntries) => {
 	const renamed: Outputs = renameData(input)
@@ -152,7 +155,6 @@ const processLines = (input: StateEntries) => {
 	const highestTotalCase = getHighestTotalCase(renamed)
 	const highestStateDeath = getHighestStateDeath(renamed)
 	const highestTotalDeath = getHighestTotalDeath(renamed)
-	const toEnhance: nums[] = ['tc', 'td']
 	const grouped: Grouped = groupByDate(renamed)
 	const main: GroupedEnhanced = enhanceData(toEnhance)(grouped)
 	return {
