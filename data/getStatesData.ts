@@ -100,6 +100,8 @@ const getHighest = (prop: keyof StringPropertiesOf<StateOutput>) => (
 
 const getHighestStateCase = getHighest('tc')((x) => x.st !== 'TOTAL')
 const getHighestTotalCase = getHighest('tc')((x) => x.st === 'TOTAL')
+const getHighestStateDeath = getHighest('td')((x) => x.st !== 'TOTAL')
+const getHighestTotalDeath = getHighest('td')((x) => x.st === 'TOTAL')
 
 const processLines = (input: StateEntries) => {
 	const renamedData = renameData(input)
@@ -108,7 +110,17 @@ const processLines = (input: StateEntries) => {
 	const states = renamedData.map(getStates)
 	const highestStateCase = getHighestStateCase(renamedData)
 	const highestTotalCase = getHighestTotalCase(renamedData)
-	return { main, dates, states, highestStateCase, highestTotalCase }
+	const highestStateDeath = getHighestStateDeath(renamedData)
+	const highestTotalDeath = getHighestTotalDeath(renamedData)
+	return {
+		main,
+		dates,
+		states,
+		highestStateCase,
+		highestTotalCase,
+		highestStateDeath,
+		highestTotalDeath,
+	}
 }
 
 const handleEnd = (rowCount: number) => {
