@@ -39,8 +39,12 @@ type EnhancedOutput = {
 type Outputs = StateOutput[]
 type EnhancedOutputs = EnhancedOutput[]
 
-type Main = {
-	[key: string]: Outputs | EnhancedOutputs
+type Grouped = {
+	[key: string]: Outputs
+}
+
+type GroupedEnhanced = {
+	[key: string]: EnhancedOutputs
 }
 
 type TypePropertiesOf<T1, T2> = Pick<
@@ -120,19 +124,25 @@ const getHighestTotalDeath = getHighest('td')((x) => x.st === 'TOTAL')
 type KeyNumTuple = [nums, number]
 type KeyNumTuples = KeyNumTuple[]
 
-type EnhanceFunction = (acc: StateOutput, [k, t]: KeyNumTuple) => EnhancedOutput
+type EnhanceFunction = (
+	arr: Outputs,
+) => (acc: StateOutput, k: nums, i: number) => EnhancedOutput
 
-const enhance: EnhanceFunction = (acc, [k, t]) => ({
-	...acc,
-	[`r${k}`]: acc[k] / t,
-})
+const enhance: EnhanceFunction = (arr) => (acc, k, i) => {
+	// if(arr[i].st === 'TOTAL') return arr[i]
+	return { ...acc, [`r${k}`]: acc[k] / getHighest(k)((x) => !!x)(arr) }
+}
 
-type EnhanceDataFunction = (
-	args: KeyNumTuples,
-) => (x: Outputs) => EnhancedOutput[]
+type EnhanceDataFunction = (args: nums[]) => (x: Grouped) => GroupedEnhanced
 
 const enhanceData: EnhanceDataFunction = (args) => (x) =>
-	x.map((y) => args.reduce(enhance, y))
+	Object.entries(x).reduce(
+		(acc, [k, v]) => ({
+			...acc,
+			[k]: v.map((x) => args.reduce(enhance(v), x)),
+		}),
+		{},
+	)
 
 const processLines = (input: StateEntries) => {
 	const renamed: Outputs = renameData(input)
@@ -142,12 +152,9 @@ const processLines = (input: StateEntries) => {
 	const highestTotalCase = getHighestTotalCase(renamed)
 	const highestStateDeath = getHighestStateDeath(renamed)
 	const highestTotalDeath = getHighestTotalDeath(renamed)
-	const toEnhance: KeyNumTuples = [
-		['tc', highestTotalCase],
-		['td', highestTotalDeath],
-	]
-	const enhanced = enhanceData(toEnhance)(renamed)
-	const main: Main = groupByDate(enhanced)
+	const toEnhance: nums[] = ['tc', 'td']
+	const grouped: Grouped = groupByDate(renamed)
+	const main: GroupedEnhanced = enhanceData(toEnhance)(grouped)
 	return {
 		main,
 		dates,
