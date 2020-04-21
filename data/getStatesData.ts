@@ -3,6 +3,8 @@ const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
 const { groupBy, uniq } = require('ramda')
 
+const states = require('./statesMeta.json')
+
 type ErrorType = Error | String
 
 type StateEntry = {
@@ -103,7 +105,6 @@ const renameData = (data: StateEntries) =>
 	}))
 
 const getDates = ({ date }: StateOutput) => date
-const getStates = ({ st }: StateOutput) => st
 const groupByDate = groupBy(getDates)
 
 const defaultFilter = (x: StateOutput) => !!x
@@ -150,7 +151,6 @@ const toEnhance: numericKeys[] = ['tc', 'td']
 const processLines = (input: StateEntries) => {
 	const renamed: Outputs = renameData(input)
 	const dates = uniq(renamed.map(getDates))
-	const states = uniq(renamed.map(getStates))
 	const highestStateCase = getHighestStateCase(renamed)
 	const highestTotalCase = getHighestTotalCase(renamed)
 	const highestStateDeath = getHighestStateDeath(renamed)
