@@ -79,12 +79,26 @@ type Main = {
 	[key: string]: StateOutput[]
 }
 
+const getHighestStateCase = (x: StateOutput[]) =>
+	Object.values(x)
+		.filter((x) => x.st !== 'TOTAL')
+		.map((x) => x.tc)
+		.reduce((a: number, b: number) => (a > b ? a : b), 0)
+
+const getHighestTotalCase = (x: StateOutput[]) =>
+	Object.values(x)
+		.filter((x) => x.st === 'TOTAL')
+		.map((x) => x.tc)
+		.reduce((a: number, b: number) => (a > b ? a : b), 0)
+
 const processLines = (input: StateEntries) => {
 	const renamedData = renameData(input)
 	const main: Main = groupByDate(renamedData)
 	const dates = renamedData.map(getDates)
 	const states = renamedData.map(getStates)
-	return { main, dates, states }
+	const highestStateCase = getHighestStateCase(renamedData)
+	const highestTotalCase = getHighestTotalCase(renamedData)
+	return { main, dates, states, highestStateCase, highestTotalCase }
 }
 
 const handleEnd = (rowCount: number) => {

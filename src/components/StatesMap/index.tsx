@@ -3,26 +3,14 @@ import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 import { scaleLinear } from 'd3-scale'
 import { schemeOrRd } from 'd3-scale-chromatic'
 
-import type { StateEntry, StateEntries } from '../StatesTable'
+import type { StateEntries } from '../StatesTable'
 
 import data from '../../data/states.json'
 
 const geography = '/topo/states.json'
 
-export type Main = {
-	[key: string]: StateEntry[]
-}
-
-const main: Main = data.main
-
-const highestCase = Object.values(main)
-	.flatMap((x) => x)
-	.filter((x) => x.st !== 'TOTAL')
-	.map((x) => x.tc)
-	.reduce((a: number, b: number) => (a > b ? a : b), 0)
-
 // @ts-ignore
-const colorScale = scaleLinear([1, highestCase / 12], schemeOrRd[9])
+const colorScale = scaleLinear([1, data.highestStateCase / 12], schemeOrRd[9])
 
 const mapStyle = {
 	default: { outline: 'none' },
