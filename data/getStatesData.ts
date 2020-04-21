@@ -21,9 +21,36 @@ type StateOutput = {
 	st: string
 	td: number
 	nd: number
-	nc: number
 	tc: number
+	nc: number
 }
+
+type EnhancedOutput = {
+	date: string
+	st: string
+	td: number
+	nd: number
+	rtd?: number
+	tc: number
+	nc: number
+	rtc?: number
+}
+
+type Outputs = StateOutput[]
+type EnhancedOutputs = EnhancedOutput[]
+
+type Main = {
+	[key: string]: Outputs | EnhancedOutputs
+}
+
+type TypePropertiesOf<T1, T2> = Pick<
+	T1,
+	{ [K in keyof T1]: T1[K] extends T2 ? K : never }[keyof T1]
+>
+
+type NumericPropertiesOfStateOutput = TypePropertiesOf<StateOutput, number>
+
+type nums = keyof NumericPropertiesOfStateOutput
 
 const lines: StateEntries = []
 
@@ -75,24 +102,11 @@ const getDates = ({ date }: StateOutput) => date
 const getStates = ({ st }: StateOutput) => st
 const groupByDate = groupBy(getDates)
 
-type Main = {
-	[key: string]: StateOutput[]
-}
-
-type StringPropertiesOf<T> = Pick<
-	T,
-	{
-		[K in keyof T]: T[K] extends number ? K : never
-	}[keyof T]
->
-
 const defaultFilter = (x: StateOutput) => !!x
 
 const higher = (a: number, b: number) => (a > b ? a : b)
 
-const getHighest = (prop: keyof StringPropertiesOf<StateOutput>) => (
-	filter = defaultFilter,
-) => (x: StateOutput[]) =>
+const getHighest = (prop: nums) => (filter = defaultFilter) => (x: Outputs) =>
 	Object.values(x)
 		.filter(filter)
 		.map((x) => x[prop])
@@ -103,15 +117,37 @@ const getHighestTotalCase = getHighest('tc')((x) => x.st === 'TOTAL')
 const getHighestStateDeath = getHighest('td')((x) => x.st !== 'TOTAL')
 const getHighestTotalDeath = getHighest('td')((x) => x.st === 'TOTAL')
 
+type KeyNumTuple = [nums, number]
+type KeyNumTuples = KeyNumTuple[]
+
+type EnhanceFunction = (acc: StateOutput, [k, t]: KeyNumTuple) => EnhancedOutput
+
+const enhance: EnhanceFunction = (acc, [k, t]) => ({
+	...acc,
+	[`r${k}`]: acc[k] / t,
+})
+
+type EnhanceDataFunction = (
+	args: KeyNumTuples,
+) => (x: Outputs) => EnhancedOutput[]
+
+const enhanceData: EnhanceDataFunction = (args) => (x) =>
+	x.map((y) => args.reduce(enhance, y))
+
 const processLines = (input: StateEntries) => {
-	const renamedData = renameData(input)
-	const main: Main = groupByDate(renamedData)
-	const dates = renamedData.map(getDates)
-	const states = renamedData.map(getStates)
-	const highestStateCase = getHighestStateCase(renamedData)
-	const highestTotalCase = getHighestTotalCase(renamedData)
-	const highestStateDeath = getHighestStateDeath(renamedData)
-	const highestTotalDeath = getHighestTotalDeath(renamedData)
+	const renamed: Outputs = renameData(input)
+	const dates = renamed.map(getDates)
+	const states = renamed.map(getStates)
+	const highestStateCase = getHighestStateCase(renamed)
+	const highestTotalCase = getHighestTotalCase(renamed)
+	const highestStateDeath = getHighestStateDeath(renamed)
+	const highestTotalDeath = getHighestTotalDeath(renamed)
+	const toEnhance: KeyNumTuples = [
+		['tc', highestTotalCase],
+		['td', highestTotalDeath],
+	]
+	const enhanced = enhanceData(toEnhance)(renamed)
+	const main: Main = groupByDate(enhanced)
 	return {
 		main,
 		dates,
