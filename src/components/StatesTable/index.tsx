@@ -7,8 +7,12 @@ export type StateEntry = {
 	st: string
 	td: number
 	nd: number
-	nc: number
+	rtd?: number | null
+	ptd?: number | null
 	tc: number
+	nc: number
+	rtc?: number | null
+	ptc?: number | null
 }
 
 export type StateEntries = StateEntry[]
@@ -24,11 +28,15 @@ type Column = {
 
 type Columns = Column[]
 
-type Cell = { row: { values: StateEntry } }
+type Cell = {
+	row: { values: StateEntry }
+	[key: string]: any
+}
 type CellProps = {
 	row: { values: StateEntry }
 	prop: keyof StateEntry
-	newProp?: keyof StateEntry
+	leftProp?: keyof StateEntry
+	leftRender?: (x: ReactNode) => ReactNode
 	children?: ReactNode
 	toggleSortBy?: (id: string, desc?: boolean, isMulti?: boolean) => void
 }
@@ -48,14 +56,15 @@ const noop = () => null
 const Cell = ({
 	row,
 	prop,
-	newProp,
+	leftProp,
+	leftRender = (x) => `+${x}`,
 	children,
 	toggleSortBy = noop,
 }: CellProps) => (
 	<div style={{ display: 'flex' }}>
-		{newProp && !!row.values?.[newProp] && (
-			<small onClick={() => toggleSortBy(newProp, true)} style={{ flex: 1 }}>
-				+{row.values?.[newProp]}
+		{leftProp && !!row.values?.[leftProp] && (
+			<small onClick={() => toggleSortBy(leftProp, true)} style={{ flex: 1 }}>
+				{leftRender(row.values?.[leftProp])}
 			</small>
 		)}
 		{'\t'}
@@ -69,7 +78,7 @@ const Cell = ({
 const Header = ({ children, column }: HeaderProps) => (
 	<div>
 		<strong>{children}</strong>{' '}
-		{column.isSorted ? (column.isSortedDesc ? '↓' : '↑') : '↕'}
+		{column.isSorted ? (column.isSortedDesc ? '↓' : '↑') : '·'}
 	</div>
 )
 
@@ -117,15 +126,15 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 			{
 				accessor: 'tc',
 				Header: (x: Header) => <Header {...x}>Confirmed</Header>,
-				Cell: ({ row }: Cell) => (
-					<Cell row={row} prop='tc' newProp='nc' toggleSortBy={toggleSortBy} />
+				Cell: ({ row, ...props }: Cell) => (
+					<Cell row={row} prop='tc' leftProp='nc' toggleSortBy={toggleSortBy} />
 				),
 			},
 			{
 				accessor: 'td',
 				Header: (x: Header) => <Header {...x}>Deaths</Header>,
 				Cell: ({ row }: Cell) => (
-					<Cell row={row} prop='td' newProp='nd' toggleSortBy={toggleSortBy} />
+					<Cell row={row} prop='td' leftProp='nd' toggleSortBy={toggleSortBy} />
 				),
 			},
 			{
@@ -203,10 +212,10 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 						<Cell row={{ values: total }} prop='st' />
 					</td>
 					<td>
-						<Cell row={{ values: total }} prop='tc' newProp='nc' />
+						<Cell row={{ values: total }} prop='tc' leftProp='nc' />
 					</td>
 					<td>
-						<Cell row={{ values: total }} prop='td' newProp='nd' />
+						<Cell row={{ values: total }} prop='td' leftProp='nd' />
 					</td>
 				</tr>
 			</tbody>
