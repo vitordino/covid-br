@@ -13,6 +13,10 @@ const GlobalStyle = createGlobalStyle`
 		min-height: 100vh;
 		background: var(--color-base00);
 		color: var(--color-base);
+		font-weight: 300;
+	}
+	strong {
+		font-weight: 500;
 	}
 	::selection {
 		background: var(--color-base);
