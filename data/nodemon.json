@@ -1,0 +1,6 @@
+{
+	"watch": ["."],
+	"ext": "ts",
+	"exec": "ts-node --project data/tsconfig.json data/index.ts",
+	"ignore": ["*.json"]
+}

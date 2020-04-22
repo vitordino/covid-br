@@ -46,7 +46,8 @@
     "frontend:build": "react-scripts build",
     "frontend:test": "react-scripts test",
     "data:build": "ts-node --project data/tsconfig.json data/index.ts",
-    "start": "npm run data:build && npm run frontend:start",
+    "data:start": "nodemon --config data/nodemon.json",
+    "start": "npm run data:start & npm run frontend:start",
     "build": "npm run data:build && npm run frontend:build",
     "format": "prettier --write 'src/**/*.{ts,tsx,js}' 'data/**/*.{ts,tsx,js}'",
     "lint": "eslint --ignore-path .gitignore src data"
