@@ -3,7 +3,7 @@ const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
 const { groupBy, uniq } = require('ramda')
 
-const states = require('./statesMeta.json')
+const states: StatesMeta = require('./statesMeta.json')
 
 type ErrorType = Error | String
 
@@ -14,6 +14,36 @@ type StateEntry = {
 	newDeaths: string
 	newCases: string
 	totalCases: string
+}
+
+enum StatesEnum {
+	SP,
+	MG,
+	RJ,
+	BA,
+	PR,
+	RS,
+	PE,
+	CE,
+	PA,
+	SC,
+	MA,
+	GO,
+	AM,
+	ES,
+	PB,
+	RN,
+	MT,
+	AL,
+	PI,
+	DF,
+	MS,
+	SE,
+	RO,
+	TO,
+	AC,
+	AP,
+	RR,
 }
 
 type StateEntries = StateEntry[]
@@ -27,22 +57,35 @@ type StateOutput = {
 	nc: number
 }
 
+type PopulationalEnhancedOutput = {
+	date: string
+	st: string
+	td: number
+	nd: number
+	ptd?: number
+	tc: number
+	nc: number
+	ptc?: number
+}
+
 type EnhancedOutput = {
 	date: string
 	st: string
 	td: number
 	nd: number
 	rtd?: number
+	ptd?: number
 	tc: number
 	nc: number
 	rtc?: number
+	ptc?: number
 }
 
 type Outputs = StateOutput[]
 type EnhancedOutputs = EnhancedOutput[]
 
 type Grouped = {
-	[key: string]: Outputs
+	[key: string]: PopulationalEnhancedOutput[]
 }
 
 type GroupedEnhanced = {
@@ -56,7 +99,14 @@ type TypePropertiesOf<T1, T2> = Pick<
 
 type NumericPropertiesOfStateOutput = TypePropertiesOf<StateOutput, number>
 
-type numericKeys = keyof NumericPropertiesOfStateOutput
+type NumericKey = keyof NumericPropertiesOfStateOutput
+
+type StateMeta = { p: number; n: string }
+type StatesMeta = {
+	[key: string]: StateMeta
+}
+
+type StateKeys = keyof typeof StatesEnum
 
 const lines: StateEntries = []
 
@@ -104,14 +154,16 @@ const renameData = (data: StateEntries) =>
 		tc: parseInt(totalCases),
 	}))
 
-const getDates = ({ date }: StateOutput) => date
-const groupByDate = groupBy(getDates)
+type GetStateFn = ({ st }: StateOutput) => StateKeys | string
+const getState: GetStateFn = ({ st }) => st
+const getDate = ({ date }: StateOutput) => date
+const groupByDate = groupBy(getDate)
 
 const defaultFilter = (x: StateOutput) => !!x
 
 const higher = (a: number, b: number) => (a > b ? a : b)
 
-const getHighest = (prop: numericKeys) => (filter = defaultFilter) => (
+const getHighest = (prop: NumericKey) => (filter = defaultFilter) => (
 	x: Outputs,
 ) =>
 	Object.values(x)
@@ -126,7 +178,11 @@ const getHighestTotalDeath = getHighest('td')((x) => x.st === 'TOTAL')
 
 type EnhanceReducerFn = (
 	arr: Outputs,
-) => (acc: StateOutput, k: numericKeys, i: number) => EnhancedOutput
+) => (
+	acc: PopulationalEnhancedOutput,
+	k: NumericKey,
+	i: number,
+) => EnhancedOutput
 
 const enhance: EnhanceReducerFn = (arr) => (acc, k, i) => ({
 	...acc,
@@ -134,7 +190,7 @@ const enhance: EnhanceReducerFn = (arr) => (acc, k, i) => ({
 })
 
 type EnhanceDataFunction = (
-	toEnhance: numericKeys[],
+	toEnhance: NumericKey[],
 ) => (data: Grouped) => GroupedEnhanced
 
 const enhanceData: EnhanceDataFunction = (toEnhance) => (data) =>
@@ -146,16 +202,34 @@ const enhanceData: EnhanceDataFunction = (toEnhance) => (data) =>
 		{},
 	)
 
-const toEnhance: numericKeys[] = ['tc', 'td']
+type EnhanceWithPopulationalDataFn = (
+	toEnhance: NumericKey[],
+) => (data: Outputs) => PopulationalEnhancedOutput[]
+
+const enhanceWithPopulationalData: EnhanceWithPopulationalDataFn = (
+	toEnhance,
+) => (data) =>
+	data.map((x) => {
+		const state = getState(x)
+		if (state === 'TOTAL') return x
+		const population = states[state].p
+		return toEnhance.reduce(
+			(acc, k) => ({ ...acc, [`p${k}`]: acc[k] / population }),
+			x,
+		)
+	})
+
+const toEnhance: NumericKey[] = ['tc', 'td']
 
 const processLines = (input: StateEntries) => {
 	const renamed: Outputs = renameData(input)
-	const dates = uniq(renamed.map(getDates))
+	const dates = uniq(renamed.map(getDate))
 	const highestStateCase = getHighestStateCase(renamed)
 	const highestTotalCase = getHighestTotalCase(renamed)
 	const highestStateDeath = getHighestStateDeath(renamed)
 	const highestTotalDeath = getHighestTotalDeath(renamed)
-	const grouped: Grouped = groupByDate(renamed)
+	const withPopulationalData = enhanceWithPopulationalData(toEnhance)(renamed)
+	const grouped: Grouped = groupByDate(withPopulationalData)
 	const main: GroupedEnhanced = enhanceData(toEnhance)(grouped)
 	return {
 		main,
