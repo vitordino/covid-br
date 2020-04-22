@@ -4,6 +4,7 @@ const { parse } = require('@fast-csv/parse')
 const { groupBy, uniq } = require('ramda')
 
 const states: StatesMeta = require('./statesMeta.json')
+const totalPopulation = Object.values(states).reduce((a, { p }) => a + p, 0)
 
 type ErrorType = Error | String
 
@@ -16,35 +17,8 @@ type StateEntry = {
 	totalCases: string
 }
 
-enum StatesEnum {
-	SP,
-	MG,
-	RJ,
-	BA,
-	PR,
-	RS,
-	PE,
-	CE,
-	PA,
-	SC,
-	MA,
-	GO,
-	AM,
-	ES,
-	PB,
-	RN,
-	MT,
-	AL,
-	PI,
-	DF,
-	MS,
-	SE,
-	RO,
-	TO,
-	AC,
-	AP,
-	RR,
-}
+// prettier-ignore
+enum StatesEnum { SP, MG, RJ, BA, PR, RS, PE, CE, PA, SC, MA, GO, AM, ES, PB, RN, MT, AL, PI, DF, MS, SE, RO, TO, AC, AP, RR }
 
 type StateEntries = StateEntry[]
 
@@ -211,8 +185,7 @@ const enhanceWithPopulationalData: EnhanceWithPopulationalDataFn = (
 ) => (data) =>
 	data.map((x) => {
 		const state = getState(x)
-		if (state === 'TOTAL') return x
-		const population = states[state].p
+		const population = states[state]?.p || totalPopulation
 		return toEnhance.reduce(
 			(acc, k) => ({ ...acc, [`p${k}`]: acc[k] / population }),
 			x,
