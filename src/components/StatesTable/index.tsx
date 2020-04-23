@@ -39,15 +39,6 @@ type Cell = {
 	data: StateEntries
 	[key: string]: any
 }
-type CellProps = {
-	row: RowProps
-	data?: StateEntries
-	column: { id: keyof StateEntry }
-	leftProp?: keyof StateEntry
-	leftRender?: (x: ReactNode) => ReactNode
-	children?: ReactNode
-	toggleSortBy?: (id: string, desc?: boolean, isMulti?: boolean) => void
-}
 
 type Header = any
 type HeaderProps = {
@@ -59,29 +50,41 @@ type HeaderProps = {
 	[key: string]: any
 }
 
-const noop = () => null
+type CellProps = {
+	left?: ReactNode
+	children?: ReactNode
+}
 
-const Cell = ({
+const Cell = ({ left, children }: CellProps) => (
+	<div style={{ display: 'flex' }}>
+		{!!left && <small style={{ flex: 1 }}>{left}</small>}
+		{'\t'}
+		<strong style={{ flex: 1 }}>{children}</strong>
+	</div>
+)
+
+type DynamicCellProps = {
+	row: RowProps
+	data?: StateEntries
+	column: { id: keyof StateEntry }
+	leftProp?: keyof StateEntry
+	leftRender?: (x: ReactNode) => ReactNode
+	children?: ReactNode
+	toggleSortBy?: (id: string, desc?: boolean, isMulti?: boolean) => void
+}
+
+const DynamicCell = ({
 	row,
 	column,
 	data,
 	leftProp,
 	leftRender = (x) => `+${x}`,
 	children,
-	toggleSortBy = noop,
-}: CellProps) => (
-	<div style={{ display: 'flex' }}>
-		{leftProp && !!data?.[row.index]?.[leftProp] && (
-			<small onClick={() => toggleSortBy(leftProp, true)} style={{ flex: 1 }}>
-				{leftRender(data[row.index][leftProp])}
-			</small>
-		)}
-		{'\t'}
-		<strong style={{ flex: 1 }}>
-			{row.values?.[column.id]}
-			{children}
-		</strong>
-	</div>
+}: DynamicCellProps) => (
+	<Cell left={leftProp && leftRender(data?.[row.index]?.[leftProp])}>
+		{row.values?.[column.id]}
+		{children}
+	</Cell>
 )
 
 const Header = ({ children, column }: HeaderProps) => (
@@ -129,8 +132,8 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 			{
 				accessor: 'tc',
 				Header: (x: Header) => <Header {...x}>Confirmed</Header>,
-				Cell: ({ row, column, data }: Cell) => (
-					<Cell
+				Cell: ({ row, column }: Cell) => (
+					<DynamicCell
 						row={row}
 						column={column}
 						data={data}
@@ -142,8 +145,8 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 			{
 				accessor: 'td',
 				Header: (x: Header) => <Header {...x}>Deaths</Header>,
-				Cell: ({ row, column, ...props }: Cell) => (
-					<Cell
+				Cell: ({ row, column }: Cell) => (
+					<DynamicCell
 						row={row}
 						column={column}
 						data={data}
@@ -207,18 +210,17 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 						</tr>
 					)
 				})}
-				{/* <tr>
+				<tr>
 					<td>
-						<Cell row={{ values: total }} prop='st' />
+						<Cell>{total.st}</Cell>
 					</td>
 					<td>
-						<Cell row={{ values: total }} prop='tc' leftProp='nc' />
+						<Cell left={total.nc}>{total.tc}</Cell>
 					</td>
 					<td>
-						<Cell row={{ values: total }} prop='td' leftProp='nd'>
-						</Cell>
+						<Cell left={total.nd}>{total.td}</Cell>
 					</td>
-				</tr> */}
+				</tr>
 			</tbody>
 		</Table>
 	)
