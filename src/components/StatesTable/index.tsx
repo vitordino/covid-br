@@ -35,13 +35,14 @@ type RowProps = {
 
 type Cell = {
 	row: RowProps
+	column: { id: keyof StateEntry }
 	data: StateEntries
 	[key: string]: any
 }
 type CellProps = {
 	row: RowProps
 	data?: StateEntries
-	prop: keyof StateEntry
+	column: { id: keyof StateEntry }
 	leftProp?: keyof StateEntry
 	leftRender?: (x: ReactNode) => ReactNode
 	children?: ReactNode
@@ -62,8 +63,8 @@ const noop = () => null
 
 const Cell = ({
 	row,
+	column,
 	data,
-	prop,
 	leftProp,
 	leftRender = (x) => `+${x}`,
 	children,
@@ -77,7 +78,7 @@ const Cell = ({
 		)}
 		{'\t'}
 		<strong style={{ flex: 1 }}>
-			{row.values?.[prop]}
+			{row.values?.[column.id]}
 			{children}
 		</strong>
 	</div>
@@ -128,11 +129,11 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 			{
 				accessor: 'tc',
 				Header: (x: Header) => <Header {...x}>Confirmed</Header>,
-				Cell: ({ row, data }: Cell) => (
+				Cell: ({ row, column, data }: Cell) => (
 					<Cell
 						row={row}
+						column={column}
 						data={data}
-						prop='tc'
 						leftProp='nc'
 						toggleSortBy={toggleSortBy}
 					/>
@@ -141,11 +142,11 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 			{
 				accessor: 'td',
 				Header: (x: Header) => <Header {...x}>Deaths</Header>,
-				Cell: ({ row }: Cell) => (
+				Cell: ({ row, column, ...props }: Cell) => (
 					<Cell
 						row={row}
+						column={column}
 						data={data}
-						prop='td'
 						leftProp='nd'
 						toggleSortBy={toggleSortBy}
 					/>
