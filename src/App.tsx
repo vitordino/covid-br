@@ -7,7 +7,7 @@ import Container from './components/Container'
 import Grid from './components/Grid'
 import Layout from './components/Layout'
 
-import type { StateEntry, StateEntries } from './components/StatesTable'
+import type { StateEntry } from './components/StatesTable'
 
 import data from './data/states.json'
 
@@ -31,10 +31,10 @@ const Trend = (props: any) => (
 	/>
 )
 
-const removeTotal = (lines: StateEntries) =>
+const removeTotal = (lines: StateEntry[]) =>
 	lines.filter(({ st }) => st !== 'TOTAL')
 
-const findTotal = (lines: StateEntries) =>
+const findTotal = (lines: StateEntry[]) =>
 	lines.filter(({ st }) => st === 'TOTAL')[0]
 
 const identity = (x: any) => x
@@ -45,7 +45,7 @@ const trendData = Object.values(main)
 
 const App = () => {
 	const [index, setIndex] = useState(dates.length - 1)
-	const data: StateEntries = useMemo(() => removeTotal(main[dates[index]]), [
+	const data: StateEntry[] = useMemo(() => removeTotal(main[dates[index]]), [
 		index,
 	])
 	const total: StateEntry = useMemo(() => findTotal(main[dates[index]]), [

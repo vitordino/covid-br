@@ -1,6 +1,6 @@
 import React, { ReactNode, useMemo } from 'react'
 import styled from 'styled-components'
-import { useTable, useSortBy } from 'react-table'
+import { useTable, useSortBy, Column } from 'react-table'
 
 export type StateEntry = {
 	date: string
@@ -15,19 +15,6 @@ export type StateEntry = {
 	ptc?: number | null
 }
 
-export type StateEntries = StateEntry[]
-
-type Accessor<T> = keyof T
-
-type Column = {
-	accessor: Accessor<StateEntry>
-	Header: string | ReactNode
-	Cell?: any
-	[key: string]: any
-}
-
-type Columns = Column[]
-
 type RowProps = {
 	values: StateEntry
 	index: number
@@ -36,7 +23,7 @@ type RowProps = {
 type Cell = {
 	row: RowProps
 	column: { id: keyof StateEntry }
-	data: StateEntries
+	data: StateEntry[]
 	[key: string]: any
 }
 
@@ -50,12 +37,12 @@ type HeaderProps = {
 	[key: string]: any
 }
 
-type CellProps = {
+type StaticCellProps = {
 	left?: ReactNode
 	children?: ReactNode
 }
 
-const Cell = ({ left, children }: CellProps) => (
+const Cell = ({ left, children }: StaticCellProps) => (
 	<div style={{ display: 'flex' }}>
 		{!!left && <small style={{ flex: 1 }}>{left}</small>}
 		{'\t'}
@@ -65,7 +52,7 @@ const Cell = ({ left, children }: CellProps) => (
 
 type DynamicCellProps = {
 	row: RowProps
-	data?: StateEntries
+	data?: StateEntry[]
 	column: { id: keyof StateEntry }
 	leftProp?: keyof StateEntry
 	leftRender?: (x: ReactNode) => ReactNode
@@ -104,12 +91,12 @@ const Table = styled.table`
 `
 
 type StatesTableProps = {
-	data: StateEntries
+	data: StateEntry[]
 	total: StateEntry
 }
 
 type SortByOptions = {
-	id: Accessor<StateEntry>
+	id: keyof StateEntry
 	desc: boolean
 }
 
@@ -122,7 +109,7 @@ const initialState: InitialTableState = {
 }
 
 const StatesTable = ({ data, total }: StatesTableProps) => {
-	const columns: Columns = useMemo(
+	const columns: Column<StateEntry>[] = useMemo(
 		() => [
 			{
 				accessor: 'st',

@@ -3,7 +3,7 @@ import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 import { scaleLinear } from 'd3-scale'
 import { schemeOrRd } from 'd3-scale-chromatic'
 
-import type { StateEntries } from '../StatesTable'
+import type { StateEntry } from '../StatesTable'
 
 import data from '../../data/states.json'
 
@@ -27,14 +27,14 @@ const mapStyle = {
 	pressed: { outline: 'none' },
 }
 
-const getFill = (data: StateEntries, id: string) => {
+const getFill = (data: StateEntry[], id: string) => {
 	const { tc } = data.find(({ st }) => st === id) || { tc: '0' }
 	if (tc === '0') return '#eee'
 	return colorScale(tc)
 }
 
 type StatesMapProps = {
-	data: StateEntries
+	data: StateEntry[]
 }
 
 const StatesMap = ({ data }: StatesMapProps) => (
