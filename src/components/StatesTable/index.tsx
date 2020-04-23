@@ -205,12 +205,7 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 				{rows.map((row: any) => {
 					prepareRow(row)
 					return (
-						<tr
-							{...row.getRowProps({
-								layoutTransition: spring,
-								exit: { opacity: 0, maxHeight: 0 },
-							})}
-						>
+						<tr {...row.getRowProps()}>
 							{row.cells.map((cell: any) => (
 								<td {...cell.getCellProps()}>{cell.render('Cell')}</td>
 							))}
