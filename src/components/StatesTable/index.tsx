@@ -28,12 +28,19 @@ type Column = {
 
 type Columns = Column[]
 
+type RowProps = {
+	values: StateEntry
+	index: number
+}
+
 type Cell = {
-	row: { values: StateEntry }
+	row: RowProps
+	data: StateEntries
 	[key: string]: any
 }
 type CellProps = {
-	row: { values: StateEntry }
+	row: RowProps
+	data?: StateEntries
 	prop: keyof StateEntry
 	leftProp?: keyof StateEntry
 	leftRender?: (x: ReactNode) => ReactNode
@@ -55,6 +62,7 @@ const noop = () => null
 
 const Cell = ({
 	row,
+	data,
 	prop,
 	leftProp,
 	leftRender = (x) => `+${x}`,
@@ -62,9 +70,9 @@ const Cell = ({
 	toggleSortBy = noop,
 }: CellProps) => (
 	<div style={{ display: 'flex' }}>
-		{leftProp && !!row.values?.[leftProp] && (
+		{leftProp && !!data?.[row.index]?.[leftProp] && (
 			<small onClick={() => toggleSortBy(leftProp, true)} style={{ flex: 1 }}>
-				{leftRender(row.values?.[leftProp])}
+				{leftRender(data[row.index][leftProp])}
 			</small>
 		)}
 		{'\t'}
@@ -126,26 +134,28 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 			{
 				accessor: 'tc',
 				Header: (x: Header) => <Header {...x}>Confirmed</Header>,
-				Cell: ({ row, ...props }: Cell) => (
-					<Cell row={row} prop='tc' leftProp='nc' toggleSortBy={toggleSortBy} />
+				Cell: ({ row, data }: Cell) => (
+					<Cell
+						row={row}
+						data={data}
+						prop='tc'
+						leftProp='nc'
+						toggleSortBy={toggleSortBy}
+					/>
 				),
 			},
 			{
 				accessor: 'td',
 				Header: (x: Header) => <Header {...x}>Deaths</Header>,
 				Cell: ({ row }: Cell) => (
-					<Cell row={row} prop='td' leftProp='nd' toggleSortBy={toggleSortBy} />
+					<Cell
+						row={row}
+						data={data}
+						prop='td'
+						leftProp='nd'
+						toggleSortBy={toggleSortBy}
+					/>
 				),
-			},
-			{
-				accessor: 'nc',
-				Header: noop,
-				Cell: noop,
-			},
-			{
-				accessor: 'nd',
-				Header: noop,
-				Cell: noop,
 			},
 		],
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -207,7 +217,7 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 						</tr>
 					)
 				})}
-				<tr>
+				{/* <tr>
 					<td>
 						<Cell row={{ values: total }} prop='st' />
 					</td>
@@ -215,9 +225,10 @@ const StatesTable = ({ data, total }: StatesTableProps) => {
 						<Cell row={{ values: total }} prop='tc' leftProp='nc' />
 					</td>
 					<td>
-						<Cell row={{ values: total }} prop='td' leftProp='nd' />
+						<Cell row={{ values: total }} prop='td' leftProp='nd'>
+						</Cell>
 					</td>
-				</tr>
+				</tr> */}
 			</tbody>
 		</Table>
 	)
