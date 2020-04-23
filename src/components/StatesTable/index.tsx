@@ -117,12 +117,6 @@ const initialState: InitialTableState = {
 	sortBy: [{ id: 'tc', desc: true }],
 }
 
-const spring = {
-	type: 'spring',
-	damping: 50,
-	stiffness: 100,
-}
-
 const StatesTable = ({ data, total }: StatesTableProps) => {
 	const columns: Columns = useMemo(
 		() => [
