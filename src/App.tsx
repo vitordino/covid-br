@@ -7,7 +7,7 @@ import Container from './components/Container'
 import Grid from './components/Grid'
 import Layout from './components/Layout'
 
-import type { StateEntry } from './components/StatesTable'
+import type { StateEntry, StatesMeta } from './components/StatesTable'
 
 import data from './data/states.json'
 
@@ -17,6 +17,7 @@ export type Main = {
 
 const main: Main = data.main
 const dates: string[] = data.dates
+const statesMeta: StatesMeta = data.states
 
 const Trend = (props: any) => (
 	<BaseTrend
@@ -66,7 +67,7 @@ const App = () => {
 						/>
 						<pre>{dates[index]}</pre>
 						<Trend data={trendData} />
-						<StatesTable data={data} total={total} />
+						<StatesTable data={data} total={total} statesMeta={statesMeta} />
 					</Grid.Column>
 					<Grid.Column xs={16} lg={8}>
 						<StatesMap data={data} />

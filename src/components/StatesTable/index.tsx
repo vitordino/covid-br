@@ -42,12 +42,20 @@ type StaticCellProps = {
 	children?: ReactNode
 }
 
+const CellWrapper = styled.div`
+	padding: 0 0.75rem;
+	display: flex;
+	& > * {
+		flex: 1;
+	}
+`
+
 const Cell = ({ left, children }: StaticCellProps) => (
-	<div style={{ display: 'flex' }}>
-		{!!left && <small style={{ flex: 1 }}>{left}</small>}
+	<CellWrapper>
+		{!!left && <small>{left}</small>}
 		{'\t'}
-		<strong style={{ flex: 1 }}>{children}</strong>
-	</div>
+		<strong>{children}</strong>
+	</CellWrapper>
 )
 
 type DynamicCellProps = {
@@ -57,7 +65,6 @@ type DynamicCellProps = {
 	leftProp?: keyof StateEntry
 	leftRender?: (x: ReactNode) => ReactNode
 	children?: ReactNode
-	toggleSortBy?: (id: string, desc?: boolean, isMulti?: boolean) => void
 }
 
 const DynamicCell = ({
@@ -69,30 +76,51 @@ const DynamicCell = ({
 	children,
 }: DynamicCellProps) => (
 	<Cell left={leftProp && leftRender(data?.[row.index]?.[leftProp])}>
-		{row.values?.[column.id]}
-		{children}
+		{children || row.values?.[column.id]}
 	</Cell>
 )
 
+const HeaderWrapper = styled.div`
+	background: var(--color-base06);
+	display: flex;
+	justify-content: space-between;
+	padding: 0.5rem;
+	border-radius: 0.25rem;
+`
+
 const Header = ({ children, column }: HeaderProps) => (
-	<div>
+	<HeaderWrapper>
 		<strong>{children}</strong>{' '}
 		{column.isSorted ? (column.isSortedDesc ? '↓' : '↑') : '·'}
-	</div>
+	</HeaderWrapper>
 )
 
 const Table = styled.table`
 	width: 100%;
 	text-align: right;
+	margin: 0 -0.25rem;
 	th:first-child,
 	td:first-child {
 		text-align: left;
 	}
+	th {
+		padding: 0 0.25rem 0.75rem;
+	}
 `
+
+type StateMeta = {
+	p: number
+	n: string
+}
+
+export type StatesMeta = {
+	[key: string]: StateMeta
+}
 
 type StatesTableProps = {
 	data: StateEntry[]
 	total: StateEntry
+	statesMeta: StatesMeta
 }
 
 type SortByOptions = {
@@ -108,38 +136,27 @@ const initialState: InitialTableState = {
 	sortBy: [{ id: 'tc', desc: true }],
 }
 
-const StatesTable = ({ data, total }: StatesTableProps) => {
+const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 	const columns: Column<StateEntry>[] = useMemo(
 		() => [
 			{
 				accessor: 'st',
 				Header: (x: Header) => <Header {...x}>State</Header>,
 				sortInverted: true,
+				Cell: ({ row }: Cell) => <Cell>{statesMeta[row.values.st].n}</Cell>,
 			},
 			{
 				accessor: 'tc',
 				Header: (x: Header) => <Header {...x}>Confirmed</Header>,
 				Cell: ({ row, column }: Cell) => (
-					<DynamicCell
-						row={row}
-						column={column}
-						data={data}
-						leftProp='nc'
-						toggleSortBy={toggleSortBy}
-					/>
+					<DynamicCell row={row} column={column} data={data} leftProp='nc' />
 				),
 			},
 			{
 				accessor: 'td',
 				Header: (x: Header) => <Header {...x}>Deaths</Header>,
 				Cell: ({ row, column }: Cell) => (
-					<DynamicCell
-						row={row}
-						column={column}
-						data={data}
-						leftProp='nd'
-						toggleSortBy={toggleSortBy}
-					/>
+					<DynamicCell row={row} column={column} data={data} leftProp='nd' />
 				),
 			},
 		],
