@@ -40,21 +40,29 @@ type HeaderProps = {
 type StaticCellProps = {
 	left?: ReactNode
 	children?: ReactNode
+	bold?: boolean
 }
 
 const CellWrapper = styled.div`
-	padding: 0 0.75rem;
+	padding: 0.375rem 0.75rem;
 	display: flex;
+	position: relative;
+	align-items: baseline;
 	& > * {
 		flex: 1;
 	}
+	small {
+		${(p) => p.theme.transition.get()};
+		color: var(--color-base66);
+	}
 `
 
-const Cell = ({ left, children }: StaticCellProps) => (
+const Cell = ({ left, children, bold = true }: StaticCellProps) => (
 	<CellWrapper>
 		{!!left && <small>{left}</small>}
 		{'\t'}
-		<strong>{children}</strong>
+		{bold && <strong>{children}</strong>}
+		{!bold && <div>{children}</div>}
 	</CellWrapper>
 )
 
@@ -81,17 +89,23 @@ const DynamicCell = ({
 )
 
 const HeaderWrapper = styled.div`
-	background: var(--color-base06);
 	display: flex;
 	justify-content: space-between;
 	padding: 0.5rem;
 	border-radius: 0.25rem;
+	background: var(--color-base06);
+	color: var(--color-base66);
+	${(p) => p.theme.transition.get()};
+	&:hover {
+		background: var(--color-base);
+		color: var(--color-base00);
+	}
 `
 
 const Header = ({ children, column }: HeaderProps) => (
 	<HeaderWrapper>
 		<strong>{children}</strong>{' '}
-		{column.isSorted ? (column.isSortedDesc ? '↓' : '↑') : '·'}
+		<span>{column.isSorted ? (column.isSortedDesc ? '↓' : '↑') : '·'}</span>
 	</HeaderWrapper>
 )
 
@@ -105,6 +119,19 @@ const Table = styled.table`
 	}
 	th {
 		padding: 0 0.25rem 0.75rem;
+	}
+	tr:nth-child(2n) > * {
+		position: relative;
+		&:before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			background: var(--color-base03);
+			${(p) => p.theme.transition.get()};
+		}
 	}
 `
 
@@ -143,7 +170,12 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 				accessor: 'st',
 				Header: (x: Header) => <Header {...x}>State</Header>,
 				sortInverted: true,
-				Cell: ({ row }: Cell) => <Cell>{statesMeta[row.values.st].n}</Cell>,
+				Cell: ({ row }: Cell) => (
+					<Cell bold={false}>
+						<strong>{row.values.st} </strong>
+						<small>{statesMeta[row.values.st].n}</small>
+					</Cell>
+				),
 			},
 			{
 				accessor: 'tc',
@@ -161,7 +193,7 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 			},
 		],
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[],
+		[data],
 	)
 
 	const {
@@ -173,7 +205,6 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 		toggleSortBy,
 	} = useTable(
 		{
-			// @ts-ignore
 			columns,
 			// @ts-ignore
 			initialState,
