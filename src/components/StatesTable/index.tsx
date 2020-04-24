@@ -250,10 +250,10 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 						<Cell>{total.st}</Cell>
 					</td>
 					<td>
-						<Cell left={total.nc}>{total.tc}</Cell>
+						<Cell left={`+${total.nc}`}>{total.tc}</Cell>
 					</td>
 					<td>
-						<Cell left={total.nd}>{total.td}</Cell>
+						<Cell left={`+${total.nd}`}>{total.td}</Cell>
 					</td>
 				</tr>
 			</tbody>
