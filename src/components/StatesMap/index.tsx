@@ -36,9 +36,7 @@ const mapStyle = {
 	pressed: { outline: 'none' },
 }
 
-type PropUnion = keyof StateEntry &
-	keyof typeof domains &
-	keyof typeof multipliers
+type PropUnion = keyof typeof domains & keyof typeof multipliers
 
 const getFill = (data: StateEntry[], id: string) => (prop: PropUnion) => {
 	const x = data.find(({ st }) => st === id)?.[prop]
@@ -48,9 +46,10 @@ const getFill = (data: StateEntry[], id: string) => (prop: PropUnion) => {
 
 type StatesMapProps = {
 	data: StateEntry[]
+	scaleProp?: PropUnion
 }
 
-const StatesMap = ({ data }: StatesMapProps) => (
+const StatesMap = ({ data, scaleProp = 'ptc' }: StatesMapProps) => (
 	<ComposableMap
 		data-tip=''
 		projectionConfig={{ scale: 550, center: [-54, -13] }}
@@ -66,7 +65,7 @@ const StatesMap = ({ data }: StatesMapProps) => (
 						key={geo.rsmKey}
 						geography={geo}
 						style={mapStyle}
-						fill={getFill(data, geo.id)('ptc')}
+						fill={getFill(data, geo.id)(scaleProp)}
 					/>
 				))
 			}

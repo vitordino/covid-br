@@ -46,6 +46,7 @@ const trendData = Object.values(main)
 
 const App = () => {
 	const [index, setIndex] = useState(dates.length - 1)
+	const [relative, setRelative] = useState(true)
 	const data: StateEntry[] = useMemo(() => removeTotal(main[dates[index]]), [
 		index,
 	])
@@ -65,12 +66,20 @@ const App = () => {
 							value={index}
 							onChange={({ target }) => setIndex(parseInt(target.value))}
 						/>
+						<label>
+							{JSON.stringify({ relative })}
+							<input
+								type='checkbox'
+								checked={relative}
+								onChange={({ target }) => setRelative(target.checked)}
+							/>
+						</label>
 						<pre>{dates[index]}</pre>
 						<Trend data={trendData} />
 						<StatesTable data={data} total={total} statesMeta={statesMeta} />
 					</Grid.Column>
 					<Grid.Column xs={16} lg={8}>
-						<StatesMap data={data} />
+						<StatesMap data={data} scaleProp={relative ? 'ptc' : 'tc'} />
 					</Grid.Column>
 				</Grid.Row>
 			</Container>
