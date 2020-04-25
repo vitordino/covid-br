@@ -1,6 +1,6 @@
 import { createGlobalStyle, css } from 'styled-components'
 import 'wipe.css'
-import 'typeface-ibm-plex-mono'
+import 'typeface-inter'
 
 const GlobalStyle = createGlobalStyle`
 	html {

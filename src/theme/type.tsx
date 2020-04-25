@@ -1,5 +1,5 @@
 const mono =
-	'"IBM Plex Mono", SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace'
+	'"Inter", SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace'
 
 type Fonts = {
 	[key: string]: string
