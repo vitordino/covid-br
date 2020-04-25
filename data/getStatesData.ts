@@ -6,6 +6,8 @@ const { groupBy, uniq, values } = require('ramda')
 const states: StatesMeta = require('./statesMeta.json')
 const totalPopulation = Object.values(states).reduce((a, { p }) => a + p, 0)
 
+type HashMapOf<T> = { [key: string]: T }
+
 type ErrorType = Error | String
 
 type StateEntry = {
@@ -58,13 +60,9 @@ type EnhancedOutput = {
 type Outputs = StateOutput[]
 type EnhancedOutputs = EnhancedOutput[]
 
-type Grouped = {
-	[key: string]: PopulationalEnhancedOutput[]
-}
+type Grouped = HashMapOf<PopulationalEnhancedOutput[]>
 
-type GroupedEnhanced = {
-	[key: string]: EnhancedOutputs
-}
+type GroupedEnhanced = HashMapOf<EnhancedOutputs>
 
 type TypePropertiesOf<T1, T2> = Pick<
 	T1,
@@ -76,11 +74,14 @@ type NumericKeysOf<T> = keyof TypePropertiesOf<T, number>
 type NumericKey = NumericKeysOf<StateOutput>
 
 type StateMeta = { p: number; n: string }
-type StatesMeta = {
-	[key: string]: StateMeta
-}
+type StatesMeta = HashMapOf<StateMeta>
 
 type StateKeys = keyof typeof StatesEnum
+
+type PickFirst<T extends {}> = (x: HashMapOf<T[]>) => HashMapOf<T>
+
+const pickFirst: PickFirst<EnhancedOutput> = x =>
+	Object.entries(x).reduce((acc, [k, v]) => ({ ...acc, [k]: v[0] }), {})
 
 const lines: StateEntries = []
 
@@ -223,7 +224,9 @@ const processLines = (input: StateEntries) => {
 	)
 
 	const groupedTotals: Grouped = groupByDate(withPopulationalTotals)
-	const totals: GroupedEnhanced = enhanceData(toEnhance)(groupedTotals)
+	const totals: HashMapOf<EnhancedOutput> = pickFirst(
+		enhanceData(toEnhance)(groupedTotals),
+	)
 
 	const groupedStates: Grouped = groupByDate(withPopulationalStates)
 	const main: GroupedEnhanced = enhanceData(toEnhance)(groupedStates)

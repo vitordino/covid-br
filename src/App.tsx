@@ -14,9 +14,10 @@ import data from './data/states.json'
 
 type HashMapOf<T> = { [key: string]: T }
 export type Main = HashMapOf<StateEntry[]>
+export type Totals = HashMapOf<StateEntry>
 
 const main: Main = data.main
-const totalsMain: Main = data.totals
+const totals: Totals = data.totals
 const dates: string[] = data.dates
 const statesMeta: StatesMeta = data.states
 
@@ -32,13 +33,6 @@ const Trend = (props: any) => (
 		{...props}
 	/>
 )
-
-type PickFirst<T extends {}> = (x: HashMapOf<T[]>) => HashMapOf<T>
-
-const pickFirst: PickFirst<StateEntry> = x =>
-	Object.entries(x).reduce((acc, [k, v]) => ({ ...acc, [k]: v[0] }), {})
-
-const totals = pickFirst(totalsMain)
 
 const trendData = Object.values(totals).map(({ tc }) => tc)
 
