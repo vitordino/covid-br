@@ -5,21 +5,30 @@ import { schemeOrRd } from 'd3-scale-chromatic'
 
 import type { StateEntry } from '../StatesTable'
 
-import data from '../../data/states.json'
+import { highestPopCase, highestStateCase } from '../../data/states.json'
 
 const geography = '/topo/states.json'
 
+const POP_MULTIPLIER = 100000
+
 const range = (n: number) => Array.from(Array(n).keys())
 
-const getDomain = (divisions: number) => (entry: number) => [
+const getDomain = (entry: number, divisions: number = 8) => [
 	1,
 	...range(divisions).map(div => ((div + 1) / divisions) * entry),
 ]
+const domains = {
+	tc: getDomain(highestStateCase),
+	ptc: getDomain(highestPopCase * POP_MULTIPLIER),
+}
 
-const domain = getDomain(8)(data.highestPopCase * 100000)
+const multipliers = {
+	tc: 1,
+	ptc: POP_MULTIPLIER,
+}
 
 // @ts-ignore
-const colorScale = scaleLinear(domain, schemeOrRd[9])
+const colorScale = domain => scaleLinear(domain, schemeOrRd[9])
 
 const mapStyle = {
 	default: { outline: 'none' },
@@ -27,10 +36,14 @@ const mapStyle = {
 	pressed: { outline: 'none' },
 }
 
-const getFill = (data: StateEntry[], id: string) => {
-	const { ptc } = data.find(({ st }) => st === id) || { ptc: undefined }
-	if (!ptc) return '#eee'
-	return colorScale(ptc * 100000)
+type PropUnion = keyof StateEntry &
+	keyof typeof domains &
+	keyof typeof multipliers
+
+const getFill = (data: StateEntry[], id: string) => (prop: PropUnion) => {
+	const x = data.find(({ st }) => st === id)?.[prop]
+	if (typeof x !== 'number') return '#eee'
+	return colorScale(domains[prop])(x * multipliers[prop])
 }
 
 type StatesMapProps = {
@@ -53,7 +66,7 @@ const StatesMap = ({ data }: StatesMapProps) => (
 						key={geo.rsmKey}
 						geography={geo}
 						style={mapStyle}
-						fill={getFill(data, geo.id)}
+						fill={getFill(data, geo.id)('ptc')}
 					/>
 				))
 			}
