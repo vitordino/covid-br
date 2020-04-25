@@ -13,7 +13,7 @@ const range = (n: number) => Array.from(Array(n).keys())
 
 const getDomain = (divisions: number) => (entry: number) => [
 	1,
-	...range(divisions).map((div) => ((div + 1) / divisions) * entry),
+	...range(divisions).map(div => ((div + 1) / divisions) * entry),
 ]
 
 const domain = getDomain(8)(data.highestStateCase)
@@ -48,7 +48,7 @@ const StatesMap = ({ data }: StatesMapProps) => (
 	>
 		<Geographies geography={geography}>
 			{({ geographies }) =>
-				geographies.map((geo) => (
+				geographies.map(geo => (
 					<Geography
 						key={geo.rsmKey}
 						geography={geo}

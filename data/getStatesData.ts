@@ -142,13 +142,13 @@ const getHighest = (prop: NumericKey) => (filter = defaultFilter) => (
 ) =>
 	Object.values(x)
 		.filter(filter)
-		.map((x) => x[prop])
+		.map(x => x[prop])
 		.reduce(higher, 0)
 
-const getHighestStateCase = getHighest('tc')((x) => x.st !== 'TOTAL')
-const getHighestTotalCase = getHighest('tc')((x) => x.st === 'TOTAL')
-const getHighestStateDeath = getHighest('td')((x) => x.st !== 'TOTAL')
-const getHighestTotalDeath = getHighest('td')((x) => x.st === 'TOTAL')
+const getHighestStateCase = getHighest('tc')(x => x.st !== 'TOTAL')
+const getHighestTotalCase = getHighest('tc')(x => x.st === 'TOTAL')
+const getHighestStateDeath = getHighest('td')(x => x.st !== 'TOTAL')
+const getHighestTotalDeath = getHighest('td')(x => x.st === 'TOTAL')
 
 type EnhanceReducerFn = (
 	arr: Outputs,
@@ -158,20 +158,20 @@ type EnhanceReducerFn = (
 	i: number,
 ) => EnhancedOutput
 
-const enhance: EnhanceReducerFn = (arr) => (acc, k, i) => ({
+const enhance: EnhanceReducerFn = arr => (acc, k, i) => ({
 	...acc,
-	[`r${k}`]: acc[k] / getHighest(k)((x) => !!x)(arr),
+	[`r${k}`]: acc[k] / getHighest(k)(x => !!x)(arr),
 })
 
 type EnhanceDataFunction = (
 	toEnhance: NumericKey[],
 ) => (data: Grouped) => GroupedEnhanced
 
-const enhanceData: EnhanceDataFunction = (toEnhance) => (data) =>
+const enhanceData: EnhanceDataFunction = toEnhance => data =>
 	Object.entries(data).reduce(
 		(acc, [k, v]) => ({
 			...acc,
-			[k]: v.map((data) => toEnhance.reduce(enhance(v), data)),
+			[k]: v.map(data => toEnhance.reduce(enhance(v), data)),
 		}),
 		{},
 	)
@@ -180,10 +180,8 @@ type EnhanceWithPopulationalDataFn = (
 	toEnhance: NumericKey[],
 ) => (data: Outputs) => PopulationalEnhancedOutput[]
 
-const enhanceWithPopulationalData: EnhanceWithPopulationalDataFn = (
-	toEnhance,
-) => (data) =>
-	data.map((x) => {
+const enhanceWithPopulationalData: EnhanceWithPopulationalDataFn = toEnhance => data =>
+	data.map(x => {
 		const state = getState(x)
 		const population = states[state]?.p || totalPopulation
 		return toEnhance.reduce(

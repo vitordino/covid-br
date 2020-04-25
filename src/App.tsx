@@ -42,7 +42,7 @@ const identity = (x: any) => x
 const trendData = Object.values(main)
 	.flatMap(identity)
 	.filter(({ st }) => st === 'TOTAL')
-	.map((x) => x.tc)
+	.map(x => x.tc)
 
 const App = () => {
 	const [index, setIndex] = useState(dates.length - 1)

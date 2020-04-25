@@ -5,7 +5,8 @@ import { mapTheme, mapBreakpoints } from 'etymos'
 type GetColumnDisplay = {
 	flex: boolean | undefined
 }
-const getColumnDisplay = ({ flex }: GetColumnDisplay) => (flex ? 'flex' : 'block')
+const getColumnDisplay = ({ flex }: GetColumnDisplay) =>
+	flex ? 'flex' : 'block'
 
 type ColumnProps = {
 	children: ReactNode
@@ -24,9 +25,9 @@ const Column = styled.div<ColumnProps>`
 			`,
 	)}
 	${mapBreakpoints(
-		(value, props) => 
-		// @ts-ignore
-		`display: ${value > 0 ? getColumnDisplay(props) : 'none'};
+		(value, props) =>
+			// @ts-ignore
+			`display: ${value > 0 ? getColumnDisplay(props) : 'none'};
 			width: ${(value / props.theme.columns || 1) * 100}%;
 		`,
 	)}
@@ -37,7 +38,6 @@ type RowProps = {
 	children: ReactNode
 	[key: string]: any
 }
-
 
 const Row = styled.div<RowProps>`
 	box-sizing: border-box;

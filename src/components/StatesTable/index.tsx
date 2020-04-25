@@ -52,7 +52,7 @@ const CellWrapper = styled.div`
 		flex: 1;
 	}
 	small {
-		${(p) => p.theme.transition.get()};
+		${p => p.theme.transition.get()};
 		color: var(--color-base66);
 	}
 `
@@ -80,7 +80,7 @@ const DynamicCell = ({
 	column,
 	data,
 	leftProp,
-	leftRender = (x) => `+${x}`,
+	leftRender = x => `+${x}`,
 	children,
 }: DynamicCellProps) => (
 	<Cell left={leftProp && leftRender(data?.[row.index]?.[leftProp])}>
@@ -96,7 +96,7 @@ const HeaderWrapper = styled.div`
 	background: var(--color-base06);
 	color: var(--color-base66);
 	box-shadow: 0 0 0 0.25rem var(--color-base00);
-	${(p) => p.theme.transition.get()};
+	${p => p.theme.transition.get()};
 	&:hover {
 		background: var(--color-base);
 		color: var(--color-base00);
@@ -129,7 +129,7 @@ const Table = styled.table`
 	}
 	tr:nth-child(2n) > * {
 		background: var(--color-base03);
-		${(p) => p.theme.transition.get('background')};
+		${p => p.theme.transition.get('background')};
 	}
 `
 
