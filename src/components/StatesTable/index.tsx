@@ -162,6 +162,7 @@ type StatesTableProps = {
 	data: StateEntry[]
 	total: StateEntry
 	statesMeta: StatesMeta
+	relative: boolean
 }
 
 type SortByOptions = {
@@ -177,7 +178,27 @@ const initialState: InitialTableState = {
 	sortBy: [{ id: 'tc', desc: true }],
 }
 
-const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
+const RelativeRender = ({ x }: { x: number }) => (
+	<span title={`${x * 10000} a cada 10 mil hab`}>
+		{(x * 10000).toFixed(3)}‱
+	</span>
+)
+
+const getLeftRender = (relative: boolean) => (x: ReactNode) => {
+	if (!x) return null
+	if (relative && typeof x === 'number') return <RelativeRender x={x} />
+	return `+${x}`
+}
+
+const StatesTable = ({
+	data,
+	total,
+	statesMeta,
+	relative,
+}: StatesTableProps) => {
+	const caseProp = relative ? 'ptc' : 'nc'
+	const deathProp = relative ? 'ptd' : 'nd'
+
 	const columns: Column<StateEntry>[] = useMemo(
 		() => [
 			{
@@ -195,19 +216,31 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 				accessor: 'tc',
 				Header: (x: Header) => <Header {...x}>Confirmed</Header>,
 				Cell: ({ row, column }: Cell) => (
-					<DynamicCell row={row} column={column} data={data} leftProp='nc' />
+					<DynamicCell
+						row={row}
+						column={column}
+						data={data}
+						leftProp={caseProp}
+						leftRender={getLeftRender(relative)}
+					/>
 				),
 			},
 			{
 				accessor: 'td',
 				Header: (x: Header) => <Header {...x}>Deaths</Header>,
 				Cell: ({ row, column }: Cell) => (
-					<DynamicCell row={row} column={column} data={data} leftProp='nd' />
+					<DynamicCell
+						row={row}
+						column={column}
+						data={data}
+						leftProp={deathProp}
+						leftRender={getLeftRender(relative)}
+					/>
 				),
 			},
 		],
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[data],
+		[data, relative],
 	)
 
 	const {
@@ -264,10 +297,14 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 						<Cell>{total.st}</Cell>
 					</td>
 					<td>
-						<Cell left={`+${total.nc}`}>{total.tc}</Cell>
+						<Cell left={getLeftRender(relative)(total[caseProp])}>
+							{total.tc}
+						</Cell>
 					</td>
 					<td>
-						<Cell left={`+${total.nd}`}>{total.td}</Cell>
+						<Cell left={getLeftRender(relative)(total[deathProp])}>
+							{total.td}
+						</Cell>
 					</td>
 				</TotalRow>
 			</tbody>

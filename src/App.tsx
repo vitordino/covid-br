@@ -76,7 +76,12 @@ const App = () => {
 						</label>
 						<pre>{dates[index]}</pre>
 						<Trend data={trendData} />
-						<StatesTable data={data} total={total} statesMeta={statesMeta} />
+						<StatesTable
+							data={data}
+							total={total}
+							statesMeta={statesMeta}
+							relative={relative}
+						/>
 					</Grid.Column>
 					<Grid.Column xs={16} lg={8}>
 						<StatesMap data={data} scaleProp={relative ? 'ptc' : 'tc'} />
