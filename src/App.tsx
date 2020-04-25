@@ -16,6 +16,7 @@ export type Main = {
 }
 
 const main: Main = data.main
+const totalsMain: Main = data.totals
 const dates: string[] = data.dates
 const statesMeta: StatesMeta = data.states
 
@@ -32,27 +33,16 @@ const Trend = (props: any) => (
 	/>
 )
 
-const removeTotal = (lines: StateEntry[]) =>
-	lines.filter(({ st }) => st !== 'TOTAL')
-
-const findTotal = (lines: StateEntry[]) =>
-	lines.filter(({ st }) => st === 'TOTAL')[0]
-
 const identity = (x: any) => x
-const trendData = Object.values(main)
+const trendData = Object.values(totalsMain)
 	.flatMap(identity)
-	.filter(({ st }) => st === 'TOTAL')
 	.map(x => x.tc)
 
 const App = () => {
 	const [index, setIndex] = useState(dates.length - 1)
 	const [relative, setRelative] = useState(true)
-	const data: StateEntry[] = useMemo(() => removeTotal(main[dates[index]]), [
-		index,
-	])
-	const total: StateEntry = useMemo(() => findTotal(main[dates[index]]), [
-		index,
-	])
+	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
+	const total: StateEntry = useMemo(() => totalsMain[dates[index]][0], [index])
 
 	return (
 		<Layout>

@@ -158,10 +158,10 @@ const getHighestPop = <T extends PopulationalEnhancedOutput>(prop: keyof T) => (
 
 const getHighestStateCase = getHighest('tc')(({ st }) => st !== 'TOTAL')
 const getHighestTotalCase = getHighest('tc')(({ st }) => st === 'TOTAL')
-const getHighestPopCase = getHighestPop('ptc')(({ st }) => st !== 'TOTAL')
 const getHighestStateDeath = getHighest('td')(({ st }) => st !== 'TOTAL')
 const getHighestTotalDeath = getHighest('td')(({ st }) => st === 'TOTAL')
-const getHighestPopDeath = getHighestPop('ptd')(({ st }) => st !== 'TOTAL')
+const getHighestPopCase = getHighestPop('ptc')()
+const getHighestPopDeath = getHighestPop('ptd')()
 
 type EnhanceReducerFn = (
 	arr: Outputs,
@@ -205,20 +205,41 @@ const enhanceWithPopulationalData: EnhanceWithPopulationalDataFn = toEnhance => 
 
 const toEnhance: NumericKey[] = ['tc', 'td']
 
+const getTotals = (arr: PopulationalEnhancedOutput[]) =>
+	arr.filter(({ st }) => st === 'TOTAL')
+
+const getNonTotals = (arr: PopulationalEnhancedOutput[]) =>
+	arr.filter(({ st }) => st !== 'TOTAL')
+
 const processLines = (input: StateEntries) => {
+	// arrays + hashmaps
 	const renamed: Outputs = renameData(input)
 	const dates = uniq(renamed.map(getDate))
+	const withPopulationalTotals = getTotals(
+		enhanceWithPopulationalData(toEnhance)(renamed),
+	)
+	const withPopulationalStates = getNonTotals(
+		enhanceWithPopulationalData(toEnhance)(renamed),
+	)
+
+	const groupedTotals: Grouped = groupByDate(withPopulationalTotals)
+	const totals: GroupedEnhanced = enhanceData(toEnhance)(groupedTotals)
+
+	const groupedStates: Grouped = groupByDate(withPopulationalStates)
+	const main: GroupedEnhanced = enhanceData(toEnhance)(groupedStates)
+
+	// numbers
 	const highestStateCase = getHighestStateCase(renamed)
 	const highestTotalCase = getHighestTotalCase(renamed)
 	const highestStateDeath = getHighestStateDeath(renamed)
 	const highestTotalDeath = getHighestTotalDeath(renamed)
-	const withPopulationalData = enhanceWithPopulationalData(toEnhance)(renamed)
-	const highestPopCase = getHighestPopCase(withPopulationalData)
-	const highestPopDeath = getHighestPopDeath(withPopulationalData)
-	const grouped: Grouped = groupByDate(withPopulationalData)
-	const main: GroupedEnhanced = enhanceData(toEnhance)(grouped)
+	const highestPopCase = getHighestPopCase(withPopulationalStates)
+	const highestPopDeath = getHighestPopDeath(withPopulationalStates)
+	const highestTotalPopCase = getHighestPopCase(withPopulationalTotals)
+	const highestTotalPopDeath = getHighestPopDeath(withPopulationalTotals)
 	return {
 		main,
+		totals,
 		dates,
 		states,
 		highestStateCase,
@@ -227,6 +248,8 @@ const processLines = (input: StateEntries) => {
 		highestTotalDeath,
 		highestPopCase,
 		highestPopDeath,
+		highestTotalPopCase,
+		highestTotalPopDeath,
 	}
 }
 
