@@ -1,7 +1,7 @@
 const { get } = require('https')
 const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
-const { groupBy, uniq } = require('ramda')
+const { groupBy, uniq, values } = require('ramda')
 
 const states: StatesMeta = require('./statesMeta.json')
 const totalPopulation = Object.values(states).reduce((a, { p }) => a + p, 0)
@@ -71,9 +71,9 @@ type TypePropertiesOf<T1, T2> = Pick<
 	{ [K in keyof T1]: T1[K] extends T2 ? K : never }[keyof T1]
 >
 
-type NumericPropertiesOfStateOutput = TypePropertiesOf<StateOutput, number>
+type NumericKeysOf<T> = keyof TypePropertiesOf<T, number>
 
-type NumericKey = keyof NumericPropertiesOfStateOutput
+type NumericKey = NumericKeysOf<StateOutput>
 
 type StateMeta = { p: number; n: string }
 type StatesMeta = {
@@ -133,22 +133,35 @@ const getState: GetStateFn = ({ st }) => st
 const getDate = ({ date }: StateOutput) => date
 const groupByDate = groupBy(getDate)
 
-const defaultFilter = (x: StateOutput) => !!x
-
 const higher = (a: number, b: number) => (a > b ? a : b)
 
-const getHighest = (prop: NumericKey) => (filter = defaultFilter) => (
-	x: Outputs,
-) =>
-	Object.values(x)
-		.filter(filter)
-		.map(x => x[prop])
-		.reduce(higher, 0)
+type FilterOf<T> = (x: T) => boolean
 
-const getHighestStateCase = getHighest('tc')(x => x.st !== 'TOTAL')
-const getHighestTotalCase = getHighest('tc')(x => x.st === 'TOTAL')
-const getHighestStateDeath = getHighest('td')(x => x.st !== 'TOTAL')
-const getHighestTotalDeath = getHighest('td')(x => x.st === 'TOTAL')
+const defaultFilter: FilterOf<any> = x => !!x
+
+const getHighest = <T extends StateOutput>(prop: NumericKeysOf<T>) => (
+	filter: (value: T) => boolean = defaultFilter,
+) => (x: T[]) =>
+	values(x)
+		.filter(filter)
+		.map((x: T) => x[prop])
+		.reduce(higher)
+
+// i f***** hate TS
+const getHighestPop = <T extends PopulationalEnhancedOutput>(prop: keyof T) => (
+	filter: (value: T) => boolean = defaultFilter,
+) => (x: T[]) =>
+	values(x)
+		.filter(filter)
+		.map((x: T) => x[prop])
+		.reduce(higher)
+
+const getHighestStateCase = getHighest('tc')(({ st }) => st !== 'TOTAL')
+const getHighestTotalCase = getHighest('tc')(({ st }) => st === 'TOTAL')
+const getHighestPopCase = getHighestPop('ptc')(({ st }) => st !== 'TOTAL')
+const getHighestStateDeath = getHighest('td')(({ st }) => st !== 'TOTAL')
+const getHighestTotalDeath = getHighest('td')(({ st }) => st === 'TOTAL')
+const getHighestPopDeath = getHighestPop('ptd')(({ st }) => st !== 'TOTAL')
 
 type EnhanceReducerFn = (
 	arr: Outputs,
@@ -200,6 +213,8 @@ const processLines = (input: StateEntries) => {
 	const highestStateDeath = getHighestStateDeath(renamed)
 	const highestTotalDeath = getHighestTotalDeath(renamed)
 	const withPopulationalData = enhanceWithPopulationalData(toEnhance)(renamed)
+	const highestPopCase = getHighestPopCase(withPopulationalData)
+	const highestPopDeath = getHighestPopDeath(withPopulationalData)
 	const grouped: Grouped = groupByDate(withPopulationalData)
 	const main: GroupedEnhanced = enhanceData(toEnhance)(grouped)
 	return {
@@ -210,6 +225,8 @@ const processLines = (input: StateEntries) => {
 		highestTotalCase,
 		highestStateDeath,
 		highestTotalDeath,
+		highestPopCase,
+		highestPopDeath,
 	}
 }
 
