@@ -12,9 +12,8 @@ import type { StateEntry, StatesMeta } from './components/StatesTable'
 
 import data from './data/states.json'
 
-export type Main = {
-	[key: string]: StateEntry[]
-}
+type HashMapOf<T> = { [key: string]: T }
+export type Main = HashMapOf<StateEntry[]>
 
 const main: Main = data.main
 const totalsMain: Main = data.totals
@@ -34,16 +33,20 @@ const Trend = (props: any) => (
 	/>
 )
 
-const identity = (x: any) => x
-const trendData = Object.values(totalsMain)
-	.flatMap(identity)
-	.map(x => x.tc)
+type PickFirst<T extends {}> = (x: HashMapOf<T[]>) => HashMapOf<T>
+
+const pickFirst: PickFirst<StateEntry> = x =>
+	Object.entries(x).reduce((acc, [k, v]) => ({ ...acc, [k]: v[0] }), {})
+
+const totals = pickFirst(totalsMain)
+
+const trendData = Object.values(totals).map(({ tc }) => tc)
 
 const App = () => {
 	const [index, setIndex] = useState(dates.length - 1)
 	const [relative, setRelative] = useState(true)
 	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
-	const total: StateEntry = useMemo(() => totalsMain[dates[index]][0], [index])
+	const total: StateEntry = useMemo(() => totals[dates[index]], [index])
 
 	return (
 		<Layout>
