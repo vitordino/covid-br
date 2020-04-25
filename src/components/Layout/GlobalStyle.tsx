@@ -3,7 +3,7 @@ import 'wipe.css'
 import 'typeface-ibm-plex-mono'
 
 const GlobalStyle = createGlobalStyle`
-	html, body {
+	html {
 		text-rendering: optimizeLegibility;
 		font-smoothing: antialised;
 		-webkit-font-smoothing: antialiased;
@@ -53,9 +53,8 @@ const GlobalStyle = createGlobalStyle`
 			--color-success: ${theme.colors.dark.success};
 			--color-error: ${theme.colors.dark.error};
 		}
-		body {
+		html {
 			font-family: ${theme.type.fonts.mono};
-			${theme.transition.get()};
 		}
 	`}
 `
