@@ -128,17 +128,20 @@ const Table = styled.table`
 	width: 100%;
 	text-align: right;
 	margin: 0 -0.25rem;
+	position: relative;
 	th:first-child,
 	td:first-child {
 		text-align: left;
 	}
 	th {
-		position: relative;
+		position: sticky;
+		top: 0.25rem;
+		z-index: 1;
 		&:nth-child(1) {
-			z-index: 2;
+			z-index: 3;
 		}
 		&:nth-child(2) {
-			z-index: 1;
+			z-index: 2;
 		}
 	}
 	tr:nth-child(2n) > * {
