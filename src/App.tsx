@@ -47,15 +47,30 @@ const App = () => {
 	return (
 		<Layout>
 			<Container>
+				<input
+					type='range'
+					min={0}
+					max={dates.length - 1}
+					value={index}
+					onChange={({ target }) => setIndex(parseInt(target.value))}
+					style={{
+						width: '100%',
+						position: 'sticky',
+						top: 0,
+						background: 'red',
+						zIndex: 10,
+					}}
+				/>
 				<Grid.Row vertical-gutter>
 					<Grid.Column xs={16} lg={8}>
-						<input
-							type='range'
-							min={0}
-							max={dates.length - 1}
-							value={index}
-							onChange={({ target }) => setIndex(parseInt(target.value))}
+						<StatesTable
+							data={data}
+							total={total}
+							statesMeta={statesMeta}
+							relative={relative}
 						/>
+					</Grid.Column>
+					<Grid.Column xs={16} lg={8}>
 						<label>
 							{JSON.stringify({ relative })}
 							<input
@@ -66,14 +81,6 @@ const App = () => {
 						</label>
 						<pre>{dates[index]}</pre>
 						<Trend data={trendData} />
-						<StatesTable
-							data={data}
-							total={total}
-							statesMeta={statesMeta}
-							relative={relative}
-						/>
-					</Grid.Column>
-					<Grid.Column xs={16} lg={8}>
 						<StatesMap data={data} scaleProp={relative ? 'ptc' : 'tc'} />
 					</Grid.Column>
 				</Grid.Row>

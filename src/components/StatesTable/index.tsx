@@ -124,6 +124,10 @@ const TotalRow = styled.tr`
 	}
 `
 
+const Wrapper = styled.div`
+	padding: 0 0.125rem;
+`
+
 const Table = styled.table`
 	width: 100%;
 	text-align: right;
@@ -135,7 +139,7 @@ const Table = styled.table`
 	}
 	th {
 		position: sticky;
-		top: 0.25rem;
+		top: 1.125rem;
 		z-index: 1;
 		&:nth-child(1) {
 			z-index: 3;
@@ -263,52 +267,54 @@ const StatesTable = ({
 	)
 
 	return (
-		<Table {...getTableProps()}>
-			<thead>
-				{headerGroups.map((headerGroup: any) => (
-					<tr {...headerGroup.getHeaderGroupProps()}>
-						{headerGroup.headers.map((column: any) => (
-							<th
-								{...column.getHeaderProps(
-									column.getSortByToggleProps({
-										onClick: () => toggleSortBy(column.id, true),
-									}),
-								)}
-							>
-								{column.render('Header')}
-							</th>
-						))}
-					</tr>
-				))}
-			</thead>
-			<tbody {...getTableBodyProps()}>
-				{rows.map((row: any) => {
-					prepareRow(row)
-					return (
-						<tr {...row.getRowProps()}>
-							{row.cells.map((cell: any) => (
-								<td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+		<Wrapper>
+			<Table {...getTableProps()}>
+				<thead>
+					{headerGroups.map((headerGroup: any) => (
+						<tr {...headerGroup.getHeaderGroupProps()}>
+							{headerGroup.headers.map((column: any) => (
+								<th
+									{...column.getHeaderProps(
+										column.getSortByToggleProps({
+											onClick: () => toggleSortBy(column.id, true),
+										}),
+									)}
+								>
+									{column.render('Header')}
+								</th>
 							))}
 						</tr>
-					)
-				})}
-				<TotalRow>
-					<td>
-						<Cell>{total.st}</Cell>
-					</td>
-					<td>
-						<Cell left={getLeftRender(relative)(total[caseProp])}>
-							{total.tc}
-						</Cell>
-					</td>
-					<td>
-						<Cell left={getLeftRender(relative)(total[deathProp])}>
-							{total.td}
-						</Cell>
-					</td>
-				</TotalRow>
-			</tbody>
-		</Table>
+					))}
+				</thead>
+				<tbody {...getTableBodyProps()}>
+					{rows.map((row: any) => {
+						prepareRow(row)
+						return (
+							<tr {...row.getRowProps()}>
+								{row.cells.map((cell: any) => (
+									<td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+								))}
+							</tr>
+						)
+					})}
+					<TotalRow>
+						<td>
+							<Cell>{total.st}</Cell>
+						</td>
+						<td>
+							<Cell left={getLeftRender(relative)(total[caseProp])}>
+								{total.tc}
+							</Cell>
+						</td>
+						<td>
+							<Cell left={getLeftRender(relative)(total[deathProp])}>
+								{total.td}
+							</Cell>
+						</td>
+					</TotalRow>
+				</tbody>
+			</Table>
+		</Wrapper>
 	)
 }
 
