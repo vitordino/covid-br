@@ -6,6 +6,7 @@ import StatesMap from './components/StatesMap'
 import Container from './components/Container'
 import Grid from './components/Grid'
 import Layout from './components/Layout'
+import RangeInput from './components/RangeInput'
 
 import type { StateEntry, StatesMeta } from './components/StatesTable'
 
@@ -46,21 +47,8 @@ const App = () => {
 
 	return (
 		<Layout>
+			<RangeInput value={index} onChange={setIndex} dates={dates} />
 			<Container>
-				<input
-					type='range'
-					min={0}
-					max={dates.length - 1}
-					value={index}
-					onChange={({ target }) => setIndex(parseInt(target.value))}
-					style={{
-						width: '100%',
-						position: 'sticky',
-						top: 0,
-						background: 'red',
-						zIndex: 10,
-					}}
-				/>
 				<Grid.Row vertical-gutter>
 					<Grid.Column xs={16} lg={8}>
 						<StatesTable
