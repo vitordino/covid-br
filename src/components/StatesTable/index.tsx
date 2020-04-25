@@ -91,10 +91,11 @@ const DynamicCell = ({
 const HeaderWrapper = styled.div`
 	display: flex;
 	justify-content: space-between;
-	padding: 0.5rem;
+	padding: 0.5rem 0.75rem;
 	border-radius: 0.25rem;
 	background: var(--color-base06);
 	color: var(--color-base66);
+	box-shadow: 0 0 0 0.25rem var(--color-base00);
 	${(p) => p.theme.transition.get()};
 	&:hover {
 		background: var(--color-base);
@@ -118,20 +119,17 @@ const Table = styled.table`
 		text-align: left;
 	}
 	th {
-		padding: 0 0.25rem 0.75rem;
+		position: relative;
+		&:nth-child(1) {
+			z-index: 2;
+		}
+		&:nth-child(2) {
+			z-index: 1;
+		}
 	}
 	tr:nth-child(2n) > * {
-		position: relative;
-		&:before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			bottom: 0;
-			right: 0;
-			background: var(--color-base03);
-			${(p) => p.theme.transition.get()};
-		}
+		background: var(--color-base03);
+		${(p) => p.theme.transition.get('background')};
 	}
 `
 

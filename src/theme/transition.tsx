@@ -3,7 +3,12 @@ const defaultOptions = {
 	delay: 0.125,
 }
 
-const defaultProperties = ['color', 'background-color', 'border-color']
+const defaultProperties = [
+	'color',
+	'background-color',
+	'border-color',
+	'box-shadow',
+]
 
 const get = (p = defaultProperties, { time, delay } = defaultOptions) => {
 	if (!p?.length) return null
