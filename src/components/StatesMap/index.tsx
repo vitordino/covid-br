@@ -16,7 +16,7 @@ const getDomain = (divisions: number) => (entry: number) => [
 	...range(divisions).map(div => ((div + 1) / divisions) * entry),
 ]
 
-const domain = getDomain(8)(data.highestStateCase)
+const domain = getDomain(8)(data.highestPopCase * 100000)
 
 // @ts-ignore
 const colorScale = scaleLinear(domain, schemeOrRd[9])
@@ -28,9 +28,9 @@ const mapStyle = {
 }
 
 const getFill = (data: StateEntry[], id: string) => {
-	const { tc } = data.find(({ st }) => st === id) || { tc: '0' }
-	if (tc === '0') return '#eee'
-	return colorScale(tc)
+	const { ptc } = data.find(({ st }) => st === id) || { ptc: undefined }
+	if (!ptc) return '#eee'
+	return colorScale(ptc * 100000)
 }
 
 type StatesMapProps = {
