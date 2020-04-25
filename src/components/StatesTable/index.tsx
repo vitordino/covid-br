@@ -108,6 +108,22 @@ const Header = ({ children, column }: HeaderProps) => (
 	</HeaderWrapper>
 )
 
+const TotalRow = styled.tr`
+	td {
+		background: transparent !important;
+		position: sticky;
+		bottom: 0;
+	}
+	& > * > * {
+		background: var(--color-base00);
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+		border-top: 1px solid var(--color-base11);
+		margin-top: 0.125rem;
+		/* box-shadow: 0 -0.5rem 1rem var(--color-base00); */
+	}
+`
+
 const Table = styled.table`
 	width: 100%;
 	text-align: right;
@@ -240,7 +256,7 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 						</tr>
 					)
 				})}
-				<tr>
+				<TotalRow>
 					<td>
 						<Cell>{total.st}</Cell>
 					</td>
@@ -250,7 +266,7 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 					<td>
 						<Cell left={`+${total.nd}`}>{total.td}</Cell>
 					</td>
-				</tr>
+				</TotalRow>
 			</tbody>
 		</Table>
 	)
