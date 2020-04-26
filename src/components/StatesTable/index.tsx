@@ -116,8 +116,8 @@ const TotalRow = styled.tr`
 	}
 	& > * > * {
 		background: var(--color-base00);
-		padding-top: 1rem;
-		padding-bottom: 1rem;
+		padding-top: 0.75rem;
+		padding-bottom: 0.75rem;
 		border-top: 1px solid var(--color-base11);
 		margin-top: 0.125rem;
 		/* box-shadow: 0 -0.5rem 1rem var(--color-base00); */
