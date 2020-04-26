@@ -2,6 +2,7 @@ import React, { ReactNode, useMemo } from 'react'
 import styled from 'styled-components'
 import { useTable, useSortBy, Column } from 'react-table'
 import Text from 'components/Text'
+import type { Transform } from 'components/Text'
 
 export type StateEntry = {
 	date: string
@@ -42,6 +43,7 @@ type StaticCellProps = {
 	left?: ReactNode
 	children?: ReactNode
 	bold?: boolean
+	transform?: Transform
 }
 
 const CellWrapper = styled(Text)`
@@ -54,8 +56,8 @@ const CellWrapper = styled(Text)`
 	}
 `
 
-const Cell = ({ left, children, bold = true }: StaticCellProps) => (
-	<CellWrapper>
+const Cell = ({ left, children, transform, bold = true }: StaticCellProps) => (
+	<CellWrapper transform={transform}>
 		{!!left && <Text>{left}</Text>}
 		{'\t'}
 		{bold && <strong>{children}</strong>}

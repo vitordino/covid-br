@@ -6,9 +6,11 @@ import { mapBreakpoints } from 'etymos'
 import type { TypoEnum, BreakpointEnum, ColorEnum, FontEnum } from 'theme'
 import getTypeStyle from 'utils/getTypeStyle'
 
+export type Transform = 'none' | 'lowercase' | 'uppercase' | 'capitalize'
+
 type TextProps = {
 	weight?: number
-	case?: 'none' | 'lowercase' | 'uppercase' | 'capitalize'
+	transform?: Transform
 	background?: ColorEnum
 	color?: ColorEnum
 	family?: FontEnum
@@ -20,7 +22,7 @@ const Text = styled.div<TextProps>`
 	${p => p.color && `color: var(--color-${p.color});`}
 	${p => p.background && `background: var(--color-${p.background});`}
 	${p => p.weight && `font-weight: ${p.weight};`}
-	${p => p.case && `text-transform: ${p.case};`}
+	${p => p.transform && `text-transform: ${p.transform};`}
 	${p => p.family && `font-family: ${p.theme.type.fonts?.[p.family]};`}
 	${({ theme }) => theme.transition.get()};
 	${mapBreakpoints(getTypeStyle)}
