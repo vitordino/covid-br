@@ -57,7 +57,11 @@ const RangeInput = ({
 	<Wrapper>
 		<Track>
 			{dates.map(x => (
-				<Strip total={dates.length} fill={getRangeFill(totals[x])(scaleProp)} />
+				<Strip
+					key={x}
+					total={dates.length}
+					fill={getRangeFill(totals[x])(scaleProp)}
+				/>
 			))}
 		</Track>
 		<Field
