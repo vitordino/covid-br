@@ -44,7 +44,12 @@ const App = () => {
 
 	return (
 		<Layout>
-			<RangeInput value={index} onChange={setIndex} dates={dates} />
+			<RangeInput
+				value={index}
+				onChange={setIndex}
+				dates={dates}
+				totals={totals}
+			/>
 			<Container>
 				<Grid.Row vertical-gutter>
 					<Grid.Column xs={16} lg={8}>
