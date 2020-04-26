@@ -3,7 +3,12 @@ import { schemeOrRd } from 'd3-scale-chromatic'
 
 import type { StateEntry } from 'components/StatesTable'
 
-import { highestPopCase, highestStateCase } from 'data/states.json'
+import {
+	highestPopCase,
+	highestStateCase,
+	highestTotalCase,
+	highestTotalPopCase,
+} from 'data/states.json'
 
 const POP_MULTIPLIER = 100000
 
@@ -19,6 +24,11 @@ const domains = {
 	ptc: getDomain(highestPopCase * POP_MULTIPLIER),
 }
 
+const totalDomains = {
+	tc: getDomain(highestTotalCase),
+	ptc: getDomain(highestTotalPopCase * POP_MULTIPLIER),
+}
+
 const multipliers = {
 	tc: 1,
 	ptc: POP_MULTIPLIER,
@@ -29,7 +39,13 @@ export const colorScale = domain => scaleLinear(domain, schemeOrRd[9])
 
 export type PropUnion = keyof typeof domains & keyof typeof multipliers
 
-export const getMapFill = (data: StateEntry[], id: string) => (
+export const getRangeFill = (data: StateEntry) => (prop: PropUnion) => {
+	const x = data?.[prop]
+	if (typeof x !== 'number') return '#eee'
+	return colorScale(totalDomains[prop])(x * multipliers[prop])
+}
+
+export const getMapFill = (data: StateEntry[], id?: string) => (
 	prop: PropUnion,
 ) => {
 	const x = data.find(({ st }) => st === id)?.[prop]
