@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react'
 
-import { ThemeProvider } from '../../theme'
-import SEO from './SEO'
-import GlobalStyle from './GlobalStyle'
-import ColorModeSwitcher from './ColorModeSwitcher'
+import { ThemeProvider } from 'theme'
+import SEO from 'components/Layout/SEO'
+import GlobalStyle from 'components/Layout/GlobalStyle'
+import ColorModeSwitcher from 'components/Layout/ColorModeSwitcher'
 
 type LayoutProps = {
 	children?: ReactNode

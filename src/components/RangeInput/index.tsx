@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import { Totals } from '../../App'
+import { Totals } from 'App'
 
 type RangeInputProps = {
 	value: number

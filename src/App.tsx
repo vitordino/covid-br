@@ -1,16 +1,16 @@
 import React, { useState, useMemo } from 'react'
 
-import BaseTrend from './components/Trend'
-import StatesTable from './components/StatesTable'
-import StatesMap from './components/StatesMap'
-import Container from './components/Container'
-import Grid from './components/Grid'
-import Layout from './components/Layout'
-import RangeInput from './components/RangeInput'
+import BaseTrend from 'components/Trend'
+import StatesTable from 'components/StatesTable'
+import StatesMap from 'components/StatesMap'
+import Container from 'components/Container'
+import Grid from 'components/Grid'
+import Layout from 'components/Layout'
+import RangeInput from 'components/RangeInput'
 
-import type { StateEntry, StatesMeta } from './components/StatesTable'
+import type { StateEntry, StatesMeta } from 'components/StatesTable'
 
-import data from './data/states.json'
+import data from 'data/states.json'
 
 type HashMapOf<T> = { [key: string]: T }
 export type Main = HashMapOf<StateEntry[]>

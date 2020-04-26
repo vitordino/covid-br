@@ -3,9 +3,9 @@ import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 import { scaleLinear } from 'd3-scale'
 import { schemeOrRd } from 'd3-scale-chromatic'
 
-import type { StateEntry } from '../StatesTable'
+import type { StateEntry } from 'components/StatesTable'
 
-import { highestPopCase, highestStateCase } from '../../data/states.json'
+import { highestPopCase, highestStateCase } from 'data/states.json'
 
 const geography = '/topo/states.json'
 

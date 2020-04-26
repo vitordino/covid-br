@@ -2,13 +2,13 @@ import React, { ReactNode } from 'react'
 import { ThemeProvider as Provider } from 'styled-components'
 import { above } from 'etymos'
 
-import colors from './colors'
-import type { ColorModes } from './colors'
-import responsive from './responsive'
-import type { Breakpoints } from './responsive'
-import typography from './type'
-import type Typography from './type'
-import transition from './transition'
+import colors from 'theme/colors'
+import type { ColorModes } from 'theme/colors'
+import responsive from 'theme/responsive'
+import type { Breakpoints } from 'theme/responsive'
+import typography from 'theme/type'
+import type Typography from 'theme/type'
+import transition from 'theme/transition'
 
 export type Theme = {
 	colors: ColorModes
