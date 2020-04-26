@@ -1,6 +1,6 @@
 const columns: number = 16
 
-type Breakpoint = {
+export type Breakpoint = {
 	width: number
 	[key: string]: any
 }

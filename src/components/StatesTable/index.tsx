@@ -1,6 +1,7 @@
 import React, { ReactNode, useMemo } from 'react'
 import styled from 'styled-components'
 import { useTable, useSortBy, Column } from 'react-table'
+import Text from 'components/Text'
 
 export type StateEntry = {
 	date: string
@@ -43,7 +44,7 @@ type StaticCellProps = {
 	bold?: boolean
 }
 
-const CellWrapper = styled.div`
+const CellWrapper = styled(Text)`
 	padding: 0.375rem 0.75rem;
 	display: flex;
 	position: relative;
@@ -51,14 +52,11 @@ const CellWrapper = styled.div`
 	& > * {
 		flex: 1;
 	}
-	small {
-		color: var(--color-base66);
-	}
 `
 
 const Cell = ({ left, children, bold = true }: StaticCellProps) => (
 	<CellWrapper>
-		{!!left && <small>{left}</small>}
+		{!!left && <Text>{left}</Text>}
 		{'\t'}
 		{bold && <strong>{children}</strong>}
 		{!bold && <div>{children}</div>}
@@ -87,7 +85,7 @@ const DynamicCell = ({
 	</Cell>
 )
 
-const HeaderWrapper = styled.div`
+const HeaderWrapper = styled(Text)`
 	display: flex;
 	justify-content: space-between;
 	padding: 0.5rem 0.75rem;
@@ -211,8 +209,7 @@ const StatesTable = ({
 				sortInverted: true,
 				Cell: ({ row }: Cell) => (
 					<Cell bold={false}>
-						<strong>{row.values.st} </strong>
-						<small>{statesMeta[row.values.st].n}</small>
+						<strong>{statesMeta[row.values.st].n}</strong>
 					</Cell>
 				),
 			},

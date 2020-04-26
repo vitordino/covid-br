@@ -30,6 +30,13 @@ type ThemeProviderProps = {
 	children: ReactNode
 }
 
+export type TypoEnum = keyof typeof theme.type.scale
+export type BreakpointEnum = keyof typeof theme.breakpoints
+export type FontEnum = keyof typeof theme.type.fonts
+export type ColorEnum =
+	| keyof typeof theme.colors.light
+	| keyof typeof theme.colors.dark
+
 export const ThemeProvider = ({ children }: ThemeProviderProps) => (
 	<Provider theme={theme}>{children}</Provider>
 )

@@ -1,9 +1,22 @@
+// @ts-nocheck
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { mapBreakpoints } from 'etymos'
 
-import getTypeStyle from '~/utils/getTypeStyle'
+import type { TypoEnum, BreakpointEnum, ColorEnum, FontEnum } from 'theme'
+import getTypeStyle from 'utils/getTypeStyle'
 
-const Text = styled.div`
+type TextProps = {
+	weight?: number
+	case?: 'none' | 'lowercase' | 'uppercase' | 'capitalize'
+	background?: ColorEnum
+	color?: ColorEnum
+	family?: FontEnum
+	children?: ReactNode
+	[key: BreakpointEnum]: TypoEnum
+}
+
+const Text = styled.div<TextProps>`
 	${p => p.color && `color: var(--color-${p.color});`}
 	${p => p.background && `background: var(--color-${p.background});`}
 	${p => p.weight && `font-weight: ${p.weight};`}
@@ -13,6 +26,6 @@ const Text = styled.div`
 	${mapBreakpoints(getTypeStyle)}
 `
 
-Text.defaultProps = { xs: 0 }
+Text.defaultProps = { xs: 1 }
 
 export default Text
