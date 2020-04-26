@@ -298,7 +298,7 @@ const StatesTable = ({
 					})}
 					<TotalRow>
 						<td>
-							<Cell>{total.st}</Cell>
+							<Cell transform='capitalize'>{total.st.toLowerCase()}</Cell>
 						</td>
 						<td>
 							<Cell left={getLeftRender(relative)(total[caseProp])}>
