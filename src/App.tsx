@@ -52,7 +52,7 @@ const App = () => {
 				scaleProp={relative ? 'ptc' : 'tc'}
 			/>
 			<Container>
-				<Grid.Row vertical-gutter>
+				<Grid.Row>
 					<Grid.Column xs={16} lg={8}>
 						<StatesTable
 							data={data}
