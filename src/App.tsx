@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from 'react'
+import styled from 'styled-components'
 
 import BaseTrend from 'components/Trend'
 import StatesTable from 'components/StatesTable'
 import StatesMap from 'components/StatesMap'
 import Container from 'components/Container'
 import Grid from 'components/Grid'
+import Text from 'components/Text'
 import Layout from 'components/Layout'
 import RangeInput from 'components/RangeInput'
 
@@ -21,6 +23,13 @@ const totals: Totals = data.totals
 const dates: string[] = data.dates
 const statesMeta: StatesMeta = data.states
 
+const TitleHeader = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	padding: 2rem 0;
+`
+
 const Trend = (props: any) => (
 	<BaseTrend
 		smooth
@@ -35,6 +44,11 @@ const Trend = (props: any) => (
 )
 
 const trendData = Object.values(totals).map(({ tc }) => tc)
+
+const options = { day: 'numeric', month: 'numeric', year: 'numeric' }
+
+const dateToString = (d: string, l: string = 'en') =>
+	new Date(d).toLocaleDateString(l, options)
 
 const App = () => {
 	const [index, setIndex] = useState(dates.length - 1)
@@ -52,6 +66,14 @@ const App = () => {
 				scaleProp={relative ? 'ptc' : 'tc'}
 			/>
 			<Container>
+				<TitleHeader>
+					<Text as='h1' weight={400} xs={3} md={4} lg={5}>
+						Brazil
+					</Text>
+					<Text weight={400} xs={2} md={3}>
+						{dateToString(dates[index])}
+					</Text>
+				</TitleHeader>
 				<Grid.Row>
 					<Grid.Column xs={16} lg={8}>
 						<StatesTable
