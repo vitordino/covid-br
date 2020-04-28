@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode, SetStateAction, Dispatch } from 'react'
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 
 import { getMapFill } from 'utils/colorScale'
@@ -16,9 +16,14 @@ const mapStyle = {
 type StatesMapProps = {
 	data: StateEntry[]
 	scaleProp?: PropUnion
+	setTooltipContent: Dispatch<SetStateAction<ReactNode>>
 }
 
-const StatesMap = ({ data, scaleProp = 'ptc' }: StatesMapProps) => (
+const StatesMap = ({
+	data,
+	scaleProp = 'ptc',
+	setTooltipContent,
+}: StatesMapProps) => (
 	<ComposableMap
 		data-tip=''
 		projectionConfig={{ scale: 550, center: [-54, -13] }}
@@ -35,6 +40,8 @@ const StatesMap = ({ data, scaleProp = 'ptc' }: StatesMapProps) => (
 						geography={geo}
 						style={mapStyle}
 						fill={getMapFill(data, geo.id)(scaleProp)}
+						onMouseEnter={() => setTooltipContent(() => <div>{geo.id}</div>)}
+						onMouseLeave={() => setTooltipContent('')}
 					/>
 				))
 			}

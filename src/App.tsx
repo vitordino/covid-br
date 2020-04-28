@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react'
+import React, { ReactNode, useState, useMemo } from 'react'
 import styled from 'styled-components'
+import ReactTooltip from 'react-tooltip'
 
 import BaseTrend from 'components/Trend'
 import StatesTable from 'components/StatesTable'
@@ -51,13 +52,15 @@ const dateToString = (d: string, l: string = 'en') =>
 	new Date(d).toLocaleDateString(l, options)
 
 const App = () => {
-	const [index, setIndex] = useState(dates.length - 1)
-	const [relative, setRelative] = useState(true)
+	const [index, setIndex] = useState<number>(dates.length - 1)
+	const [relative, setRelative] = useState<boolean>(true)
+	const [tooltipContent, setTooltipContent] = useState<ReactNode>('')
 	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
 	const total: StateEntry = useMemo(() => totals[dates[index]], [index])
 
 	return (
 		<Layout>
+			<ReactTooltip>{tooltipContent}</ReactTooltip>
 			<RangeInput
 				value={index}
 				onChange={setIndex}
@@ -94,7 +97,11 @@ const App = () => {
 						</label>
 						<pre>{dates[index]}</pre>
 						<Trend data={trendData} />
-						<StatesMap data={data} scaleProp={relative ? 'ptc' : 'tc'} />
+						<StatesMap
+							data={data}
+							scaleProp={relative ? 'ptc' : 'tc'}
+							setTooltipContent={setTooltipContent}
+						/>
 					</Grid.Column>
 				</Grid.Row>
 			</Container>
