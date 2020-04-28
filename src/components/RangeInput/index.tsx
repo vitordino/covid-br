@@ -1,4 +1,4 @@
-import React, { ReactNode, Dispatch, SetStateAction } from 'react'
+import React, { ReactNode, Dispatch, SetStateAction, SyntheticEvent } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Totals } from 'App'
@@ -14,7 +14,10 @@ type RangeInputProps = {
 	setTooltipContent: Dispatch<SetStateAction<ReactNode>>
 }
 
-const Wrapper = styled.label`
+type WrapperProps = { max: number }
+
+const Wrapper =
+	styled.label<WrapperProps>`
 	display: flex;
 	position: fixed;
 	width: 100%;
@@ -92,14 +95,29 @@ const Strip = styled.div<StripProps>`
 	background: ${p => p.fill};
 `
 
+type GetHoverValue = (event: SyntheticEvent<HTMLLabelElement>) => number
+
+const getHoverValue: GetHoverValue = ({ target, nativeEvent }) => Math.floor(
+	// @ts-ignore
+	(nativeEvent.offsetX / target.clientWidth) *
+	// @ts-ignore
+	parseInt(target.getAttribute('max'))
+)
+
 const RangeInput = ({
 	value,
 	onChange,
 	dates,
 	totals,
 	scaleProp = 'tc',
+	setTooltipContent,
 }: RangeInputProps) => (
-	<Wrapper>
+	<Wrapper
+		max={dates.length - 1}
+		onMouseUp={e => setTooltipContent(dates[getHoverValue(e)])}
+		onMouseMove={e => setTooltipContent(dates[getHoverValue(e)])}
+		onMouseLeave={() => setTooltipContent('')}
+	>
 		{dates.map(x => (
 			<Strip
 				key={x}

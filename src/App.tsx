@@ -61,14 +61,6 @@ const App = () => {
 	return (
 		<Layout>
 			<ReactTooltip>{tooltipContent}</ReactTooltip>
-			<RangeInput
-				value={index}
-				onChange={setIndex}
-				dates={dates}
-				totals={totals}
-				scaleProp={relative ? 'ptc' : 'tc'}
-				setTooltipContent={setTooltipContent}
-			/>
 			<Container>
 				<TitleHeader>
 					<Text as='h1' weight={400} xs={3} md={4} lg={5}>
@@ -106,6 +98,14 @@ const App = () => {
 					</Grid.Column>
 				</Grid.Row>
 			</Container>
+			<RangeInput
+				value={index}
+				onChange={setIndex}
+				dates={dates}
+				totals={totals}
+				scaleProp={relative ? 'ptc' : 'tc'}
+				setTooltipContent={setTooltipContent}
+			/>
 		</Layout>
 	)
 }
