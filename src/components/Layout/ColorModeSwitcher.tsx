@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 const Button = styled.button`
 	display: block;
-	padding: 1.5rem 1rem;
+	padding: 1.75rem 1rem;
 	position: fixed;
 	bottom: 0;
 	right: 0;
