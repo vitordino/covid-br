@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, Dispatch, SetStateAction } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Totals } from 'App'
@@ -11,10 +11,11 @@ type RangeInputProps = {
 	dates: string[]
 	totals: Totals
 	scaleProp?: PropUnion
+	setTooltipContent: Dispatch<SetStateAction<ReactNode>>
 }
 
 const Wrapper = styled.label`
-	display: block;
+	display: flex;
 	position: fixed;
 	width: 100%;
 	bottom: 0;
@@ -57,7 +58,7 @@ const thumbStyle = ({ max, color }: { max: number; color: string }) => css`
 `
 
 const Field = styled.input`
-	position: relative;
+	position: absolute;
 	display: block;
 	width: 100%;
 	appearance: none;
@@ -84,14 +85,6 @@ type StripProps = {
 	fill: string
 }
 
-const Track = styled.div`
-	display: flex;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	transition: height 0.2s;
-`
-
 const Strip = styled.div<StripProps>`
 	width: calc(100% / ${p => p.total});
 	height: 100%;
@@ -107,15 +100,13 @@ const RangeInput = ({
 	scaleProp = 'tc',
 }: RangeInputProps) => (
 	<Wrapper>
-		<Track>
-			{dates.map(x => (
-				<Strip
-					key={x}
-					total={dates.length}
-					fill={getRangeFill(totals[x])(scaleProp)}
-				/>
-			))}
-		</Track>
+		{dates.map(x => (
+			<Strip
+				key={x}
+				total={dates.length}
+				fill={getRangeFill(totals[x])(scaleProp)}
+			/>
+		))}
 		<Field
 			type='range'
 			min={0}
