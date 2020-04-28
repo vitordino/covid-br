@@ -33,6 +33,7 @@
     "react-helmet": "^6.0.0",
     "react-scripts": "3.4.1",
     "react-simple-maps": "^2.0.0",
+    "react-snap": "^1.23.0",
     "react-table": "^7.0.4",
     "react-tooltip": "^4.2.5",
     "react-trend": "^1.2.5",
