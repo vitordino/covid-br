@@ -52,6 +52,7 @@
     "data:start": "nodemon --config data/nodemon.json",
     "start": "concurrently 'npm:*:start'",
     "build": "npm run data:build && npm run frontend:build",
+    "postbuild": "react-snap",
     "format": "prettier --write 'src/**/*.{ts,tsx,js}' 'data/**/*.{ts,tsx,js}'",
     "lint": "eslint --ignore-path .gitignore src data"
   },
