@@ -26,7 +26,6 @@ const Text = styled.div<TextProps>`
 	${p => p.weight && `font-weight: ${p.weight};`}
 	${p => p.transform && `text-transform: ${p.transform};`}
 	${p => p.family && `font-family: ${p.theme.type.fonts?.[p.family]};`}
-	${({ theme }) => theme.transition.get()};
 	${mapping}
 `
 

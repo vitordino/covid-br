@@ -112,7 +112,8 @@ const TotalRow = styled.tr`
 	td {
 		background: transparent !important;
 		position: sticky;
-		bottom: 0;
+		bottom: 0.5rem;
+		padding-top: 0.5rem;
 	}
 	& > * > * {
 		background: var(--color-base00);
@@ -139,7 +140,7 @@ const Table = styled.table`
 	}
 	th {
 		position: sticky;
-		top: 1.125rem;
+		top: 0.125rem;
 		z-index: 1;
 		&:nth-child(1) {
 			z-index: 3;
