@@ -1,4 +1,9 @@
-import React, { ReactNode, Dispatch, SetStateAction, SyntheticEvent } from 'react'
+import React, {
+	ReactNode,
+	Dispatch,
+	SetStateAction,
+	SyntheticEvent,
+} from 'react'
 import styled, { css } from 'styled-components'
 
 import { Totals } from 'App'
@@ -14,10 +19,7 @@ type RangeInputProps = {
 	setTooltipContent: Dispatch<SetStateAction<ReactNode>>
 }
 
-type WrapperProps = { max: number }
-
-const Wrapper =
-	styled.label<WrapperProps>`
+const Wrapper = styled.label`
 	display: flex;
 	position: fixed;
 	width: 100%;
@@ -95,14 +97,15 @@ const Strip = styled.div<StripProps>`
 	background: ${p => p.fill};
 `
 
-type GetHoverValue = (event: SyntheticEvent<HTMLLabelElement>) => number
+type GetHoverValue = (event: SyntheticEvent<HTMLInputElement>) => number
 
-const getHoverValue: GetHoverValue = ({ target, nativeEvent }) => Math.floor(
-	// @ts-ignore
-	(nativeEvent.offsetX / target.clientWidth) *
-	// @ts-ignore
-	parseInt(target.getAttribute('max'))
-)
+const getHoverValue: GetHoverValue = ({ target, nativeEvent }) =>
+	Math.round(
+		// @ts-ignore
+		(nativeEvent.offsetX / target.clientWidth) *
+			// @ts-ignore
+			parseInt(target.getAttribute('max')),
+	)
 
 const RangeInput = ({
 	value,
@@ -112,19 +115,7 @@ const RangeInput = ({
 	scaleProp = 'tc',
 	setTooltipContent,
 }: RangeInputProps) => (
-	<Wrapper
-		max={dates.length - 1}
-		onMouseUp={e => setTooltipContent(dates[getHoverValue(e)])}
-		onMouseMove={e => setTooltipContent(dates[getHoverValue(e)])}
-		onMouseLeave={() => setTooltipContent('')}
-	>
-		{dates.map(x => (
-			<Strip
-				key={x}
-				total={dates.length}
-				fill={getRangeFill(totals[x])(scaleProp)}
-			/>
-		))}
+	<Wrapper>
 		<Field
 			type='range'
 			min={0}
@@ -132,7 +123,17 @@ const RangeInput = ({
 			value={value}
 			color={getRangeFill(totals[dates[value]])(scaleProp)}
 			onChange={({ target }) => onChange(parseInt(target.value))}
+			onMouseUp={e => setTooltipContent(dates[getHoverValue(e)])}
+			onMouseMove={e => setTooltipContent(dates[getHoverValue(e)])}
+			onMouseLeave={() => setTooltipContent('')}
 		/>
+		{dates.map(x => (
+			<Strip
+				key={x}
+				total={dates.length}
+				fill={getRangeFill(totals[x])(scaleProp)}
+			/>
+		))}
 	</Wrapper>
 )
 
