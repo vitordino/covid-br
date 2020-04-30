@@ -39,9 +39,11 @@ type PopulationalEnhancedOutput = {
 	td: number
 	nd: number
 	ptd?: number
+	pnd?: number
 	tc: number
 	nc: number
 	ptc?: number
+	pnc?: number
 }
 
 type EnhancedOutput = {
@@ -51,10 +53,12 @@ type EnhancedOutput = {
 	nd: number
 	rtd?: number
 	ptd?: number
+	pnd?: number
 	tc: number
 	nc: number
 	rtc?: number
 	ptc?: number
+	pnc?: number
 }
 
 type Outputs = StateOutput[]
@@ -204,7 +208,7 @@ const enhanceWithPopulationalData: EnhanceWithPopulationalDataFn = toEnhance => 
 		)
 	})
 
-const toEnhance: NumericKey[] = ['tc', 'td']
+const toEnhance: NumericKey[] = ['tc', 'td', 'nc', 'nd']
 
 const getTotals = (arr: PopulationalEnhancedOutput[]) =>
 	arr.filter(({ st }) => st === 'TOTAL')
