@@ -162,11 +162,19 @@ const getHighestPop = <T extends PopulationalEnhancedOutput>(prop: keyof T) => (
 		.reduce(higher)
 
 const getHighestStateCase = getHighest('tc')(({ st }) => st !== 'TOTAL')
-const getHighestTotalCase = getHighest('tc')(({ st }) => st === 'TOTAL')
 const getHighestStateDeath = getHighest('td')(({ st }) => st !== 'TOTAL')
+const getHighestStateNewCase = getHighest('nc')(({ st }) => st !== 'TOTAL')
+const getHighestStateNewDeath = getHighest('nd')(({ st }) => st !== 'TOTAL')
+
+const getHighestTotalCase = getHighest('tc')(({ st }) => st === 'TOTAL')
 const getHighestTotalDeath = getHighest('td')(({ st }) => st === 'TOTAL')
+const getHighestTotalNewCase = getHighest('tc')(({ st }) => st === 'TOTAL')
+const getHighestTotalNewDeath = getHighest('td')(({ st }) => st === 'TOTAL')
+
 const getHighestPopCase = getHighestPop('ptc')()
 const getHighestPopDeath = getHighestPop('ptd')()
+const getHighestPopNewCase = getHighestPop('pnc')()
+const getHighestPopNewDeath = getHighestPop('pnd')()
 
 type EnhanceReducerFn = (
 	arr: Outputs,
@@ -237,26 +245,45 @@ const processLines = (input: StateEntries) => {
 
 	// numbers
 	const highestStateCase = getHighestStateCase(renamed)
-	const highestTotalCase = getHighestTotalCase(renamed)
 	const highestStateDeath = getHighestStateDeath(renamed)
+	const highestStateNewCase = getHighestStateNewCase(renamed)
+	const highestStateNewDeath = getHighestStateNewDeath(renamed)
+
+	const highestTotalCase = getHighestTotalCase(renamed)
 	const highestTotalDeath = getHighestTotalDeath(renamed)
+	const highestTotalNewCase = getHighestTotalNewCase(renamed)
+	const highestTotalNewDeath = getHighestTotalNewDeath(renamed)
+
 	const highestPopCase = getHighestPopCase(withPopulationalStates)
 	const highestPopDeath = getHighestPopDeath(withPopulationalStates)
+	const highestPopNewCase = getHighestPopNewCase(withPopulationalStates)
+	const highestPopNewDeath = getHighestPopNewDeath(withPopulationalStates)
+
 	const highestTotalPopCase = getHighestPopCase(withPopulationalTotals)
 	const highestTotalPopDeath = getHighestPopDeath(withPopulationalTotals)
+	const highestTotalPopNewCase = getHighestPopNewCase(withPopulationalTotals)
+	const highestTotalPopNewDeath = getHighestPopNewDeath(withPopulationalTotals)
 	return {
 		main,
 		totals,
 		dates,
 		states,
 		highestStateCase,
-		highestTotalCase,
 		highestStateDeath,
+		highestStateNewCase,
+		highestStateNewDeath,
+		highestTotalCase,
 		highestTotalDeath,
+		highestTotalNewCase,
+		highestTotalNewDeath,
 		highestPopCase,
 		highestPopDeath,
+		highestPopNewCase,
+		highestPopNewDeath,
 		highestTotalPopCase,
 		highestTotalPopDeath,
+		highestTotalPopNewCase,
+		highestTotalPopNewDeath,
 	}
 }
 
