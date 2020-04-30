@@ -242,6 +242,18 @@ const StatesTable = ({
 					/>
 				),
 			},
+			{
+				accessor: 'nc',
+				Header: () => null,
+				Cell: () => null,
+				show: false,
+			},
+			{
+				accessor: 'nd',
+				Header: () => null,
+				Cell: () => null,
+				show: false,
+			},
 		],
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[data, relative],
