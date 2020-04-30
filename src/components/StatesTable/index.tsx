@@ -170,6 +170,18 @@ const Table = styled.table`
 	}
 `
 
+const Mobile = styled.span`
+	${p => p.theme.above('md')`
+		display: none;
+	`}
+`
+const Desktop = styled.span`
+	display: none;
+	${p => p.theme.above('md')`
+		display: inline;
+	`}
+`
+
 type StateMeta = {
 	p: number
 	n: string
@@ -263,13 +275,15 @@ const StatesTable = ({
 				accessor: 'st',
 				Header: (x: Header) => (
 					<Header isVisible={true} {...x}>
-						State
+						<Mobile>St</Mobile>
+						<Desktop>State</Desktop>
 					</Header>
 				),
 				sortInverted: true,
 				Cell: ({ row }: Cell) => (
 					<Cell bold={false}>
-						<strong>{statesMeta[row.values.st].n}</strong>
+						<Desktop as='strong'>{statesMeta[row.values.st].n}</Desktop>
+						<Mobile as='strong'>{row.values.st}</Mobile>
 					</Cell>
 				),
 			},
