@@ -2,7 +2,6 @@ import React, { ReactNode, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import ReactTooltip from 'react-tooltip'
 
-import BaseTrend from 'components/Trend'
 import StatesTable from 'components/StatesTable'
 import StatesMap from 'components/StatesMap'
 import Container from 'components/Container'
@@ -30,21 +29,6 @@ const TitleHeader = styled.div`
 	align-items: baseline;
 	padding: 2rem 0;
 `
-
-const Trend = (props: any) => (
-	<BaseTrend
-		smooth
-		autoDraw
-		autoDrawEasing='ease-out'
-		gradient={['#00c6ff', '#F0F', '#FF0']}
-		radius={5}
-		strokeWidth={2}
-		strokeLinecap={'round'}
-		{...props}
-	/>
-)
-
-const trendData = Object.values(totals).map(({ tc }) => tc)
 
 const options = { day: 'numeric', month: 'numeric', year: 'numeric' }
 
@@ -88,7 +72,6 @@ const App = () => {
 								onChange={({ target }) => setRelative(target.checked)}
 							/>
 						</label>
-						<Trend data={trendData} />
 						<StatesMap
 							data={data}
 							scaleProp={relative ? 'ptc' : 'tc'}
