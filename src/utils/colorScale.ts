@@ -2,10 +2,22 @@ import { scaleLinear } from 'd3-scale'
 import { schemeOrRd } from 'd3-scale-chromatic'
 
 import {
-	highestPopCase,
 	highestStateCase,
+	highestStateDeath,
+	highestStateNewCase,
+	highestStateNewDeath,
 	highestTotalCase,
+	highestTotalDeath,
+	highestTotalNewCase,
+	highestTotalNewDeath,
+	highestPopCase,
+	highestPopDeath,
+	highestPopNewCase,
+	highestPopNewDeath,
 	highestTotalPopCase,
+	highestTotalPopDeath,
+	highestTotalPopNewCase,
+	highestTotalPopNewDeath,
 } from 'data/states.json'
 
 const POP_MULTIPLIER = 100000
@@ -19,17 +31,37 @@ const getDomain = (entry: number, divisions: number = 8) => [
 
 const domains = {
 	tc: getDomain(highestStateCase),
+	nc: getDomain(highestStateNewCase),
 	ptc: getDomain(highestPopCase * POP_MULTIPLIER),
+	pnc: getDomain(highestPopNewCase * POP_MULTIPLIER),
+
+	td: getDomain(highestStateDeath),
+	nd: getDomain(highestStateNewDeath),
+	ptd: getDomain(highestPopDeath * POP_MULTIPLIER),
+	pnd: getDomain(highestPopNewDeath * POP_MULTIPLIER),
 }
 
 const totalDomains = {
 	tc: getDomain(highestTotalCase),
+	nc: getDomain(highestTotalNewCase),
 	ptc: getDomain(highestTotalPopCase * POP_MULTIPLIER),
+	pnc: getDomain(highestTotalPopNewCase * POP_MULTIPLIER),
+
+	td: getDomain(highestTotalDeath),
+	nd: getDomain(highestTotalNewDeath),
+	ptd: getDomain(highestTotalPopDeath * POP_MULTIPLIER),
+	pnd: getDomain(highestTotalPopNewDeath * POP_MULTIPLIER),
 }
 
 const multipliers = {
 	tc: 1,
+	nc: 1,
+	td: 1,
+	nd: 1,
 	ptc: POP_MULTIPLIER,
+	pnc: POP_MULTIPLIER,
+	ptd: POP_MULTIPLIER,
+	pnd: POP_MULTIPLIER,
 }
 
 // @ts-ignore
