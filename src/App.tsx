@@ -1,6 +1,5 @@
-import React, { ReactNode, useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
-import ReactTooltip from 'react-tooltip'
 
 import StatesTable from 'components/StatesTable'
 import StatesMap from 'components/StatesMap'
@@ -38,13 +37,11 @@ const dateToString = (d: string, l: string = 'en') =>
 const App = () => {
 	const [index, setIndex] = useState<number>(dates.length - 1)
 	const [relative, setRelative] = useState<boolean>(false)
-	const [tooltipContent, setTooltipContent] = useState<ReactNode>('')
 	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
 	const total: StateEntry = useMemo(() => totals[dates[index]], [index])
 
 	return (
 		<Layout>
-			<ReactTooltip>{tooltipContent}</ReactTooltip>
 			<Container>
 				<TitleHeader>
 					<Text as='h1' weight={400} xs={3} md={4} lg={5}>
@@ -72,11 +69,7 @@ const App = () => {
 								onChange={({ target }) => setRelative(target.checked)}
 							/>
 						</label>
-						<StatesMap
-							data={data}
-							scaleProp={relative ? 'ptc' : 'tc'}
-							setTooltipContent={setTooltipContent}
-						/>
+						<StatesMap data={data} scaleProp={relative ? 'ptc' : 'tc'} />
 					</Grid.Column>
 				</Grid.Row>
 			</Container>
