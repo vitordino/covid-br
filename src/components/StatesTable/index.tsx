@@ -265,7 +265,7 @@ const StatesTable = ({
 	statesMeta,
 	relative,
 }: StatesTableProps) => {
-	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
+	const setSort = useStore(s => s.setSort)
 	const caseProp = relative ? 'ptc' : 'tc'
 	const caseLeftProp = relative ? 'pnc' : 'nc'
 	const deathProp = relative ? 'ptd' : 'td'
