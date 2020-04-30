@@ -1,9 +1,4 @@
-import React, {
-	ReactNode,
-	Dispatch,
-	SetStateAction,
-	SyntheticEvent,
-} from 'react'
+import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Totals } from 'App'
@@ -16,7 +11,6 @@ type RangeInputProps = {
 	dates: string[]
 	totals: Totals
 	scaleProp?: PropUnion
-	setTooltipContent: Dispatch<SetStateAction<ReactNode>>
 }
 
 const Wrapper = styled.label`
@@ -26,7 +20,6 @@ const Wrapper = styled.label`
 	bottom: 0;
 	z-index: 1;
 	height: 0.75rem;
-	/* overflow: hidden; */
 	transition: height 0.2s;
 	box-shadow: 0 0 0 0.125rem var(--color-base00);
 	&:hover {
@@ -97,23 +90,12 @@ const Strip = styled.div<StripProps>`
 	background: ${p => p.fill};
 `
 
-type GetHoverValue = (event: SyntheticEvent<HTMLInputElement>) => number
-
-const getHoverValue: GetHoverValue = ({ target, nativeEvent }) =>
-	Math.round(
-		// @ts-ignore
-		(nativeEvent.offsetX / target.clientWidth) *
-			// @ts-ignore
-			parseInt(target.getAttribute('max')),
-	)
-
 const RangeInput = ({
 	value,
 	onChange,
 	dates,
 	totals,
 	scaleProp = 'tc',
-	setTooltipContent,
 }: RangeInputProps) => (
 	<Wrapper>
 		<Field
@@ -123,9 +105,6 @@ const RangeInput = ({
 			value={value}
 			color={getRangeFill(totals[dates[value]])(scaleProp)}
 			onChange={({ target }) => onChange(parseInt(target.value))}
-			onMouseUp={e => setTooltipContent(dates[getHoverValue(e)])}
-			onMouseMove={e => setTooltipContent(dates[getHoverValue(e)])}
-			onMouseLeave={() => setTooltipContent('')}
 		/>
 		{dates.map(x => (
 			<Strip

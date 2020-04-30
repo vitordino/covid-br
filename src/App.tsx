@@ -104,7 +104,6 @@ const App = () => {
 				dates={dates}
 				totals={totals}
 				scaleProp={relative ? 'ptc' : 'tc'}
-				setTooltipContent={setTooltipContent}
 			/>
 		</Layout>
 	)
