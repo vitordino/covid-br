@@ -1,6 +1,6 @@
 import create from 'zustand'
 
-import type { StateEntry } from 'components/StatesTable'
+import type { StateEntry } from 'App'
 
 type Store = {
 	sort: keyof StateEntry

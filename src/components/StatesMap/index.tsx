@@ -1,9 +1,9 @@
 import React from 'react'
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 
+import type { StateEntry } from 'App'
 import { getMapFill } from 'utils/colorScale'
 import type { PropUnion } from 'utils/colorScale'
-import type { StateEntry } from 'components/StatesTable'
 
 const geography = '/topo/states.json'
 

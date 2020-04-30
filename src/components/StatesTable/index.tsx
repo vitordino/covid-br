@@ -2,24 +2,10 @@ import React, { ReactNode, useMemo, useEffect } from 'react'
 import styled from 'styled-components'
 import { useTable, useSortBy, Column } from 'react-table'
 
+import type { StateEntry, StatesMeta } from 'App'
+import type { Transform } from 'components/Text'
 import useStore from 'store'
 import Text from 'components/Text'
-import type { Transform } from 'components/Text'
-
-export type StateEntry = {
-	date: string
-	st: string
-	td: number
-	nd: number
-	rtd?: number | null
-	ptd?: number | null
-	pnd?: number | null
-	tc: number
-	nc: number
-	rtc?: number | null
-	ptc?: number | null
-	pnc?: number | null
-}
 
 type RowProps = {
 	values: StateEntry
@@ -34,6 +20,7 @@ type Cell = {
 }
 
 type Header = any
+
 type HeaderProps = {
 	children?: ReactNode
 	column: {
@@ -188,10 +175,6 @@ type StateMeta = {
 	n: string
 }
 
-export type StatesMeta = {
-	[key: string]: StateMeta
-}
-
 type StatesTableProps = {
 	data: StateEntry[]
 	total: StateEntry
@@ -284,7 +267,9 @@ const StatesTable = ({
 				sortInverted: true,
 				Cell: ({ row }: Cell) => (
 					<Cell bold={false}>
-						<strong title={statesMeta[row.values.st].n}>{row.values.st}</strong>
+						<strong title={statesMeta?.[row.values.st].n}>
+							{row.values.st}
+						</strong>
 					</Cell>
 				),
 			},
