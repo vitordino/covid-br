@@ -88,7 +88,6 @@ const App = () => {
 								onChange={({ target }) => setRelative(target.checked)}
 							/>
 						</label>
-						<pre>{dates[index]}</pre>
 						<Trend data={trendData} />
 						<StatesMap
 							data={data}
