@@ -282,8 +282,7 @@ const StatesTable = ({
 				sortInverted: true,
 				Cell: ({ row }: Cell) => (
 					<Cell bold={false}>
-						<Desktop as='strong'>{statesMeta[row.values.st].n}</Desktop>
-						<Mobile as='strong'>{row.values.st}</Mobile>
+						<strong title={statesMeta[row.values.st].n}>{row.values.st}</strong>
 					</Cell>
 				),
 			},
