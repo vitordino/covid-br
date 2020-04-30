@@ -95,6 +95,7 @@ const HeaderWrapper = styled(Text)`
 	background: var(--color-base06);
 	color: var(--color-base66);
 	box-shadow: 0 0 0 0.25rem var(--color-base00);
+	margin-bottom: 0.25rem;
 	&:hover {
 		background: var(--color-base);
 		color: var(--color-base00);
@@ -166,6 +167,25 @@ const Desktop = styled.span`
 	display: none;
 	${p => p.theme.above('md')`
 		display: inline;
+	`}
+`
+
+type TableRowProps = { active: boolean }
+
+const TableRow = styled.tr<TableRowProps>`
+	&:hover {
+		& > * {
+			background: yellow !important;
+			color: black;
+		}
+	}
+	${p =>
+		p.active &&
+		`
+		& > * {
+			background: yellow !important;
+			color: black;
+		}
 	`}
 `
 
@@ -248,6 +268,10 @@ const StatesTable = ({
 	relative,
 }: StatesTableProps) => {
 	const setSort = useStore(s => s.setSort)
+	const [hoveredState, setHoveredState] = useStore(s => [
+		s.hoveredState,
+		s.setHoveredState,
+	])
 	const caseProp = relative ? 'ptc' : 'tc'
 	const caseLeftProp = relative ? 'pnc' : 'nc'
 	const deathProp = relative ? 'ptd' : 'td'
@@ -419,11 +443,17 @@ const StatesTable = ({
 					{rows.map((row: any) => {
 						prepareRow(row)
 						return (
-							<tr {...row.getRowProps()}>
+							<TableRow
+								{...row.getRowProps({
+									onMouseEnter: () => setHoveredState(row.original.st),
+									onMouseLeave: () => setHoveredState(null),
+									active: row.original.st === hoveredState,
+								})}
+							>
 								{row.cells.map((cell: any) => (
 									<td {...cell.getCellProps()}>{cell.render('Cell')}</td>
 								))}
-							</tr>
+							</TableRow>
 						)
 					})}
 					<TotalRow>

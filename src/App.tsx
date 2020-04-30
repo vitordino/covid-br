@@ -34,6 +34,7 @@ const dateToString = (d: string, l: string = 'en') =>
 
 const App = () => {
 	const sort = useStore(s => s.sort)
+	const hoveredState = useStore(s => s.hoveredState)
 	const [index, setIndex] = useState<number>(dates.length - 1)
 	const [relative, setRelative] = useState<boolean>(false)
 	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
@@ -60,7 +61,6 @@ const App = () => {
 						/>
 					</Grid.Column>
 					<Grid.Column xs={16} lg={8}>
-						{JSON.stringify({ sort })}
 						<label>
 							{JSON.stringify({ relative })}
 							<input
@@ -69,6 +69,8 @@ const App = () => {
 								onChange={({ target }) => setRelative(target.checked)}
 							/>
 						</label>
+						{JSON.stringify({ sort })}
+						{JSON.stringify({ hoveredState })}
 						<StatesMap data={data} scaleProp={relative ? 'ptc' : 'tc'} />
 					</Grid.Column>
 				</Grid.Row>
