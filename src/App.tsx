@@ -37,7 +37,7 @@ const dateToString = (d: string, l: string = 'en') =>
 
 const App = () => {
 	const [index, setIndex] = useState<number>(dates.length - 1)
-	const [relative, setRelative] = useState<boolean>(true)
+	const [relative, setRelative] = useState<boolean>(false)
 	const [tooltipContent, setTooltipContent] = useState<ReactNode>('')
 	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
 	const total: StateEntry = useMemo(() => totals[dates[index]], [index])

@@ -1,6 +1,7 @@
 import React, { ReactNode, useMemo } from 'react'
 import styled from 'styled-components'
 import { useTable, useSortBy, Column } from 'react-table'
+
 import Text from 'components/Text'
 import type { Transform } from 'components/Text'
 
@@ -11,10 +12,12 @@ export type StateEntry = {
 	nd: number
 	rtd?: number | null
 	ptd?: number | null
+	pnd?: number | null
 	tc: number
 	nc: number
 	rtc?: number | null
 	ptc?: number | null
+	pnc?: number | null
 }
 
 type RowProps = {
@@ -37,6 +40,7 @@ type HeaderProps = {
 		isSortedDesc: boolean
 	}
 	[key: string]: any
+	isVisible: boolean
 }
 
 type StaticCellProps = {
@@ -69,23 +73,32 @@ type DynamicCellProps = {
 	row: RowProps
 	data?: StateEntry[]
 	column: { id: keyof StateEntry }
+	prop: keyof StateEntry
 	leftProp?: keyof StateEntry
 	leftRender?: (x: ReactNode) => ReactNode
+	mainRender?: (x: ReactNode) => ReactNode
 	children?: ReactNode
+	isVisible: boolean
 }
 
 const DynamicCell = ({
 	row,
 	column,
 	data,
+	prop,
 	leftProp,
 	leftRender = x => `+${x}`,
+	mainRender = x => x,
 	children,
-}: DynamicCellProps) => (
-	<Cell left={leftProp && leftRender(data?.[row.index]?.[leftProp])}>
-		{children || row.values?.[column.id]}
-	</Cell>
-)
+	isVisible,
+}: DynamicCellProps) => {
+	if (!isVisible) return null
+	return (
+		<Cell left={leftProp && leftRender(data?.[row.index]?.[leftProp])}>
+			{children || mainRender(row.values?.[prop || column.id])}
+		</Cell>
+	)
+}
 
 const HeaderWrapper = styled(Text)`
 	display: flex;
@@ -101,12 +114,15 @@ const HeaderWrapper = styled(Text)`
 	}
 `
 
-const Header = ({ children, column }: HeaderProps) => (
-	<HeaderWrapper>
-		<strong>{children}</strong>{' '}
-		<span>{column.isSorted ? (column.isSortedDesc ? '↓' : '↑') : '·'}</span>
-	</HeaderWrapper>
-)
+const Header = ({ children, column, isVisible }: HeaderProps) => {
+	if (!isVisible) return null
+	return (
+		<HeaderWrapper>
+			<strong>{children}</strong>{' '}
+			<span>{column.isSorted ? (column.isSortedDesc ? '↓' : '↑') : '·'}</span>
+		</HeaderWrapper>
+	)
+}
 
 const TotalRow = styled.tr`
 	td {
@@ -183,16 +199,26 @@ const initialState: InitialTableState = {
 	sortBy: [{ id: 'tc', desc: true }],
 }
 
-const RelativeRender = ({ x }: { x: number }) => (
-	<span title={`${x * 10000} a cada 10 mil hab`}>
+const RelativeRender = ({ x, isNew }: { x: number; isNew?: boolean }) => (
+	<span title={`${isNew && '+ '}${x * 10000} a cada 10 mil hab`}>
+		{!!isNew && '+ '}
 		{(x * 10000).toFixed(3)}‱
 	</span>
 )
 
-const getLeftRender = (relative: boolean) => (x: ReactNode) => {
-	if (!x) return null
-	if (relative && typeof x === 'number') return <RelativeRender x={x} />
-	return `+${x}`
+const AbsoluteRender = ({ x, isNew }: { x: number; isNew?: boolean }) => (
+	<span>
+		{!!isNew && '+ '}
+		{x}
+	</span>
+)
+
+const getCellRender = (relative: boolean, isNew?: boolean) => (
+	x: ReactNode,
+) => {
+	if (typeof x !== 'number') return x
+	if (relative) return <RelativeRender x={x} isNew={isNew} />
+	return <AbsoluteRender x={x} isNew={isNew} />
 }
 
 const StatesTable = ({
@@ -201,14 +227,20 @@ const StatesTable = ({
 	statesMeta,
 	relative,
 }: StatesTableProps) => {
-	const caseProp = relative ? 'ptc' : 'nc'
-	const deathProp = relative ? 'ptd' : 'nd'
+	const caseProp = relative ? 'ptc' : 'tc'
+	const caseLeftProp = relative ? 'pnc' : 'nc'
+	const deathProp = relative ? 'ptd' : 'td'
+	const deathLeftProp = relative ? 'pnd' : 'nd'
 
 	const columns: Column<StateEntry>[] = useMemo(
 		() => [
 			{
 				accessor: 'st',
-				Header: (x: Header) => <Header {...x}>State</Header>,
+				Header: (x: Header) => (
+					<Header isVisible={true} {...x}>
+						State
+					</Header>
+				),
 				sortInverted: true,
 				Cell: ({ row }: Cell) => (
 					<Cell bold={false}>
@@ -218,41 +250,85 @@ const StatesTable = ({
 			},
 			{
 				accessor: 'tc',
-				Header: (x: Header) => <Header {...x}>Confirmed</Header>,
+				Header: (x: Header) => (
+					<Header isVisible={!relative} {...x}>
+						Confirmed
+					</Header>
+				),
 				Cell: ({ row, column }: Cell) => (
 					<DynamicCell
 						row={row}
 						column={column}
 						data={data}
-						leftProp={caseProp}
-						leftRender={getLeftRender(relative)}
+						prop={caseProp}
+						leftProp={caseLeftProp}
+						leftRender={getCellRender(relative, true)}
+						mainRender={getCellRender(relative, false)}
+						isVisible={!relative}
 					/>
 				),
 			},
 			{
 				accessor: 'td',
-				Header: (x: Header) => <Header {...x}>Deaths</Header>,
+				Header: (x: Header) => (
+					<Header isVisible={!relative} {...x}>
+						Deaths
+					</Header>
+				),
 				Cell: ({ row, column }: Cell) => (
 					<DynamicCell
 						row={row}
 						column={column}
 						data={data}
-						leftProp={deathProp}
-						leftRender={getLeftRender(relative)}
+						prop={deathProp}
+						leftProp={deathLeftProp}
+						leftRender={getCellRender(relative, true)}
+						mainRender={getCellRender(relative, false)}
+						isVisible={!relative}
 					/>
 				),
 			},
 			{
-				accessor: 'nc',
-				Header: () => null,
-				Cell: () => null,
-				show: false,
+				accessor: 'ptc',
+				sortType: 'basic',
+				Header: (x: Header) => (
+					<Header isVisible={relative} {...x}>
+						Confirmed
+					</Header>
+				),
+				Cell: ({ row, column }: Cell) => (
+					<DynamicCell
+						row={row}
+						column={column}
+						data={data}
+						prop={caseProp}
+						leftProp={caseLeftProp}
+						leftRender={getCellRender(relative, true)}
+						mainRender={getCellRender(relative, false)}
+						isVisible={relative}
+					/>
+				),
 			},
 			{
-				accessor: 'nd',
-				Header: () => null,
-				Cell: () => null,
-				show: false,
+				accessor: 'ptd',
+				sortType: 'basic',
+				Header: (x: Header) => (
+					<Header isVisible={relative} {...x}>
+						Deaths
+					</Header>
+				),
+				Cell: ({ row, column }: Cell) => (
+					<DynamicCell
+						row={row}
+						column={column}
+						data={data}
+						prop={deathProp}
+						leftProp={deathLeftProp}
+						leftRender={getCellRender(relative, true)}
+						mainRender={getCellRender(relative, false)}
+						isVisible={relative}
+					/>
+				),
 			},
 		],
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -313,16 +389,28 @@ const StatesTable = ({
 						<td>
 							<Cell transform='capitalize'>{total.st.toLowerCase()}</Cell>
 						</td>
+						{!!relative && (
+							<>
+								<td />
+								<td />
+							</>
+						)}
 						<td>
-							<Cell left={getLeftRender(relative)(total[caseProp])}>
-								{total.tc}
+							<Cell left={getCellRender(relative, true)(total[caseLeftProp])}>
+								{getCellRender(relative)(total[caseProp])}
 							</Cell>
 						</td>
 						<td>
-							<Cell left={getLeftRender(relative)(total[deathProp])}>
-								{total.td}
+							<Cell left={getCellRender(relative, true)(total[deathLeftProp])}>
+								{getCellRender(relative)(total[deathProp])}
 							</Cell>
 						</td>
+						{!relative && (
+							<>
+								<td />
+								<td />
+							</>
+						)}
 					</TotalRow>
 				</tbody>
 			</Table>
