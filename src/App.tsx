@@ -27,7 +27,7 @@ const TitleHeader = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-	padding: 2rem 0;
+	padding: 2rem 0.5rem;
 `
 
 const options = { day: 'numeric', month: 'numeric', year: 'numeric' }
