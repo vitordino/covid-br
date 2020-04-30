@@ -1,8 +1,6 @@
 import { scaleLinear } from 'd3-scale'
 import { schemeOrRd } from 'd3-scale-chromatic'
 
-import type { StateEntry } from 'App'
-
 import {
 	highestPopCase,
 	highestStateCase,

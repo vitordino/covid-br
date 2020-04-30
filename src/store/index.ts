@@ -1,7 +1,5 @@
 import create from 'zustand'
 
-import type { StateEntry } from 'App'
-
 type Store = {
 	sort: keyof StateEntry
 	setSort: (v: keyof StateEntry) => void

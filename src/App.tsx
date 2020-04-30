@@ -12,43 +12,6 @@ import RangeInput from 'components/RangeInput'
 
 import data from 'data/states.json'
 
-export type HashMapOf<T> = { [key: string]: T }
-
-export type StateEntry = {
-	date: DatesEnum
-	st: StatesEnum
-	td: number
-	nd: number
-	rtd?: number | null
-	ptd?: number | null
-	pnd?: number | null
-	tc: number
-	nc: number
-	rtc?: number | null
-	ptc?: number | null
-	pnc?: number | null
-}
-
-// export enum DatesEnum { data.totals }
-export type StatesEnum = keyof typeof data.states
-
-export type DateMapOf<T> = { [K in DatesEnum]: T }
-
-export type Main = DateMapOf<StateEntry[]>
-export type Totals = DateMapOf<StateEntry>
-type StateMeta = {
-	p: number
-	n: string
-}
-
-export type StatesMeta = {
-	[K in StatesEnum]: StateMeta
-}
-
-export type ValuesOf<T extends string[]> = T[number]
-
-export type DatesEnum = ValuesOf<typeof data.dates>
-
 // @ts-ignore
 const main: Main = data.main
 // @ts-ignore

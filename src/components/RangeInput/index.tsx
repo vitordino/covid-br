@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-import { Totals } from 'App'
 import { getRangeFill } from 'utils/colorScale'
 import type { PropUnion } from 'utils/colorScale'
 

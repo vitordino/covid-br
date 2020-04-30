@@ -2,7 +2,6 @@ import React, { ReactNode, useMemo, useEffect } from 'react'
 import styled from 'styled-components'
 import { useTable, useSortBy, Column } from 'react-table'
 
-import type { StateEntry, StatesMeta } from 'App'
 import type { Transform } from 'components/Text'
 import useStore from 'store'
 import Text from 'components/Text'
@@ -267,7 +266,10 @@ const StatesTable = ({
 				sortInverted: true,
 				Cell: ({ row }: Cell) => (
 					<Cell bold={false}>
-						<strong title={statesMeta?.[row.values.st].n}>
+						<strong
+							// @ts-ignore
+							title={statesMeta?.[row.values.st].n}
+						>
 							{row.values.st}
 						</strong>
 					</Cell>
