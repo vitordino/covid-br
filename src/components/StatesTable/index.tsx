@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react'
+import React, { ReactNode, useMemo, useEffect } from 'react'
 import styled from 'styled-components'
 import { useTable, useSortBy, Column } from 'react-table'
 
@@ -196,7 +196,7 @@ type InitialTableState = {
 }
 
 const initialState: InitialTableState = {
-	sortBy: [{ id: 'tc', desc: true }],
+	sortBy: [{ id: 'st', desc: true }],
 }
 
 const RelativeRender = ({ x, isNew }: { x: number; isNew?: boolean }) => (
@@ -220,6 +220,31 @@ const getCellRender = (relative: boolean, isNew?: boolean) => (
 	if (relative) return <RelativeRender x={x} isNew={isNew} />
 	return <AbsoluteRender x={x} isNew={isNew} />
 }
+
+type KeyToKey<T> = {
+	[K in keyof T]?: keyof T
+}
+
+const absoluteToRelative: KeyToKey<StateEntry> = {
+	tc: 'ptc',
+	td: 'ptd',
+	nc: 'pnc',
+	nd: 'pnd',
+}
+
+const relativeToAbsolute: KeyToKey<StateEntry> = {
+	ptc: 'tc',
+	ptd: 'td',
+	pnc: 'nc',
+	pnd: 'nd',
+}
+
+const transposeKeys: KeyToKey<StateEntry> = {
+	...absoluteToRelative,
+	...relativeToAbsolute,
+}
+
+type OptionalKey<T> = keyof T | undefined
 
 const StatesTable = ({
 	data,
@@ -341,6 +366,7 @@ const StatesTable = ({
 		headerGroups,
 		rows,
 		prepareRow,
+		state,
 		toggleSortBy,
 	} = useTable(
 		{
@@ -353,6 +379,14 @@ const StatesTable = ({
 		},
 		useSortBy,
 	)
+
+	const currentSort: keyof StateEntry = state.sortBy[0].id
+	const nextSort: OptionalKey<StateEntry> = transposeKeys?.[currentSort]
+
+	useEffect(() => {
+		if (nextSort) toggleSortBy(nextSort, true)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [relative])
 
 	return (
 		<Wrapper>
@@ -389,7 +423,7 @@ const StatesTable = ({
 						<td>
 							<Cell transform='capitalize'>{total.st.toLowerCase()}</Cell>
 						</td>
-						{!!relative && (
+						{relative && (
 							<>
 								<td />
 								<td />
