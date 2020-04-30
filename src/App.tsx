@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
 
+import useStore from 'store'
 import StatesTable from 'components/StatesTable'
 import StatesMap from 'components/StatesMap'
 import Container from 'components/Container'
@@ -35,6 +36,7 @@ const dateToString = (d: string, l: string = 'en') =>
 	new Date(d).toLocaleDateString(l, options)
 
 const App = () => {
+	const sort = useStore(s => s.sort)
 	const [index, setIndex] = useState<number>(dates.length - 1)
 	const [relative, setRelative] = useState<boolean>(false)
 	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
@@ -61,6 +63,7 @@ const App = () => {
 						/>
 					</Grid.Column>
 					<Grid.Column xs={16} lg={8}>
+						{JSON.stringify({ sort })}
 						<label>
 							{JSON.stringify({ relative })}
 							<input

@@ -2,6 +2,7 @@ import React, { ReactNode, useMemo, useEffect } from 'react'
 import styled from 'styled-components'
 import { useTable, useSortBy, Column } from 'react-table'
 
+import useStore from 'store'
 import Text from 'components/Text'
 import type { Transform } from 'components/Text'
 
@@ -264,6 +265,7 @@ const StatesTable = ({
 	statesMeta,
 	relative,
 }: StatesTableProps) => {
+	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const caseProp = relative ? 'ptc' : 'tc'
 	const caseLeftProp = relative ? 'pnc' : 'nc'
 	const deathProp = relative ? 'ptd' : 'td'
@@ -400,6 +402,11 @@ const StatesTable = ({
 		if (nextSort) toggleSortBy(nextSort, true)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [relative])
+
+	useEffect(() => {
+		setSort(currentSort)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentSort])
 
 	return (
 		<Wrapper>
