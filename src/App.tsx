@@ -40,12 +40,15 @@ const App = () => {
 	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
 	const total: StateEntry = useMemo(() => totals[dates[index]], [index])
 
+	// @ts-ignore
+	const title = statesMeta?.[hoveredState]?.n || 'Brazil'
+
 	return (
 		<Layout>
 			<Container>
 				<TitleHeader>
 					<Text as='h1' weight={400} xs={3} md={4} lg={5}>
-						Brazil
+						{title}
 					</Text>
 					<Text weight={400} xs={2} md={3}>
 						{dateToString(dates[index])}
