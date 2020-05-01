@@ -21,10 +21,10 @@ const mapStyle = {
 
 type StatesMapProps = {
 	data: StateEntry[]
-	scaleProp?: PropUnion
 }
 
-const StatesMap = ({ data, scaleProp = 'ptc' }: StatesMapProps) => {
+const StatesMap = ({ data }: StatesMapProps) => {
+	const sort = useStore(s => s.sort)
 	const [hoveredState, setHoveredState] = useStore(s => [
 		s.hoveredState,
 		s.setHoveredState,
@@ -48,7 +48,7 @@ const StatesMap = ({ data, scaleProp = 'ptc' }: StatesMapProps) => {
 							fill={
 								geo.id === hoveredState
 									? 'yellow'
-									: getMapFill(data, geo.id)(scaleProp)
+									: getMapFill(data, geo.id)(sort)
 							}
 							onMouseEnter={() => setHoveredState(geo.id)}
 							onMouseLeave={() => setHoveredState(null)}

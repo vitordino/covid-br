@@ -71,7 +71,7 @@ const App = () => {
 						</label>
 						{JSON.stringify({ sort })}
 						{JSON.stringify({ hoveredState })}
-						<StatesMap data={data} scaleProp={relative ? 'ptc' : 'tc'} />
+						<StatesMap data={data} />
 					</Grid.Column>
 				</Grid.Row>
 			</Container>
