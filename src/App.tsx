@@ -29,7 +29,7 @@ const TitleHeader = styled.div`
 
 const options = { day: 'numeric', month: 'numeric', year: 'numeric' }
 
-const dateToString = (d: string, l: string = 'en') =>
+const dateToString = (d: string, l: string = 'pt') =>
 	new Date(d).toLocaleDateString(l, options)
 
 const App = () => {
