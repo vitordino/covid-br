@@ -80,7 +80,6 @@ const App = () => {
 				onChange={setIndex}
 				dates={dates}
 				totals={totals}
-				scaleProp={relative ? 'ptc' : 'tc'}
 			/>
 		</Layout>
 	)

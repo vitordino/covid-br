@@ -1,15 +1,14 @@
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
+import useStore from 'store'
 import { getRangeFill } from 'utils/colorScale'
-import type { PropUnion } from 'utils/colorScale'
 
 type RangeInputProps = {
 	value: number
 	onChange: (value: number) => void
 	dates: string[]
 	totals: Totals
-	scaleProp?: PropUnion
 }
 
 const Wrapper = styled.label`
@@ -89,30 +88,27 @@ const Strip = styled.div<StripProps>`
 	background: ${p => p.fill};
 `
 
-const RangeInput = ({
-	value,
-	onChange,
-	dates,
-	totals,
-	scaleProp = 'tc',
-}: RangeInputProps) => (
-	<Wrapper>
-		<Field
-			type='range'
-			min={0}
-			max={dates.length - 1}
-			value={value}
-			color={getRangeFill(totals[dates[value]])(scaleProp)}
-			onChange={({ target }) => onChange(parseInt(target.value))}
-		/>
-		{dates.map(x => (
-			<Strip
-				key={x}
-				total={dates.length}
-				fill={getRangeFill(totals[x])(scaleProp)}
+const RangeInput = ({ value, onChange, dates, totals }: RangeInputProps) => {
+	const sort = useStore(s => s.sort)
+	return (
+		<Wrapper>
+			<Field
+				type='range'
+				min={0}
+				max={dates.length - 1}
+				value={value}
+				color={getRangeFill(totals[dates[value]])(sort)}
+				onChange={({ target }) => onChange(parseInt(target.value))}
 			/>
-		))}
-	</Wrapper>
-)
+			{dates.map(x => (
+				<Strip
+					key={x}
+					total={dates.length}
+					fill={getRangeFill(totals[x])(sort)}
+				/>
+			))}
+		</Wrapper>
+	)
+}
 
 export default RangeInput
