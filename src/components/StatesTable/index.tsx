@@ -175,7 +175,7 @@ type TableRowProps = { active: boolean }
 const activeStyle = css`
 	& > * {
 		background: yellow !important;
-		color: black;
+		color: ${p => p.theme.colors.light.base};
 	}
 `
 
