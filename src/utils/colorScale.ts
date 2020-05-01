@@ -41,6 +41,8 @@ const domains = {
 	pnd: getDomain(highestPopNewDeath * POP_MULTIPLIER),
 }
 
+const domainsKeys = Object.keys(domains)
+
 const totalDomains = {
 	tc: getDomain(highestTotalCase),
 	nc: getDomain(highestTotalNewCase),
@@ -51,7 +53,9 @@ const totalDomains = {
 	nd: getDomain(highestTotalNewDeath),
 	ptd: getDomain(highestTotalPopDeath * POP_MULTIPLIER),
 	pnd: getDomain(highestTotalPopNewDeath * POP_MULTIPLIER),
-}
+} as const
+
+const totalDomainsKeys = Object.keys(totalDomains)
 
 const multipliers = {
 	tc: 1,
@@ -62,23 +66,39 @@ const multipliers = {
 	pnc: POP_MULTIPLIER,
 	ptd: POP_MULTIPLIER,
 	pnd: POP_MULTIPLIER,
-}
+} as const
+
+const multipliersKeys = Object.keys(multipliers)
 
 // @ts-ignore
 export const colorScale = domain => scaleLinear(domain, schemeOrRd[9])
 
 export type PropUnion = keyof typeof domains & keyof typeof multipliers
 
-export const getRangeFill = (data: StateEntry) => (prop: PropUnion) => {
-	const x = data?.[prop]
+export const getRangeFill = (data: StateEntry) => (
+	prop: keyof StateEntry,
+	fallbackProp: PropUnion = 'tc',
+) => {
+	const isPropSafe: boolean =
+		totalDomainsKeys.includes(prop) && multipliersKeys.includes(prop)
+	// @ts-ignore
+	const safeProp: PropUnion = isPropSafe ? prop : fallbackProp
+
+	const x = data?.[safeProp]
 	if (typeof x !== 'number') return '#eee'
-	return colorScale(totalDomains[prop])(x * multipliers[prop])
+	return colorScale(totalDomains[safeProp])(x * multipliers[safeProp])
 }
 
 export const getMapFill = (data: StateEntry[], id?: string) => (
-	prop: PropUnion,
+	prop: keyof StateEntry,
+	fallbackProp: PropUnion = 'tc',
 ) => {
-	const x = data.find(({ st }) => st === id)?.[prop]
+	const isPropSafe: boolean =
+		domainsKeys.includes(prop) && multipliersKeys.includes(prop)
+	// @ts-ignore
+	const safeProp: PropUnion = isPropSafe ? prop : fallbackProp
+
+	const x = data.find(({ st }) => st === id)?.[safeProp]
 	if (typeof x !== 'number') return '#eee'
-	return colorScale(domains[prop])(x * multipliers[prop])
+	return colorScale(domains[safeProp])(x * multipliers[safeProp])
 }
