@@ -1,5 +1,5 @@
 import React, { ReactNode, useMemo, useEffect } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { useTable, useSortBy, Column } from 'react-table'
 
 import type { Transform } from 'components/Text'
@@ -172,21 +172,18 @@ const Desktop = styled.span`
 
 type TableRowProps = { active: boolean }
 
+const activeStyle = css`
+	& > * {
+		background: yellow !important;
+		color: black;
+	}
+`
+
 const TableRow = styled.tr<TableRowProps>`
 	&:hover {
-		& > * {
-			background: yellow !important;
-			color: black;
-		}
+		${activeStyle}
 	}
-	${p =>
-		p.active &&
-		`
-		& > * {
-			background: yellow !important;
-			color: black;
-		}
-	`}
+	${p => p.active && activeStyle}
 `
 
 type StateMeta = {
