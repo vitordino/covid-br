@@ -3,7 +3,6 @@ import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 
 import useStore from 'store'
 import { getMapFill } from 'utils/colorScale'
-import type { PropUnion } from 'utils/colorScale'
 
 const geography = '/topo/states.json'
 
