@@ -60,7 +60,7 @@ type DynamicCellProps = {
 	row: RowProps
 	data?: StateEntry[]
 	column: { id: keyof StateEntry }
-	prop: keyof StateEntry
+	prop?: keyof StateEntry
 	leftProp?: keyof StateEntry
 	leftRender?: (x: ReactNode) => ReactNode
 	mainRender?: (x: ReactNode) => ReactNode
@@ -309,8 +309,7 @@ const StatesTable = ({
 						row={row}
 						column={column}
 						data={data}
-						prop={caseProp}
-						leftProp={caseLeftProp}
+						leftProp='nc'
 						leftRender={getCellRender(relative, true)}
 						mainRender={getCellRender(relative, false)}
 						isVisible={!relative}
@@ -329,8 +328,7 @@ const StatesTable = ({
 						row={row}
 						column={column}
 						data={data}
-						prop={deathProp}
-						leftProp={deathLeftProp}
+						leftProp='nd'
 						leftRender={getCellRender(relative, true)}
 						mainRender={getCellRender(relative, false)}
 						isVisible={!relative}
@@ -350,8 +348,7 @@ const StatesTable = ({
 						row={row}
 						column={column}
 						data={data}
-						prop={caseProp}
-						leftProp={caseLeftProp}
+						leftProp='pnc'
 						leftRender={getCellRender(relative, true)}
 						mainRender={getCellRender(relative, false)}
 						isVisible={relative}
@@ -371,8 +368,7 @@ const StatesTable = ({
 						row={row}
 						column={column}
 						data={data}
-						prop={deathProp}
-						leftProp={deathLeftProp}
+						leftProp='pnd'
 						leftRender={getCellRender(relative, true)}
 						mainRender={getCellRender(relative, false)}
 						isVisible={relative}
