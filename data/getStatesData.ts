@@ -17,6 +17,8 @@ type StateEntry = {
 	newDeaths: string
 	newCases: string
 	totalCases: string
+	recovered: string
+	totalRecovered?: string
 }
 
 // prettier-ignore
@@ -97,6 +99,11 @@ const destinies = [
 const url =
 	'https://cdn.jsdelivr.net/gh/wcota/covid19br@master/cases-brazil-states.csv'
 
+const getTotalRecoveredUntilNow = () =>
+	lines
+		.reduce((acc, { recovered }) => acc + parseInt(recovered || '0'), 0)
+		.toString()
+
 const write = (
 	destinies: Array<string> = [],
 	content: any,
@@ -112,7 +119,9 @@ const handleError = (err: string) => {
 	throw new Error(err)
 }
 
-const handleData = (data: StateEntry) => lines.push(data)
+const handleData = (data: StateEntry) => {
+	lines.push({ ...data, totalRecovered: getTotalRecoveredUntilNow() })
+}
 
 const handleWrite = (err: ErrorType, destiny: string) => {
 	if (err) {
