@@ -287,13 +287,13 @@ const StatesTable = ({
 				),
 				sortInverted: true,
 				Cell: ({ row }: Cell) => (
-					<Cell bold={false}>
-						<strong
+					<Cell>
+						<span
 							// @ts-ignore
 							title={statesMeta?.[row.values.st].n}
 						>
 							{row.values.st}
-						</strong>
+						</span>
 					</Cell>
 				),
 			},
