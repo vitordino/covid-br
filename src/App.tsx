@@ -72,8 +72,6 @@ const App = () => {
 								onChange={({ target }) => setRelative(target.checked)}
 							/>
 						</label>
-						{JSON.stringify({ sort })}
-						{JSON.stringify({ hoveredState })}
 						<StatesMap data={data} />
 					</Grid.Column>
 				</Grid.Row>
