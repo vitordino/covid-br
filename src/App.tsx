@@ -55,7 +55,7 @@ const App = () => {
 					</Text>
 				</TitleHeader>
 				<Grid.Row>
-					<Grid.Column xs={16} lg={8}>
+					<Grid.Column xs={16} lg={10}>
 						<StatesTable
 							data={data}
 							total={total}
@@ -63,7 +63,7 @@ const App = () => {
 							relative={relative}
 						/>
 					</Grid.Column>
-					<Grid.Column xs={16} lg={8}>
+					<Grid.Column xs={16} lg={6}>
 						<label>
 							{JSON.stringify({ relative })}
 							<input
