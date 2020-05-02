@@ -1,5 +1,5 @@
 import { scaleLinear } from 'd3-scale'
-import { schemeOrRd } from 'd3-scale-chromatic'
+import { schemeOrRd, schemeGreys } from 'd3-scale-chromatic'
 
 import {
 	highestStateCase,
@@ -70,35 +70,70 @@ const multipliers = {
 
 const multipliersKeys = Object.keys(multipliers)
 
-// @ts-ignore
-export const colorScale = domain => scaleLinear(domain, schemeOrRd[9])
+const scales = {
+	tc: schemeOrRd[9],
+	nc: schemeOrRd[9],
+	td: schemeGreys[9],
+	nd: schemeGreys[9],
+	ptc: schemeOrRd[9],
+	pnc: schemeOrRd[9],
+	ptd: schemeGreys[9],
+	pnd: schemeGreys[9],
+} as const
 
-export type PropUnion = keyof typeof domains & keyof typeof multipliers
+const scaleKeys = Object.keys(scales)
+
+type IsPropSafe = (p: keyof StateEntry) => boolean
+
+const isPropSafe: IsPropSafe = p =>
+	domainsKeys.includes(p) &&
+	totalDomainsKeys.includes(p) &&
+	multipliersKeys.includes(p) &&
+	scaleKeys.includes(p)
+
+export type PropUnion = keyof typeof domains &
+	keyof typeof totalDomains &
+	keyof typeof multipliers &
+	keyof typeof scales
+
+type GetSafeProp = (
+	prop: keyof StateEntry,
+	fallbackProp: PropUnion,
+) => PropUnion
+
+// @ts-ignore
+const getSafeProp: GetSafeProp = (prop, fallbackProp) => {
+	if (isPropSafe(prop)) return prop
+	return fallbackProp
+}
+
+// @ts-ignore
+export const colorScale = (domain, range) => scaleLinear(domain, range)
 
 export const getRangeFill = (data: StateEntry) => (
 	prop: keyof StateEntry,
 	fallbackProp: PropUnion = 'tc',
 ) => {
-	const isPropSafe: boolean =
-		totalDomainsKeys.includes(prop) && multipliersKeys.includes(prop)
-	// @ts-ignore
-	const safeProp: PropUnion = isPropSafe ? prop : fallbackProp
+	const safeProp = getSafeProp(prop, fallbackProp)
 
 	const x = data?.[safeProp]
 	if (typeof x !== 'number') return '#eee'
-	return colorScale(totalDomains[safeProp])(x * multipliers[safeProp])
+	return colorScale(
+		totalDomains[safeProp],
+		scales[safeProp],
+	)(x * multipliers[safeProp])
 }
 
 export const getMapFill = (data: StateEntry[], id?: string) => (
 	prop: keyof StateEntry,
 	fallbackProp: PropUnion = 'tc',
 ) => {
-	const isPropSafe: boolean =
-		domainsKeys.includes(prop) && multipliersKeys.includes(prop)
-	// @ts-ignore
-	const safeProp: PropUnion = isPropSafe ? prop : fallbackProp
+	const safeProp = getSafeProp(prop, fallbackProp)
 
 	const x = data.find(({ st }) => st === id)?.[safeProp]
 	if (typeof x !== 'number') return '#eee'
-	return colorScale(domains[safeProp])(x * multipliers[safeProp])
+	return colorScale(
+		domains[safeProp],
+		scales[safeProp],
+	)(x * multipliers[safeProp])
 }
