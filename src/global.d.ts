@@ -16,6 +16,11 @@ type StateEntry = {
 	rtc: number | null
 	ptc: number | null
 	pnc: number | null
+	tr: number
+	nr: number
+	rtr: number | null
+	ptr: number | null
+	pnr: number | null
 }
 
 type DateMapOf<T> = { [K in DatesEnum]: T }
