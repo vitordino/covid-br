@@ -33,7 +33,6 @@ const dateToString = (d: string, l: string = 'pt') =>
 	new Date(d).toLocaleDateString(l, options)
 
 const App = () => {
-	const sort = useStore(s => s.sort)
 	const hoveredState = useStore(s => s.hoveredState)
 	const [index, setIndex] = useState<number>(dates.length - 1)
 	const [relative, setRelative] = useState<boolean>(false)
