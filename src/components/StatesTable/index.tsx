@@ -208,7 +208,7 @@ type InitialTableState = {
 }
 
 const initialState: InitialTableState = {
-	sortBy: [{ id: 'st', desc: true }],
+	sortBy: [{ id: 'ptc', desc: true }],
 }
 
 const RelativeRender = ({ x, isNew }: { x: number; isNew?: boolean }) => (
