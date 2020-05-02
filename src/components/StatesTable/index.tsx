@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo, useEffect } from 'react'
+import React, { ReactNode, useMemo, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { useTable, useSortBy, Column } from 'react-table'
 
@@ -208,7 +208,7 @@ type InitialTableState = {
 }
 
 const initialState: InitialTableState = {
-	sortBy: [{ id: 'ptc', desc: true }],
+	sortBy: [{ id: 'tc', desc: true }],
 }
 
 const RelativeRender = ({ x, isNew }: { x: number; isNew?: boolean }) => (
@@ -264,6 +264,7 @@ const StatesTable = ({
 	statesMeta,
 	relative,
 }: StatesTableProps) => {
+	const [wasSorted, setWasSorted] = useState(false)
 	const setSort = useStore(s => s.setSort)
 	const [hoveredState, setHoveredState] = useStore(s => [
 		s.hoveredState,
@@ -407,7 +408,8 @@ const StatesTable = ({
 	const nextSort: OptionalKey<StateEntry> = transposeKeys?.[currentSort]
 
 	useEffect(() => {
-		if (nextSort) toggleSortBy(nextSort, true)
+		if (wasSorted && nextSort) toggleSortBy(nextSort, true)
+		setWasSorted(true)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [relative])
 
