@@ -110,8 +110,9 @@ const destinies = [
 const url =
 	'https://cdn.jsdelivr.net/gh/wcota/covid19br@master/cases-brazil-states.csv'
 
-const getTotalRecoveredUntilNow = () =>
+const getTotalRecoveredUntilNow = ({ state }: StateEntry) =>
 	lines
+		.filter(x => x.state === state)
 		.reduce((acc, { recovered }) => acc + parseInt(recovered || '0'), 0)
 		.toString()
 
@@ -131,7 +132,7 @@ const handleError = (err: string) => {
 }
 
 const handleData = (data: StateEntry) => {
-	lines.push({ ...data, totalRecovered: getTotalRecoveredUntilNow() })
+	lines.push({ ...data, totalRecovered: getTotalRecoveredUntilNow(data) })
 }
 
 const handleWrite = (err: ErrorType, destiny: string) => {
