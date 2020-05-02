@@ -18,7 +18,7 @@ type StateEntry = {
 	newCases: string
 	totalCases: string
 	recovered: string
-	totalRecovered?: string
+	newRecovered?: string
 }
 
 // prettier-ignore
@@ -110,11 +110,12 @@ const destinies = [
 const url =
 	'https://cdn.jsdelivr.net/gh/wcota/covid19br@master/cases-brazil-states.csv'
 
-const getTotalRecoveredUntilNow = ({ state }: StateEntry) =>
-	lines
-		.filter(x => x.state === state)
-		.reduce((acc, { recovered }) => acc + parseInt(recovered || '0'), 0)
-		.toString()
+const getNewRecovered = ({ state, recovered }: StateEntry) => {
+	const stateLines = lines.filter(x => x.state === state)
+	const stateRecovered = stateLines.map(({ recovered }) => recovered)
+	const lastRecovered = stateRecovered[stateRecovered.length - 1]
+	return (parseInt(recovered) - parseInt(lastRecovered)).toString()
+}
 
 const write = (
 	destinies: Array<string> = [],
@@ -132,7 +133,7 @@ const handleError = (err: string) => {
 }
 
 const handleData = (data: StateEntry) => {
-	lines.push({ ...data, totalRecovered: getTotalRecoveredUntilNow(data) })
+	lines.push({ ...data, newRecovered: getNewRecovered(data) })
 }
 
 const handleWrite = (err: ErrorType, destiny: string) => {
@@ -154,7 +155,7 @@ const renameData = (data: StateEntries) =>
 			newCases,
 			totalCases,
 			recovered,
-			totalRecovered,
+			newRecovered,
 		}) => ({
 			date,
 			st: state,
@@ -162,8 +163,8 @@ const renameData = (data: StateEntries) =>
 			nd: parseInt(newDeaths),
 			nc: parseInt(newCases),
 			tc: parseInt(totalCases),
-			tr: parseInt(totalRecovered || '0'),
-			nr: parseInt(recovered),
+			tr: parseInt(recovered),
+			nr: parseInt(newRecovered || '0'),
 		}),
 	)
 
