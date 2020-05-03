@@ -172,16 +172,15 @@ type GetStateFn = ({ st }: StateOutput) => StateKeys | string
 const getState: GetStateFn = ({ st }) => st
 const getDate = ({ date }: StateOutput) => date
 const groupByDate = groupBy(getDate)
-
 const higher = (a: number, b: number) => Math.max(a, b)
 
 type FilterOf<T> = (x: T) => boolean
 
 const defaultFilter: FilterOf<any> = x => !!x
 
-const getHighest = <T extends StateOutput>(prop: NumericKeysOf<T>) => (
+const getHighest = <T extends StateOutput>(
 	filter: (value: T) => boolean = defaultFilter,
-) => (x: T[]) =>
+) => (prop: NumericKeysOf<T>) => (x: T[]) =>
 	values(x)
 		.filter(filter)
 		.filter((x: T) => !!x[prop])
@@ -189,35 +188,38 @@ const getHighest = <T extends StateOutput>(prop: NumericKeysOf<T>) => (
 		.reduce(higher, 0)
 
 // i f***** hate TS
-const getHighestPop = <T extends PopulationalEnhancedOutput>(prop: keyof T) => (
+const getHighestPop = <T extends PopulationalEnhancedOutput>(
 	filter: (value: T) => boolean = defaultFilter,
-) => (x: T[]) =>
+) => (prop: keyof T) => (x: T[]) =>
 	values(x)
 		.filter(filter)
 		.filter((x: T) => !!x[prop])
 		.map((x: T) => x[prop])
 		.reduce(higher, 0)
 
-const getHighestStateCase = getHighest('tc')(({ st }) => st !== 'TOTAL')
-const getHighestStateNewCase = getHighest('nc')(({ st }) => st !== 'TOTAL')
-const getHighestStateDeath = getHighest('td')(({ st }) => st !== 'TOTAL')
-const getHighestStateNewDeath = getHighest('nd')(({ st }) => st !== 'TOTAL')
-const getHighestStateRecovered = getHighest('tr')(({ st }) => st !== 'TOTAL')
-const getHighestStateNewRecovered = getHighest('nr')(({ st }) => st !== 'TOTAL')
+const getHighestState = getHighest(({ st }) => st !== 'TOTAL')
+const getHighestTotal = getHighest(({ st }) => st === 'TOTAL')
 
-const getHighestTotalCase = getHighest('tc')(({ st }) => st === 'TOTAL')
-const getHighestTotalNewCase = getHighest('nc')(({ st }) => st === 'TOTAL')
-const getHighestTotalDeath = getHighest('td')(({ st }) => st === 'TOTAL')
-const getHighestTotalNewDeath = getHighest('nd')(({ st }) => st === 'TOTAL')
-const getHighestTotalRecovered = getHighest('tr')(({ st }) => st === 'TOTAL')
-const getHighestTotalNewRecovered = getHighest('nr')(({ st }) => st === 'TOTAL')
+const getHighestStateCase = getHighestState('tc')
+const getHighestStateNewCase = getHighestState('nc')
+const getHighestStateDeath = getHighestState('td')
+const getHighestStateNewDeath = getHighestState('nd')
+const getHighestStateRecovered = getHighestState('tr')
+const getHighestStateNewRecovered = getHighestState('nr')
 
-const getHighestPopCase = getHighestPop('ptc')()
-const getHighestPopNewCase = getHighestPop('pnc')()
-const getHighestPopDeath = getHighestPop('ptd')()
-const getHighestPopNewDeath = getHighestPop('pnd')()
-const getHighestPopRecovered = getHighestPop('ptr')()
-const getHighestPopNewRecovered = getHighestPop('pnr')()
+const getHighestTotalCase = getHighestTotal('tc')
+const getHighestTotalNewCase = getHighestTotal('nc')
+const getHighestTotalDeath = getHighestTotal('td')
+const getHighestTotalNewDeath = getHighestTotal('nd')
+const getHighestTotalRecovered = getHighestTotal('tr')
+const getHighestTotalNewRecovered = getHighestTotal('nr')
+
+const getHighestPopCase = getHighestPop()('ptc')
+const getHighestPopNewCase = getHighestPop()('pnc')
+const getHighestPopDeath = getHighestPop()('ptd')
+const getHighestPopNewDeath = getHighestPop()('pnd')
+const getHighestPopRecovered = getHighestPop()('ptr')
+const getHighestPopNewRecovered = getHighestPop()('pnr')
 
 type EnhanceReducerFn = (
 	arr: Outputs,
@@ -229,7 +231,7 @@ type EnhanceReducerFn = (
 
 const enhance: EnhanceReducerFn = arr => (acc, k, i) => ({
 	...acc,
-	[`r${k}`]: acc[k] / getHighest(k)(x => !!x)(arr),
+	[`r${k}`]: acc[k] / getHighest()(k)(arr),
 })
 
 type EnhanceDataFunction = (
