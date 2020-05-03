@@ -239,16 +239,20 @@ type KeyToKey<T> = {
 
 const absoluteToRelative: KeyToKey<StateEntry> = {
 	tc: 'ptc',
-	td: 'ptd',
 	nc: 'pnc',
+	td: 'ptd',
 	nd: 'pnd',
+	tr: 'ptr',
+	nr: 'pnr',
 }
 
 const relativeToAbsolute: KeyToKey<StateEntry> = {
 	ptc: 'tc',
-	ptd: 'td',
 	pnc: 'nc',
+	ptd: 'td',
 	pnd: 'nd',
+	ptr: 'tr',
+	pnr: 'nr',
 }
 
 const transposeKeys: KeyToKey<StateEntry> = {
