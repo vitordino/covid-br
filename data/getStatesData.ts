@@ -112,7 +112,7 @@ const url =
 
 const getNewRecovered = ({ state, recovered }: StateEntry) => {
 	const stateLines = lines.filter(x => x.state === state)
-	const stateRecovered = stateLines.map(({ recovered }) => recovered)
+	const stateRecovered = stateLines.map(x => x.recovered)
 	const lastRecovered = stateRecovered[stateRecovered.length - 1]
 	return (parseInt(recovered) - parseInt(lastRecovered)).toString()
 }
@@ -184,8 +184,9 @@ const getHighest = <T extends StateOutput>(prop: NumericKeysOf<T>) => (
 ) => (x: T[]) =>
 	values(x)
 		.filter(filter)
+		.filter((x: T) => !!x[prop])
 		.map((x: T) => x[prop])
-		.reduce(higher)
+		.reduce(higher, 0)
 
 // i f***** hate TS
 const getHighestPop = <T extends PopulationalEnhancedOutput>(prop: keyof T) => (
@@ -193,8 +194,9 @@ const getHighestPop = <T extends PopulationalEnhancedOutput>(prop: keyof T) => (
 ) => (x: T[]) =>
 	values(x)
 		.filter(filter)
+		.filter((x: T) => !!x[prop])
 		.map((x: T) => x[prop])
-		.reduce(higher)
+		.reduce(higher, 0)
 
 const getHighestStateCase = getHighest('tc')(({ st }) => st !== 'TOTAL')
 const getHighestStateNewCase = getHighest('nc')(({ st }) => st !== 'TOTAL')
@@ -204,11 +206,11 @@ const getHighestStateRecovered = getHighest('tr')(({ st }) => st !== 'TOTAL')
 const getHighestStateNewRecovered = getHighest('nr')(({ st }) => st !== 'TOTAL')
 
 const getHighestTotalCase = getHighest('tc')(({ st }) => st === 'TOTAL')
-const getHighestTotalNewCase = getHighest('tc')(({ st }) => st === 'TOTAL')
+const getHighestTotalNewCase = getHighest('nc')(({ st }) => st === 'TOTAL')
 const getHighestTotalDeath = getHighest('td')(({ st }) => st === 'TOTAL')
-const getHighestTotalNewDeath = getHighest('td')(({ st }) => st === 'TOTAL')
+const getHighestTotalNewDeath = getHighest('nd')(({ st }) => st === 'TOTAL')
 const getHighestTotalRecovered = getHighest('tr')(({ st }) => st === 'TOTAL')
-const getHighestTotalNewRecovered = getHighest('tr')(({ st }) => st === 'TOTAL')
+const getHighestTotalNewRecovered = getHighest('nr')(({ st }) => st === 'TOTAL')
 
 const getHighestPopCase = getHighestPop('ptc')()
 const getHighestPopNewCase = getHighestPop('pnc')()
@@ -287,31 +289,30 @@ const processLines = (input: StateEntries) => {
 	// numbers
 	const highestStateCase = getHighestStateCase(renamed)
 	const highestStateNewCase = getHighestStateNewCase(renamed)
-	const highestStateDeath = getHighestStateDeath(renamed)
-	const highestStateNewDeath = getHighestStateNewDeath(renamed)
-	const highestStateRecovered = getHighestStateRecovered(renamed)
-	const highestStateNewRecovered = getHighestStateNewRecovered(renamed)
-
 	const highestTotalCase = getHighestTotalCase(renamed)
 	const highestTotalNewCase = getHighestTotalNewCase(renamed)
-	const highestTotalDeath = getHighestTotalDeath(renamed)
-	const highestTotalNewDeath = getHighestTotalNewDeath(renamed)
-	const highestTotalRecovered = getHighestTotalRecovered(renamed)
-	const highestTotalNewRecovered = getHighestTotalNewRecovered(renamed)
-
 	const highestPopCase = getHighestPopCase(withPopulationalStates)
 	const highestPopNewCase = getHighestPopNewCase(withPopulationalStates)
+	const highestTotalPopCase = getHighestPopCase(withPopulationalTotals)
+	const highestTotalPopNewCase = getHighestPopNewCase(withPopulationalTotals)
+
+	const highestStateDeath = getHighestStateDeath(renamed)
+	const highestStateNewDeath = getHighestStateNewDeath(renamed)
+	const highestTotalDeath = getHighestTotalDeath(renamed)
+	const highestTotalNewDeath = getHighestTotalNewDeath(renamed)
 	const highestPopDeath = getHighestPopDeath(withPopulationalStates)
 	const highestPopNewDeath = getHighestPopNewDeath(withPopulationalStates)
+	const highestTotalPopDeath = getHighestPopDeath(withPopulationalTotals)
+	const highestTotalPopNewDeath = getHighestPopNewDeath(withPopulationalTotals)
+
+	const highestStateRecovered = getHighestStateRecovered(renamed)
+	const highestStateNewRecovered = getHighestStateNewRecovered(renamed)
+	const highestTotalRecovered = getHighestTotalRecovered(renamed)
+	const highestTotalNewRecovered = getHighestTotalNewRecovered(renamed)
 	const highestPopRecovered = getHighestPopRecovered(withPopulationalStates)
 	const highestPopNewRecovered = getHighestPopNewRecovered(
 		withPopulationalStates,
 	)
-
-	const highestTotalPopCase = getHighestPopCase(withPopulationalTotals)
-	const highestTotalPopNewCase = getHighestPopNewCase(withPopulationalTotals)
-	const highestTotalPopDeath = getHighestPopDeath(withPopulationalTotals)
-	const highestTotalPopNewDeath = getHighestPopNewDeath(withPopulationalTotals)
 	const highestTotalPopRecovered = getHighestPopRecovered(
 		withPopulationalTotals,
 	)
@@ -324,28 +325,31 @@ const processLines = (input: StateEntries) => {
 		totals,
 		dates,
 		states,
+
 		highestStateCase,
 		highestStateNewCase,
-		highestStateDeath,
-		highestStateNewDeath,
-		highestStateRecovered,
-		highestStateNewRecovered,
 		highestTotalCase,
 		highestTotalNewCase,
-		highestTotalDeath,
-		highestTotalNewDeath,
-		highestTotalRecovered,
-		highestTotalNewRecovered,
 		highestPopCase,
 		highestPopNewCase,
-		highestPopDeath,
-		highestPopNewDeath,
-		highestPopRecovered,
-		highestPopNewRecovered,
 		highestTotalPopCase,
 		highestTotalPopNewCase,
+
+		highestStateDeath,
+		highestStateNewDeath,
+		highestTotalDeath,
+		highestTotalNewDeath,
+		highestPopDeath,
+		highestPopNewDeath,
 		highestTotalPopDeath,
 		highestTotalPopNewDeath,
+
+		highestStateRecovered,
+		highestStateNewRecovered,
+		highestTotalRecovered,
+		highestTotalNewRecovered,
+		highestPopRecovered,
+		highestPopNewRecovered,
 		highestTotalPopRecovered,
 		highestTotalPopNewRecovered,
 	}
