@@ -173,7 +173,7 @@ const getState: GetStateFn = ({ st }) => st
 const getDate = ({ date }: StateOutput) => date
 const groupByDate = groupBy(getDate)
 
-const higher = (a: number, b: number) => (a > b ? a : b)
+const higher = (a: number, b: number) => Math.max(a, b)
 
 type FilterOf<T> = (x: T) => boolean
 
