@@ -3,7 +3,7 @@ import styled from 'styled-components'
 const Container = styled.div`
 	padding-left: 0.5rem;
 	padding-right: 0.5rem;
-	max-width: 80rem;
+	max-width: 84rem;
 	margin: 0 auto;
 	${p => p.theme.above('sm')`
 		padding-left: 1rem;
