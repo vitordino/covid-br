@@ -47,10 +47,17 @@ const CellWrapper = styled(Text)`
 	}
 `
 
+const Left = styled(Text)`
+	display: none;
+	${p => p.theme.above('sm')`
+		display: block;
+	`}
+`
+
 const Cell = ({ left, children, transform, bold = true }: StaticCellProps) => (
 	<CellWrapper transform={transform}>
-		{!!left && <Text>{left}</Text>}
-		{'\t'}
+		{!!left && <Left>{left}</Left>}
+		{!!left && '\t'}
 		{bold && <strong>{children}</strong>}
 		{!bold && <div>{children}</div>}
 	</CellWrapper>
