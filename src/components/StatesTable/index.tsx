@@ -274,6 +274,8 @@ const StatesTable = ({
 	const caseLeftProp = relative ? 'pnc' : 'nc'
 	const deathProp = relative ? 'ptd' : 'td'
 	const deathLeftProp = relative ? 'pnd' : 'nd'
+	const recoveredProp = relative ? 'ptr' : 'tr'
+	const recoveredLeftProp = relative ? 'pnr' : 'nr'
 
 	const columns: Column<StateEntry>[] = useMemo(
 		() => [
@@ -336,6 +338,25 @@ const StatesTable = ({
 				),
 			},
 			{
+				accessor: 'tr',
+				Header: (x: Header) => (
+					<Header isVisible={!relative} {...x}>
+						Recovered
+					</Header>
+				),
+				Cell: ({ row, column }: Cell) => (
+					<DynamicCell
+						row={row}
+						column={column}
+						data={data}
+						leftProp='nr'
+						leftRender={getCellRender(relative, true)}
+						mainRender={getCellRender(relative, false)}
+						isVisible={!relative}
+					/>
+				),
+			},
+			{
 				accessor: 'ptc',
 				sortType: 'basic',
 				Header: (x: Header) => (
@@ -369,6 +390,26 @@ const StatesTable = ({
 						column={column}
 						data={data}
 						leftProp='pnd'
+						leftRender={getCellRender(relative, true)}
+						mainRender={getCellRender(relative, false)}
+						isVisible={relative}
+					/>
+				),
+			},
+			{
+				accessor: 'ptr',
+				sortType: 'basic',
+				Header: (x: Header) => (
+					<Header isVisible={relative} {...x}>
+						Recovered
+					</Header>
+				),
+				Cell: ({ row, column }: Cell) => (
+					<DynamicCell
+						row={row}
+						column={column}
+						data={data}
+						leftProp='pnr'
 						leftRender={getCellRender(relative, true)}
 						mainRender={getCellRender(relative, false)}
 						isVisible={relative}
@@ -459,6 +500,7 @@ const StatesTable = ({
 							<>
 								<td />
 								<td />
+								<td />
 							</>
 						)}
 						<td>
@@ -471,8 +513,16 @@ const StatesTable = ({
 								{getCellRender(relative)(total[deathProp])}
 							</Cell>
 						</td>
+						<td>
+							<Cell
+								left={getCellRender(relative, true)(total[recoveredLeftProp])}
+							>
+								{getCellRender(relative)(total[recoveredProp])}
+							</Cell>
+						</td>
 						{!relative && (
 							<>
+								<td />
 								<td />
 								<td />
 							</>
