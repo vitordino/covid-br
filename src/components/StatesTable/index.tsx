@@ -151,7 +151,7 @@ const Table = styled.table`
 	}
 	th {
 		position: sticky;
-		top: 0.125rem;
+		top: 0.25rem;
 		z-index: 1;
 		&:nth-child(1) {
 			z-index: 3;
