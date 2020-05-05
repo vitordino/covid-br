@@ -2,11 +2,32 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import useStore from 'store'
+import { scales } from 'utils/colorScale'
 import Text from 'components/Text'
 import Spacer from 'components/Spacer'
 
-const Wrapper = styled.div``
+type WrapperProps = {
+	prop: keyof StateEntry
+}
 
+type GetScaleType = ({ prop }: { prop: keyof StateEntry }) => string
+// @ts-ignore
+const getScale: GetScaleType = ({ prop }) => scales?.[prop]?.[4]
+
+const Wrapper = styled.div<WrapperProps>`
+	padding: 0.25rem 1rem;
+	position: relative;
+	margin: 1rem 0;
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: 2px;
+		background: ${getScale};
+	}
+`
 type StatsCardProps = {
 	prop: keyof StateEntry
 	data: StateEntry
@@ -114,13 +135,13 @@ const Render = ({ bold, ...props }: RenderProps) => {
 	)
 }
 
-const StatsCard = ({ prop, data, ...props }: StatsCardProps) => {
+const StatsCard = ({ prop, data }: StatsCardProps) => {
 	const sort = useStore(s => s.sort)
 	const isSorted = sort === prop
 	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[prop] || {}
 
 	return (
-		<Wrapper {...props}>
+		<Wrapper prop={prop} isSorted={isSorted}>
 			{main && (
 				<Text weight={600} transform='capitalize' xs={0}>
 					{typeMapping[main]?.scope}
