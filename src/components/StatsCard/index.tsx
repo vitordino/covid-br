@@ -176,7 +176,6 @@ const StatsCard = ({ prop, data }: StatsCardProps) => {
 				{!!sub && !!subAlt && ' '}
 				{!!subAlt && <Render value={data?.[subAlt]} {...typeMapping[subAlt]} />}
 			</Text>
-			{JSON.stringify({ isSorted })}
 		</Wrapper>
 	)
 }
