@@ -161,14 +161,14 @@ const Render = ({ bold, ...props }: RenderProps) => {
 }
 
 const StatsCard = ({ prop, data }: StatsCardProps) => {
-	const sort = useStore(s => s.sort)
+	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const isSorted = sort === prop
 	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[prop] || {}
 
 	if (!main || !data?.[main]) return null
 
 	return (
-		<Wrapper prop={prop} isSorted={isSorted}>
+		<Wrapper prop={prop} isSorted={isSorted} onClick={() => setSort(prop)}>
 			{main && (
 				<FlexText weight={600} transform='capitalize' xs={0}>
 					{typeMapping[main]?.scope}
