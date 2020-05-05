@@ -220,14 +220,14 @@ const initialState: InitialTableState = {
 
 const RelativeRender = ({ x, isNew }: { x: number; isNew?: boolean }) => (
 	<span title={`${isNew ? '+ ' : ''}${x * 10000} a cada 10 mil hab`}>
-		{!!isNew && '+ '}
+		{!!isNew && x > 0 && '+ '}
 		{(x * 10000).toFixed(2)}‱
 	</span>
 )
 
 const AbsoluteRender = ({ x, isNew }: { x: number; isNew?: boolean }) => (
 	<span>
-		{!!isNew && '+ '}
+		{!!isNew && x > 0 && '+ '}
 		{x}
 	</span>
 )

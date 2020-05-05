@@ -127,13 +127,13 @@ const RenderValue = ({ value, isNew, kind }: RenderValueProps) => {
 	if (kind === 'relative')
 		return (
 			<>
-				{isNew ? '+ ' : ''}
+				{isNew && value > 0 ? '+ ' : ''}
 				{(value * MULTIPLIER).toFixed(2)}‱
 			</>
 		)
 	return (
 		<>
-			{isNew ? '+ ' : ''}
+			{isNew && value > 0 ? '+ ' : ''}
 			{value}
 		</>
 	)
