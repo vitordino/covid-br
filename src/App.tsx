@@ -35,8 +35,8 @@ const dateToString = (d: string, l: string = 'pt') =>
 
 const App = () => {
 	const hoveredState = useStore(s => s.hoveredState)
+	const [relative, setRelative] = useStore(s => [s.relative, s.setRelative])
 	const [index, setIndex] = useState<number>(dates.length - 1)
-	const [relative, setRelative] = useState<boolean>(false)
 	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
 	const total: StateEntry = useMemo(() => totals[dates[index]], [index])
 
@@ -61,12 +61,7 @@ const App = () => {
 				</TitleHeader>
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
-						<StatesTable
-							data={data}
-							total={total}
-							statesMeta={statesMeta}
-							relative={relative}
-						/>
+						<StatesTable data={data} total={total} statesMeta={statesMeta} />
 					</Grid.Column>
 					<Grid.Column xs={16} lg={6}>
 						<label>

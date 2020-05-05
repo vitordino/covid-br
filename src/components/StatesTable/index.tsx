@@ -202,7 +202,6 @@ type StatesTableProps = {
 	data: StateEntry[]
 	total: StateEntry
 	statesMeta: StatesMeta
-	relative: boolean
 }
 
 type SortByOptions = {
@@ -269,14 +268,10 @@ const transposeKeys: KeyToKey<StateEntry> = {
 
 type OptionalKey<T> = keyof T | undefined
 
-const StatesTable = ({
-	data,
-	total,
-	statesMeta,
-	relative,
-}: StatesTableProps) => {
+const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 	const [wasSorted, setWasSorted] = useState(false)
 	const setSort = useStore(s => s.setSort)
+	const relative = useStore(s => s.relative)
 	const [hoveredState, setHoveredState] = useStore(s => [
 		s.hoveredState,
 		s.setHoveredState,
