@@ -63,7 +63,15 @@ const App = () => {
 						{title}
 					</Text>
 					<Text weight={400} xs={2} md={3}>
-						{dateToString(dates[dateIndex])}
+						<select
+							value={dateIndex}
+							onChange={({ target }) => setDateIndex(parseInt(target.value))}
+						>
+							{dates.map((x, i) => (
+								<option value={i}>{dateToString(x)}</option>
+							))}
+						</select>
+						{/* {dateToString(dates[dateIndex])} */}
 					</Text>
 				</TitleHeader>
 				<Grid.Row>
