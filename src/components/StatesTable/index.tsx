@@ -494,7 +494,7 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 							<Cell
 								left={getCellRender(relative, true)(total[recoveredLeftProp])}
 							>
-								{getCellRender(relative)(total[recoveredProp])}
+								{getCellRender(relative)(total[recoveredProp]) || <>&nbsp;</>}
 							</Cell>
 						</td>
 						{!relative && (
