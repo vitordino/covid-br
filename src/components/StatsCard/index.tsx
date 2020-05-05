@@ -41,6 +41,18 @@ const Wrapper = styled.div<WrapperProps>`
 		opacity: ${p => (p.isSorted ? 1 : 0)};
 	}
 `
+
+const FlexText = styled(Text)`
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	text-align: right;
+	flex-direction: row-reverse;
+	span {
+		color: var(--color-base44);
+	}
+`
+
 type StatsCardProps = {
 	prop: keyof StateEntry
 	data: StateEntry
@@ -158,24 +170,24 @@ const StatsCard = ({ prop, data }: StatsCardProps) => {
 	return (
 		<Wrapper prop={prop} isSorted={isSorted}>
 			{main && (
-				<Text weight={600} transform='capitalize' xs={0}>
+				<FlexText weight={600} transform='capitalize' xs={0}>
 					{typeMapping[main]?.scope}
-				</Text>
+				</FlexText>
 			)}
-			<Spacer.V xs={0.25} />
-			<Text xs={2}>
+			<Spacer.V xs={0.125} />
+			<FlexText xs={2}>
 				{!!main && <Render bold value={data?.[main]} {...typeMapping[main]} />}
 				{!!main && !!mainAlt && ' '}
 				{!!mainAlt && (
 					<Render value={data?.[mainAlt]} {...typeMapping[mainAlt]} />
 				)}
-			</Text>
+			</FlexText>
 			<Spacer.V xs={0.125} />
-			<Text xs={0}>
+			<FlexText xs={0}>
 				{!!sub && <Render bold value={data?.[sub]} {...typeMapping[sub]} />}
 				{!!sub && !!subAlt && ' '}
 				{!!subAlt && <Render value={data?.[subAlt]} {...typeMapping[subAlt]} />}
-			</Text>
+			</FlexText>
 		</Wrapper>
 	)
 }
