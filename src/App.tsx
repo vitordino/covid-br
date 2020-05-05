@@ -9,6 +9,7 @@ import Grid from 'components/Grid'
 import Text from 'components/Text'
 import Layout from 'components/Layout'
 import RangeInput from 'components/RangeInput'
+import StatsCard from 'components/StatsCard'
 
 import data from 'data/states.json'
 
@@ -41,6 +42,7 @@ const App = () => {
 
 	// @ts-ignore
 	const title = statesMeta?.[hoveredState]?.n || 'Brazil'
+	const hoveredData = data?.find(({ st }) => st === hoveredState) || total
 
 	return (
 		<Layout>
@@ -71,6 +73,7 @@ const App = () => {
 								onChange={({ target }) => setRelative(target.checked)}
 							/>
 						</label>
+						<StatsCard hoveredData={hoveredData} />
 						<StatesMap data={data} />
 					</Grid.Column>
 				</Grid.Row>
