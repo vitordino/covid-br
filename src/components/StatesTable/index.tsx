@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo, useEffect, useState } from 'react'
+import React, { ReactNode, useMemo, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { useTable, useSortBy, Column } from 'react-table'
 
@@ -239,38 +239,8 @@ const getCellRender = (relative: boolean, isNew?: boolean) => (
 	return <AbsoluteRender x={x} isNew={isNew} />
 }
 
-type KeyToKey<T> = {
-	[K in keyof T]?: keyof T
-}
-
-const absoluteToRelative: KeyToKey<StateEntry> = {
-	tc: 'ptc',
-	nc: 'pnc',
-	td: 'ptd',
-	nd: 'pnd',
-	tr: 'ptr',
-	nr: 'pnr',
-}
-
-const relativeToAbsolute: KeyToKey<StateEntry> = {
-	ptc: 'tc',
-	pnc: 'nc',
-	ptd: 'td',
-	pnd: 'nd',
-	ptr: 'tr',
-	pnr: 'nr',
-}
-
-const transposeKeys: KeyToKey<StateEntry> = {
-	...absoluteToRelative,
-	...relativeToAbsolute,
-}
-
-type OptionalKey<T> = keyof T | undefined
-
 const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
-	const [wasSorted, setWasSorted] = useState(false)
-	const setSort = useStore(s => s.setSort)
+	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const relative = useStore(s => s.relative)
 	const [hoveredState, setHoveredState] = useStore(s => [
 		s.hoveredState,
@@ -447,19 +417,17 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 		useSortBy,
 	)
 
-	const currentSort: keyof StateEntry = state.sortBy[0].id
-	const nextSort: OptionalKey<StateEntry> = transposeKeys?.[currentSort]
+	useEffect(() => {
+		if (sort !== state.sortBy[0].id) {
+			toggleSortBy(sort, true)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [sort])
 
 	useEffect(() => {
-		if (wasSorted && nextSort) toggleSortBy(nextSort, true)
-		setWasSorted(true)
+		setSort(initialState.sortBy[0].id)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [relative])
-
-	useEffect(() => {
-		setSort(currentSort)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentSort])
+	}, [])
 
 	return (
 		<Wrapper>
@@ -471,7 +439,10 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 								<th
 									{...column.getHeaderProps(
 										column.getSortByToggleProps({
-											onClick: () => toggleSortBy(column.id, true),
+											onClick: () => {
+												setSort(column.id)
+												toggleSortBy(column.id, true)
+											},
 										}),
 									)}
 								>

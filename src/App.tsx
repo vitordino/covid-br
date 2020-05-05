@@ -2,6 +2,7 @@ import React, { useMemo, useLayoutEffect } from 'react'
 import styled from 'styled-components'
 
 import useStore from 'store'
+import useRelativeSortSync from 'hooks/useRelativeSortSync'
 import StatesTable from 'components/StatesTable'
 import StatesMap from 'components/StatesMap'
 import Container from 'components/Container'
@@ -51,6 +52,8 @@ const App = () => {
 	useLayoutEffect(() => {
 		setDateIndex(dates.length - 1)
 	}, [setDateIndex])
+
+	useRelativeSortSync()
 
 	return (
 		<Layout>
