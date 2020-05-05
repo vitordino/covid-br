@@ -8,6 +8,7 @@ import Spacer from 'components/Spacer'
 
 type WrapperProps = {
 	prop: keyof StateEntry
+	isSorted: boolean
 }
 
 type GetScaleType = ({ prop }: { prop: keyof StateEntry }) => string
@@ -26,6 +27,18 @@ const Wrapper = styled.div<WrapperProps>`
 		bottom: 0;
 		width: 2px;
 		background: ${getScale};
+	}
+	&:after {
+		content: '';
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		width: 2px;
+		height: 0.75rem;
+		background: ${getScale};
+		transform: rotate(35deg);
+		transform-origin: bottom right;
+		opacity: ${p => (p.isSorted ? 1 : 0)};
 	}
 `
 type StatsCardProps = {
