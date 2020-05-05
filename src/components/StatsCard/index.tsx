@@ -8,7 +8,8 @@ import Spacer from 'components/Spacer'
 const Wrapper = styled.div``
 
 type StatsCardProps = {
-	data?: StateEntry
+	prop: keyof StateEntry
+	data: StateEntry
 }
 
 type DataMappingOf<T> = {
@@ -113,9 +114,10 @@ const Render = ({ bold, ...props }: RenderProps) => {
 	)
 }
 
-const StatsCard = ({ data, ...props }: StatsCardProps) => {
+const StatsCard = ({ prop, data, ...props }: StatsCardProps) => {
 	const sort = useStore(s => s.sort)
-	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[sort] || {}
+	const isSorted = sort === prop
+	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[prop] || {}
 
 	return (
 		<Wrapper {...props}>
@@ -138,6 +140,7 @@ const StatsCard = ({ data, ...props }: StatsCardProps) => {
 				{!!sub && !!subAlt && ' '}
 				{!!subAlt && <Render value={data?.[subAlt]} {...typeMapping[subAlt]} />}
 			</Text>
+			{JSON.stringify({ isSorted })}
 		</Wrapper>
 	)
 }

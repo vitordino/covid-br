@@ -40,6 +40,10 @@ const App = () => {
 	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
 	const total: StateEntry = useMemo(() => totals[dates[index]], [index])
 
+	const caseProp = relative ? 'ptc' : 'tc'
+	const deathProp = relative ? 'ptd' : 'td'
+	const recoveredProp = relative ? 'ptr' : 'tr'
+
 	// @ts-ignore
 	const title = statesMeta?.[hoveredState]?.n || 'Brazil'
 	const hoveredData = data?.find(({ st }) => st === hoveredState) || total
@@ -73,7 +77,9 @@ const App = () => {
 								onChange={({ target }) => setRelative(target.checked)}
 							/>
 						</label>
-						<StatsCard data={hoveredData} />
+						<StatsCard prop={caseProp} data={hoveredData} />
+						<StatsCard prop={deathProp} data={hoveredData} />
+						<StatsCard prop={recoveredProp} data={hoveredData} />
 						<StatesMap data={data} />
 					</Grid.Column>
 				</Grid.Row>
