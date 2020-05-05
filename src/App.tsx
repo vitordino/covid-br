@@ -77,10 +77,10 @@ const App = () => {
 								onChange={({ target }) => setRelative(target.checked)}
 							/>
 						</label>
+						<StatesMap data={data} />
 						<StatsCard prop={caseProp} data={hoveredData} />
 						<StatsCard prop={deathProp} data={hoveredData} />
 						<StatsCard prop={recoveredProp} data={hoveredData} />
-						<StatesMap data={data} />
 					</Grid.Column>
 				</Grid.Row>
 			</Container>
