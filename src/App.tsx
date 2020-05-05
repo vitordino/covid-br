@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useLayoutEffect } from 'react'
 import styled from 'styled-components'
 
 import useStore from 'store'
@@ -36,9 +36,9 @@ const dateToString = (d: string, l: string = 'pt') =>
 const App = () => {
 	const hoveredState = useStore(s => s.hoveredState)
 	const [relative, setRelative] = useStore(s => [s.relative, s.setRelative])
-	const [index, setIndex] = useState<number>(dates.length - 1)
-	const data: StateEntry[] = useMemo(() => main[dates[index]], [index])
-	const total: StateEntry = useMemo(() => totals[dates[index]], [index])
+	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
+	const data: StateEntry[] = useMemo(() => main[dates[dateIndex]], [dateIndex])
+	const total: StateEntry = useMemo(() => totals[dates[dateIndex]], [dateIndex])
 
 	const caseProp = relative ? 'ptc' : 'tc'
 	const deathProp = relative ? 'ptd' : 'td'
@@ -48,6 +48,10 @@ const App = () => {
 	const title = statesMeta?.[hoveredState]?.n || 'Brazil'
 	const hoveredData = data?.find(({ st }) => st === hoveredState) || total
 
+	useLayoutEffect(() => {
+		setDateIndex(dates.length - 1)
+	}, [setDateIndex])
+
 	return (
 		<Layout>
 			<Container>
@@ -56,7 +60,7 @@ const App = () => {
 						{title}
 					</Text>
 					<Text weight={400} xs={2} md={3}>
-						{dateToString(dates[index])}
+						{dateToString(dates[dateIndex])}
 					</Text>
 				</TitleHeader>
 				<Grid.Row>
@@ -80,8 +84,8 @@ const App = () => {
 				</Grid.Row>
 			</Container>
 			<RangeInput
-				value={index}
-				onChange={setIndex}
+				value={dateIndex}
+				onChange={setDateIndex}
 				dates={dates}
 				totals={totals}
 			/>
