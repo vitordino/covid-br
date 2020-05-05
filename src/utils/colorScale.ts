@@ -92,7 +92,7 @@ const multipliers = {
 
 const multipliersKeys = Object.keys(multipliers)
 
-const scales = {
+export const scales = {
 	tc: schemeReds[9],
 	nc: schemeReds[9],
 	ptc: schemeReds[9],
