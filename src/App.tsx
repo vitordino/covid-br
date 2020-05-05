@@ -73,7 +73,7 @@ const App = () => {
 								onChange={({ target }) => setRelative(target.checked)}
 							/>
 						</label>
-						<StatsCard hoveredData={hoveredData} />
+						<StatsCard data={hoveredData} />
 						<StatesMap data={data} />
 					</Grid.Column>
 				</Grid.Row>

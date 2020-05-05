@@ -8,12 +8,7 @@ import Spacer from 'components/Spacer'
 const Wrapper = styled.div``
 
 type StatsCardProps = {
-	hoveredData?: StateEntry
-	label?: ReactNode
-	main?: ReactNode
-	mainAlt?: ReactNode
-	sub?: ReactNode
-	subAlt?: ReactNode
+	data?: StateEntry
 }
 
 type DataMappingOf<T> = {
@@ -118,7 +113,7 @@ const Render = ({ bold, ...props }: RenderProps) => {
 	)
 }
 
-const StatsCard = ({ label, hoveredData, ...props }: StatsCardProps) => {
+const StatsCard = ({ data, ...props }: StatsCardProps) => {
 	const sort = useStore(s => s.sort)
 	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[sort] || {}
 
@@ -131,23 +126,17 @@ const StatsCard = ({ label, hoveredData, ...props }: StatsCardProps) => {
 			)}
 			<Spacer.V xs={0.25} />
 			<Text xs={2}>
-				{!!main && (
-					<Render bold value={hoveredData?.[main]} {...typeMapping[main]} />
-				)}
+				{!!main && <Render bold value={data?.[main]} {...typeMapping[main]} />}
 				{!!main && !!mainAlt && ' '}
 				{!!mainAlt && (
-					<Render value={hoveredData?.[mainAlt]} {...typeMapping[mainAlt]} />
+					<Render value={data?.[mainAlt]} {...typeMapping[mainAlt]} />
 				)}
 			</Text>
 			<Spacer.V xs={0.125} />
 			<Text xs={0}>
-				{!!sub && (
-					<Render bold value={hoveredData?.[sub]} {...typeMapping[sub]} />
-				)}
+				{!!sub && <Render bold value={data?.[sub]} {...typeMapping[sub]} />}
 				{!!sub && !!subAlt && ' '}
-				{!!subAlt && (
-					<Render value={hoveredData?.[subAlt]} {...typeMapping[subAlt]} />
-				)}
+				{!!subAlt && <Render value={data?.[subAlt]} {...typeMapping[subAlt]} />}
 			</Text>
 		</Wrapper>
 	)
