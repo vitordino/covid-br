@@ -5,8 +5,6 @@ import useStore from 'store'
 import { getRangeFill } from 'utils/colorScale'
 
 type RangeInputProps = {
-	value: number
-	onChange: (value: number) => void
 	dates: string[]
 	totals: Totals
 }
@@ -88,17 +86,18 @@ const Strip = styled.div<StripProps>`
 	background: ${p => p.fill};
 `
 
-const RangeInput = ({ value, onChange, dates, totals }: RangeInputProps) => {
+const RangeInput = ({ dates, totals }: RangeInputProps) => {
 	const sort = useStore(s => s.sort)
+	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
 	return (
 		<Wrapper>
 			<Field
 				type='range'
 				min={0}
 				max={dates.length - 1}
-				value={value}
-				color={getRangeFill(totals[dates[value]])(sort)}
-				onChange={({ target }) => onChange(parseInt(target.value))}
+				value={dateIndex}
+				color={getRangeFill(totals[dates[dateIndex]])(sort)}
+				onChange={({ target }) => setDateIndex(parseInt(target.value))}
 			/>
 			{dates.map(x => (
 				<Strip

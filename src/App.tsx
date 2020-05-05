@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useLayoutEffect } from 'react'
+import React, { useMemo, useLayoutEffect } from 'react'
 import styled from 'styled-components'
 
 import useStore from 'store'
@@ -83,12 +83,7 @@ const App = () => {
 					</Grid.Column>
 				</Grid.Row>
 			</Container>
-			<RangeInput
-				value={dateIndex}
-				onChange={setDateIndex}
-				dates={dates}
-				totals={totals}
-			/>
+			<RangeInput dates={dates} totals={totals} />
 		</Layout>
 	)
 }
