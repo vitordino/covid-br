@@ -34,7 +34,7 @@ const dataMappingsBySort: DataMappingsOf<StateEntry> = {
 
 enum Scopes {
 	confirmed,
-	death,
+	deaths,
 	recovered,
 }
 
@@ -58,10 +58,10 @@ const typeMapping: TypeMappings = {
 	nc: { scope: 'confirmed', isNew: true, kind: 'absolute' },
 	ptc: { scope: 'confirmed', isNew: false, kind: 'relative' },
 	pnc: { scope: 'confirmed', isNew: true, kind: 'relative' },
-	td: { scope: 'death', isNew: false, kind: 'absolute' },
-	nd: { scope: 'death', isNew: true, kind: 'absolute' },
-	ptd: { scope: 'death', isNew: false, kind: 'relative' },
-	pnd: { scope: 'death', isNew: true, kind: 'relative' },
+	td: { scope: 'deaths', isNew: false, kind: 'absolute' },
+	nd: { scope: 'deaths', isNew: true, kind: 'absolute' },
+	ptd: { scope: 'deaths', isNew: false, kind: 'relative' },
+	pnd: { scope: 'deaths', isNew: true, kind: 'relative' },
 	tr: { scope: 'recovered', isNew: false, kind: 'absolute' },
 	nr: { scope: 'recovered', isNew: true, kind: 'absolute' },
 	ptr: { scope: 'recovered', isNew: false, kind: 'relative' },
