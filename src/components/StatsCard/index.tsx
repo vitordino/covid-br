@@ -26,42 +26,12 @@ type DataMappingsOf<T> = {
 }
 
 const dataMappingsBySort: DataMappingsOf<StateEntry> = {
-	tc: {
-		main: 'tc',
-		mainAlt: 'nc',
-		sub: 'ptc',
-		subAlt: 'pnc',
-	},
-	ptc: {
-		main: 'ptc',
-		mainAlt: 'pnc',
-		sub: 'tc',
-		subAlt: 'nc',
-	},
-	td: {
-		main: 'td',
-		mainAlt: 'nd',
-		sub: 'ptd',
-		subAlt: 'pnd',
-	},
-	ptd: {
-		main: 'ptd',
-		mainAlt: 'pnd',
-		sub: 'td',
-		subAlt: 'nd',
-	},
-	tr: {
-		main: 'tr',
-		mainAlt: 'nr',
-		sub: 'ptr',
-		subAlt: 'pnr',
-	},
-	ptr: {
-		main: 'ptr',
-		mainAlt: 'pnr',
-		sub: 'tr',
-		subAlt: 'nr',
-	},
+	tc: { main: 'tc', mainAlt: 'nc', sub: 'ptc', subAlt: 'pnc' },
+	ptc: { main: 'ptc', mainAlt: 'pnc', sub: 'tc', subAlt: 'nc' },
+	td: { main: 'td', mainAlt: 'nd', sub: 'ptd', subAlt: 'pnd' },
+	ptd: { main: 'ptd', mainAlt: 'pnd', sub: 'td', subAlt: 'nd' },
+	tr: { main: 'tr', mainAlt: 'nr', sub: 'ptr', subAlt: 'pnr' },
+	ptr: { main: 'ptr', mainAlt: 'pnr', sub: 'tr', subAlt: 'nr' },
 }
 
 enum Scopes {
