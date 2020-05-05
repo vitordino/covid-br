@@ -153,6 +153,8 @@ const StatsCard = ({ prop, data }: StatsCardProps) => {
 	const isSorted = sort === prop
 	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[prop] || {}
 
+	if (!main || !data?.[main]) return null
+
 	return (
 		<Wrapper prop={prop} isSorted={isSorted}>
 			{main && (
