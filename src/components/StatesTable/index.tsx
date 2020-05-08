@@ -149,17 +149,16 @@ const Table = styled.table`
 	td:first-child {
 		text-align: left;
 	}
-	/* prettier-ignore */
 	th {
 		position: sticky;
 		top: 0.25rem;
 		z-index: 1;
-		&:nth-child(1) { z-index: 7 }
-		&:nth-child(2) { z-index: 6 }
-		&:nth-child(3) { z-index: 5 }
-		&:nth-child(4) { z-index: 4 }
-		&:nth-child(5) { z-index: 3 }
-		&:nth-child(6) { z-index: 2 }
+		&:nth-child(1) {
+			z-index: 3;
+		}
+		&:nth-child(2) {
+			z-index: 2;
+		}
 	}
 	tr:nth-child(2n) > * {
 		background: var(--color-base03);
@@ -238,6 +237,24 @@ const getCellRender = (relative: boolean, isNew?: boolean) => (
 	if (typeof x !== 'number') return x
 	if (relative) return <RelativeRender x={x} isNew={isNew} />
 	return <AbsoluteRender x={x} isNew={isNew} />
+}
+
+const range = (n: number) => Array.from(Array(n).keys())
+
+type EmptyCellsProps = {
+	count: number
+	isVisible?: boolean
+}
+
+const EmptyCells = ({ count, isVisible = true }: EmptyCellsProps) => {
+	if (!isVisible) return null
+	return (
+		<>
+			{range(count).map(x => (
+				<td key={x} />
+			))}
+		</>
+	)
 }
 
 const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
@@ -476,13 +493,7 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 						<td>
 							<Cell transform='capitalize'>{total.st.toLowerCase()}</Cell>
 						</td>
-						{relative && (
-							<>
-								<td />
-								<td />
-								<td />
-							</>
-						)}
+						<EmptyCells count={3} isVisible={relative} />
 						<td>
 							<Cell left={getCellRender(relative, true)(total[caseLeftProp])}>
 								{getCellRender(relative)(total[caseProp])}
@@ -500,13 +511,7 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 								{getCellRender(relative)(total[recoveredProp]) || <>&nbsp;</>}
 							</Cell>
 						</td>
-						{!relative && (
-							<>
-								<td />
-								<td />
-								<td />
-							</>
-						)}
+						<EmptyCells count={3} isVisible={!relative} />
 					</TotalRow>
 				</tfoot>
 			</Table>
