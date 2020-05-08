@@ -18,7 +18,10 @@ const getScale: GetScaleType = ({ prop }) => scales?.[prop]?.[4]
 const Wrapper = styled.div<WrapperProps>`
 	padding: 0.25rem 1rem;
 	position: relative;
-	margin: 1rem 0;
+	margin: 1rem 1rem 1rem 0;
+	${p => p.theme.above('md')`
+		margin: 1rem 0;
+	`}
 	&:before {
 		content: '';
 		position: absolute;
