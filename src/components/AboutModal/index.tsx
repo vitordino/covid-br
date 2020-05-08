@@ -1,28 +1,29 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useHistory } from 'react-router-dom'
 import { parse } from 'query-string'
 
+import useKeyPress from 'hooks/useKeyPress'
 import Portal from 'components/Portal'
 import Text from 'components/Text'
 import Spacer from 'components/Spacer'
 import Container from 'components/Container'
 
 const Wrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	z-index: 1000;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-end;
 `
 
 const Backdrop = styled.div`
-  backdrop-filter: blur(0.25rem) grayscale(0.5);
+	backdrop-filter: blur(0.25rem) grayscale(0.5);
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -31,15 +32,15 @@ const Backdrop = styled.div`
 `
 
 const Background = styled(Link)`
-  display: block;
-  cursor: pointer;
+	display: block;
+	cursor: pointer;
 	background: #000;
 	position: absolute;
 	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
-  opacity: 0.22;
+	opacity: 0.22;
 `
 
 const Inner = styled(Container)`
@@ -50,12 +51,12 @@ const Inner = styled(Container)`
 	position: relative;
 	bottom: 0;
 	max-width: 32rem;
-	box-shadow: 0 0 2rem rgba(0,0,0,0.44);
+	box-shadow: 0 0 2rem rgba(0, 0, 0, 0.44);
 `
 
 type AnchorProps = {
-  children: ReactNode
-  [key: string]: any
+	children: ReactNode
+	[key: string]: any
 }
 
 const Anchor = ({ children, ...props }: AnchorProps) => (
@@ -65,10 +66,19 @@ const Anchor = ({ children, ...props }: AnchorProps) => (
 )
 
 const AboutModal = () => {
-  const { search } = useLocation()
-  const { about } = parse(search)
-  if(typeof about === 'undefined') return null
-  return (
+	const { push } = useHistory()
+	const { search, pathname } = useLocation()
+	const { about } = parse(search)
+	const isOpen = typeof about !== 'undefined'
+
+	const onEsc = () => {
+		if (!isOpen) return
+		push(pathname, { query: '' })
+	}
+
+	useKeyPress('Escape', onEsc)
+	if (!isOpen) return null
+	return (
 		<Portal>
 			<Wrapper>
 				<Backdrop />
