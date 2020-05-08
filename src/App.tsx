@@ -68,7 +68,7 @@ const App = () => {
 							onChange={({ target }) => setDateIndex(parseInt(target.value))}
 						>
 							{dates.map((x, i) => (
-								<option value={i}>{dateToString(x)}</option>
+								<option key={x} value={i}>{dateToString(x)}</option>
 							))}
 						</select>
 						{/* {dateToString(dates[dateIndex])} */}
