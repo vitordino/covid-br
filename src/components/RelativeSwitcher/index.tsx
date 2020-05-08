@@ -12,6 +12,7 @@ const Wrapper = styled.label<WrapperProps>`
 	position: sticky;
 	top: 0.25rem;
 	display: flex;
+	cursor: pointer;
 	background: var(--color-base06);
 	padding: 0.5rem 0.75rem;
 	border-radius: 0.25rem 0.25rem 0 0;
