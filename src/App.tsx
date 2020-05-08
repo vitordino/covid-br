@@ -6,6 +6,7 @@ import useRelativeSortSync from 'hooks/useRelativeSortSync'
 import ColorModeSwitcher from 'components/Layout/ColorModeSwitcher'
 import StatesTable from 'components/StatesTable'
 import StatesMap from 'components/StatesMap'
+import RelativeSwitcher from 'components/RelativeSwitcher'
 import Container from 'components/Container'
 import Grid from 'components/Grid'
 import Text from 'components/Text'
@@ -37,7 +38,7 @@ const dateToString = (d: string, l: string = 'pt') =>
 
 const App = () => {
 	const hoveredState = useStore(s => s.hoveredState)
-	const [relative, setRelative] = useStore(s => [s.relative, s.setRelative])
+	const relative = useStore(s => s.relative)
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
 	const data: StateEntry[] = useMemo(() => main[dates[dateIndex]], [dateIndex])
 	const total: StateEntry = useMemo(() => totals[dates[dateIndex]], [dateIndex])
@@ -82,14 +83,7 @@ const App = () => {
 						<StatesTable data={data} total={total} statesMeta={statesMeta} />
 					</Grid.Column>
 					<Grid.Column xs={16} lg={6}>
-						<label>
-							{JSON.stringify({ relative })}
-							<input
-								type='checkbox'
-								checked={relative}
-								onChange={({ target }) => setRelative(target.checked)}
-							/>
-						</label>
+						<RelativeSwitcher />
 						<StatesMap data={data} />
 						<StatsCard prop={caseProp} data={hoveredData} />
 						<StatsCard prop={deathProp} data={hoveredData} />
