@@ -163,3 +163,7 @@ export const getMapFill = (data: StateEntry[], id?: string) => (
 		scales[safeProp],
 	)(x * multipliers[safeProp])
 }
+
+type GetColorOfType = (p: keyof StateEntry, n?: number) => string
+// @ts-ignore
+export const getColorOf: GetColorOfType = (p, n = 4) => scales?.[p]?.[n]

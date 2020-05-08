@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import useStore from 'store'
-import { scales } from 'utils/colorScale'
+import { getColorOf } from 'utils/colorScale'
 import Text from 'components/Text'
 import Spacer from 'components/Spacer'
 
@@ -10,10 +10,6 @@ type WrapperProps = {
 	prop: keyof StateEntry
 	isSorted: boolean
 }
-
-type GetScaleType = ({ prop }: { prop: keyof StateEntry }) => string
-// @ts-ignore
-const getScale: GetScaleType = ({ prop }) => scales?.[prop]?.[4]
 
 const Wrapper = styled.div<WrapperProps>`
 	padding: 0.25rem 1rem;
@@ -29,7 +25,7 @@ const Wrapper = styled.div<WrapperProps>`
 		right: 0;
 		bottom: 0;
 		width: 2px;
-		background: ${getScale};
+		background: ${({ prop }) => getColorOf(prop)};
 	}
 	&:after {
 		content: '';
@@ -38,7 +34,7 @@ const Wrapper = styled.div<WrapperProps>`
 		bottom: 0;
 		width: 2px;
 		height: 0.75rem;
-		background: ${getScale};
+		background: ${({ prop }) => getColorOf(prop)};
 		transform: rotate(35deg);
 		transform-origin: bottom right;
 		opacity: ${p => (p.isSorted ? 1 : 0)};
