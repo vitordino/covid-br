@@ -48,7 +48,7 @@ const App = () => {
 	const recoveredProp = relative ? 'ptr' : 'tr'
 
 	// @ts-ignore
-	const title = statesMeta?.[hoveredState]?.n || 'Brazil'
+	const hoveredTitle = statesMeta?.[hoveredState]?.n || 'Total'
 	const hoveredData = hoveredState
 		? data?.find(({ st }) => st === hoveredState)
 		: total
@@ -64,7 +64,7 @@ const App = () => {
 			<Container>
 				<TitleHeader>
 					<Text as='h1' weight={400} xs={3} md={4} lg={5} style={{ flex: 1 }}>
-						{title}
+						Brazil
 					</Text>
 					<Text weight={400} xs={2} md={3}>
 						<select
@@ -87,6 +87,9 @@ const App = () => {
 					<Grid.Column xs={16} lg={6}>
 						<RelativeSwitcher />
 						<StatesMap data={data} />
+						<Text xs={2} md={3} style={{ margin: '0 1rem -0.5rem' }}>
+							{hoveredTitle}
+						</Text>
 						<StatsCard prop={caseProp} data={hoveredData} />
 						<StatsCard prop={deathProp} data={hoveredData} />
 						<StatsCard prop={recoveredProp} data={hoveredData} />
