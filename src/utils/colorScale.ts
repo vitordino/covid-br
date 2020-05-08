@@ -26,7 +26,7 @@ import {
 	highestPopNewRecovered,
 	highestTotalPopRecovered,
 	highestTotalPopNewRecovered,
-} from 'data/states.json'
+} from 'data/country.json'
 
 const POP_MULTIPLIER = 100000
 

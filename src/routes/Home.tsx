@@ -3,8 +3,8 @@ import styled from 'styled-components'
 
 import useStore from 'store'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
-import StatesTable from 'components/StatesTable'
-import StatesMap from 'components/StatesMap'
+import CountryTable from 'components/CountryTable'
+import CountryMap from 'components/CountryMap'
 import RelativeSwitcher from 'components/RelativeSwitcher'
 import Container from 'components/Container'
 import Grid from 'components/Grid'
@@ -12,7 +12,7 @@ import Text from 'components/Text'
 import RangeInput from 'components/RangeInput'
 import StatsCard from 'components/StatsCard'
 
-import data from 'data/states.json'
+import data from 'data/country.json'
 
 // @ts-ignore
 const main: Main = data.main
@@ -80,11 +80,11 @@ const Home = () => {
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
 						<RelativeSwitcher />
-						<StatesTable data={data} total={total} statesMeta={statesMeta} />
+						<CountryTable data={data} total={total} statesMeta={statesMeta} />
 					</Grid.Column>
 					<Grid.Column xs={16} lg={6}>
 						<RelativeSwitcher desktop />
-						<StatesMap data={data} />
+						<CountryMap data={data} />
 						<Text xs={2} md={3} style={{ margin: '0 1rem -0.5rem' }}>
 							{hoveredTitle}
 						</Text>

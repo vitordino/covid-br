@@ -1,7 +1,7 @@
-const getStatesData = require('./getStatesData')
+const getCountryData = require('./getCountryData')
 
 const main = () => {
-	getStatesData()
+	getCountryData()
 }
 
 main()

@@ -204,7 +204,7 @@ type StateMeta = {
 	n: string
 }
 
-type StatesTableProps = {
+type CountryTableProps = {
 	data: StateEntry[]
 	total: StateEntry
 	statesMeta: StatesMeta
@@ -263,7 +263,7 @@ const EmptyCells = ({ count, isVisible = true }: EmptyCellsProps) => {
 	)
 }
 
-const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
+const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const relative = useStore(s => s.relative)
 	const [hoveredState, setHoveredState] = useStore(s => [
@@ -525,4 +525,4 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 	)
 }
 
-export default StatesTable
+export default CountryTable
