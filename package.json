@@ -15,6 +15,8 @@
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
     "@types/react-helmet": "^5.0.15",
+    "@types/react-router": "^5.1.7",
+    "@types/react-router-dom": "^5.1.5",
     "@types/react-simple-maps": "^1.0.2",
     "@types/react-table": "^7.0.16",
     "@types/react-tooltip": "^4.2.4",
