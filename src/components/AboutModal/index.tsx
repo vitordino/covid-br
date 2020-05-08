@@ -9,7 +9,11 @@ import Text from 'components/Text'
 import Spacer from 'components/Spacer'
 import Container from 'components/Container'
 
-const Wrapper = styled.div`
+type Props = {
+	isVisible?: boolean
+}
+
+const Wrapper = styled.div<Props>`
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -20,18 +24,31 @@ const Wrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: flex-end;
+	pointer-events: none;
+	${p =>
+		p.isVisible &&
+		`
+		pointer-events: all;
+	`}
 `
 
-const Backdrop = styled.div`
+const Backdrop = styled.div<Props>`
 	backdrop-filter: blur(0.25rem) grayscale(0.5);
 	position: absolute;
 	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
+	opacity: 0;
+	transition: opacity 0.3s;
+	${p =>
+		p.isVisible &&
+		`
+		opacity: 1;
+	`}
 `
 
-const Background = styled(Link)`
+const Background = styled(Link)<Props>`
 	display: block;
 	cursor: pointer;
 	background: #000;
@@ -40,10 +57,16 @@ const Background = styled(Link)`
 	left: 0;
 	bottom: 0;
 	right: 0;
-	opacity: 0.22;
+	opacity: 0;
+	transition: opacity 0.3s;
+	${p =>
+		p.isVisible &&
+		`
+		opacity: 0.22;
+	`}
 `
 
-const Inner = styled(Container)`
+const Inner = styled(Container)<Props>`
 	padding: 1.5rem 1rem 2rem;
 	background: var(--color-base00);
 	width: 100%;
@@ -52,6 +75,13 @@ const Inner = styled(Container)`
 	bottom: 0;
 	max-width: 32rem;
 	box-shadow: 0 0 2rem rgba(0, 0, 0, 0.44);
+	transition: transform 0.2s ease-out;
+	transform: translateY(100%);
+	${p =>
+		p.isVisible &&
+		`
+		transform: translateY(0);
+	`}
 `
 
 type AnchorProps = {
@@ -69,21 +99,20 @@ const AboutModal = () => {
 	const { push } = useHistory()
 	const { search, pathname } = useLocation()
 	const { about } = parse(search)
-	const isOpen = typeof about !== 'undefined'
+	const isVisible = typeof about !== 'undefined'
 
 	const onEsc = () => {
-		if (!isOpen) return
+		if (!isVisible) return
 		push(pathname, { query: '' })
 	}
 
 	useKeyPress('Escape', onEsc)
-	if (!isOpen) return null
 	return (
 		<Portal>
-			<Wrapper>
-				<Backdrop />
-				<Background to='/' />
-				<Inner>
+			<Wrapper isVisible={isVisible}>
+				<Backdrop isVisible={isVisible} />
+				<Background to='/' isVisible={isVisible} />
+				<Inner isVisible={isVisible}>
 					<Text xs={3} as='h2' weight={500}>
 						About COVID — BR
 					</Text>
