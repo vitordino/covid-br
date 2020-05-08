@@ -1,19 +1,22 @@
 import { useState, useLayoutEffect, Dispatch, SetStateAction } from 'react'
 
 const KEY = 'theme:color-mode'
-const getTheme = () => window.localStorage.getItem(KEY) || 'light'
+const getTheme = () => window.localStorage.getItem(KEY)
 const setTheme = (mode: string) => window.localStorage.setItem(KEY, mode)
 
-type UseColorMode = () => [string, Dispatch<SetStateAction<string>>]
+type Mode = string | null
+type UseColorMode = () => [Mode, Dispatch<SetStateAction<Mode>>]
 
 const useColorMode: UseColorMode = () => {
-	const [colorMode, setColorMode] = useState(getTheme)
+	const [colorMode, setColorMode] = useState<Mode>(getTheme)
 
 	useLayoutEffect(() => {
-		setTheme(colorMode)
-		document.documentElement.dataset.theme = colorMode
-		// @ts-ignore
-		window?.__setTheme?.(colorMode)
+		if (colorMode) {
+			setTheme(colorMode)
+			document.documentElement.dataset.theme = colorMode
+			// @ts-ignore
+			window?.__setTheme?.(colorMode)
+		}
 	}, [colorMode])
 
 	return [colorMode, setColorMode]
