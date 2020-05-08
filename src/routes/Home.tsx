@@ -40,6 +40,15 @@ const Home = () => {
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
 	const data: StateEntry[] = useMemo(() => main[dates[dateIndex]], [dateIndex])
 	const total: StateEntry = useMemo(() => totals[dates[dateIndex]], [dateIndex])
+	const hoveredTimeSeries: StateEntry[] = useMemo(
+		() =>
+			hoveredState
+				? Object.values(main)
+						.flatMap(x => x)
+						.filter(x => x.st === hoveredState)
+				: Object.values(totals),
+		[hoveredState],
+	)
 
 	const caseProp = relative ? 'ptc' : 'tc'
 	const deathProp = relative ? 'ptd' : 'td'
@@ -88,9 +97,21 @@ const Home = () => {
 						<Text xs={2} md={3} style={{ margin: '0 1rem -0.5rem' }}>
 							{hoveredTitle}
 						</Text>
-						<StatsCard prop={caseProp} data={hoveredData} />
-						<StatsCard prop={deathProp} data={hoveredData} />
-						<StatsCard prop={recoveredProp} data={hoveredData} />
+						<StatsCard
+							prop={caseProp}
+							data={hoveredData}
+							chartData={hoveredTimeSeries}
+						/>
+						<StatsCard
+							prop={deathProp}
+							data={hoveredData}
+							chartData={hoveredTimeSeries}
+						/>
+						<StatsCard
+							prop={recoveredProp}
+							data={hoveredData}
+							chartData={hoveredTimeSeries}
+						/>
 					</Grid.Column>
 				</Grid.Row>
 			</Container>

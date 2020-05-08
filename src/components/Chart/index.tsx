@@ -24,7 +24,7 @@ type YType = (v: StateEntry) => number
 
 const Chart = ({ width, height, data, prop = 'nc' }: ChartProps) => {
 	const dateIndex = useStore(s => s.dateIndex)
-	if (!data) return null
+	if (!data || !prop) return null
 	const y: YType = v => v[prop]
 	// scales
 	const xScale = scaleLinear({

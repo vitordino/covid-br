@@ -5,6 +5,7 @@ import useStore from 'store'
 import { getColorOf } from 'utils/colorScale'
 import Text from 'components/Text'
 import Spacer from 'components/Spacer'
+import Chart from 'components/Chart'
 
 type WrapperProps = {
 	prop: keyof StateEntry
@@ -41,6 +42,18 @@ const Wrapper = styled.div<WrapperProps>`
 	}
 `
 
+const ChartContainer = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+`
+
+const Content = styled.div`
+	position: relative;
+`
+
 const FlexText = styled(Text)`
 	display: flex;
 	align-items: baseline;
@@ -55,6 +68,7 @@ const FlexText = styled(Text)`
 type StatsCardProps = {
 	prop: keyof StateEntry
 	data?: StateEntry
+	chartData?: StateEntry[]
 }
 
 type DataMappingOf<T> = {
@@ -159,8 +173,9 @@ const Render = ({ bold, ...props }: RenderProps) => {
 	)
 }
 
-const StatsCard = ({ prop, data }: StatsCardProps) => {
+const StatsCard = ({ prop, data, chartData }: StatsCardProps) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
+	const relative = useStore(s => s.relative)
 	const isSorted = sort === prop
 	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[prop] || {}
 
@@ -168,25 +183,34 @@ const StatsCard = ({ prop, data }: StatsCardProps) => {
 
 	return (
 		<Wrapper prop={prop} isSorted={isSorted} onClick={() => setSort(prop)}>
-			{main && (
-				<FlexText weight={600} transform='capitalize' xs={0}>
-					{typeMapping[main]?.scope}
-				</FlexText>
-			)}
-			<Spacer.V xs={0.125} />
-			<FlexText xs={2}>
-				{!!main && <Render bold value={data?.[main]} {...typeMapping[main]} />}
-				{!!main && !!mainAlt && ' '}
-				{!!mainAlt && (
-					<Render value={data?.[mainAlt]} {...typeMapping[mainAlt]} />
+			<ChartContainer>
+				{chartData && <Chart prop={relative ? sub : main} data={chartData} />}
+			</ChartContainer>
+			<Content>
+				{main && (
+					<FlexText weight={600} transform='capitalize' xs={0}>
+						{typeMapping[main]?.scope}
+					</FlexText>
 				)}
-			</FlexText>
-			<Spacer.V xs={0.125} />
-			<FlexText xs={0}>
-				{!!sub && <Render bold value={data?.[sub]} {...typeMapping[sub]} />}
-				{!!sub && !!subAlt && ' '}
-				{!!subAlt && <Render value={data?.[subAlt]} {...typeMapping[subAlt]} />}
-			</FlexText>
+				<Spacer.V xs={0.125} />
+				<FlexText xs={2}>
+					{!!main && (
+						<Render bold value={data?.[main]} {...typeMapping[main]} />
+					)}
+					{!!main && !!mainAlt && ' '}
+					{!!mainAlt && (
+						<Render value={data?.[mainAlt]} {...typeMapping[mainAlt]} />
+					)}
+				</FlexText>
+				<Spacer.V xs={0.125} />
+				<FlexText xs={0}>
+					{!!sub && <Render bold value={data?.[sub]} {...typeMapping[sub]} />}
+					{!!sub && !!subAlt && ' '}
+					{!!subAlt && (
+						<Render value={data?.[subAlt]} {...typeMapping[subAlt]} />
+					)}
+				</FlexText>
+			</Content>
 		</Wrapper>
 	)
 }
