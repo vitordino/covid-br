@@ -2,8 +2,9 @@ import React, { ReactNode, useMemo, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { useTable, useSortBy, Column } from 'react-table'
 
-import type { Transform } from 'components/Text'
+import range from 'utils/range'
 import useStore from 'store'
+import type { Transform } from 'components/Text'
 import Text from 'components/Text'
 
 type RowProps = {
@@ -244,8 +245,6 @@ const getCellRender = (relative: boolean, isNew?: boolean) => (
 	if (relative) return <RelativeRender x={x} isNew={isNew} />
 	return <AbsoluteRender x={x} isNew={isNew} />
 }
-
-const range = (n: number) => Array.from(Array(n).keys())
 
 type EmptyCellsProps = {
 	count: number

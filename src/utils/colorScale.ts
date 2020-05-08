@@ -1,5 +1,6 @@
 import { scaleLinear } from 'd3-scale'
 import { schemeReds, schemeGreys, schemeGreens } from 'd3-scale-chromatic'
+import range from 'utils/range'
 
 import {
 	highestStateCase,
@@ -29,8 +30,6 @@ import {
 } from 'data/country.json'
 
 const POP_MULTIPLIER = 100000
-
-const range = (n: number) => Array.from(Array(n).keys())
 
 const getDomain = (entry: number, divisions: number = 8) => [
 	1,
