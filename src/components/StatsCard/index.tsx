@@ -55,7 +55,7 @@ const FlexText = styled(Text)`
 
 type StatsCardProps = {
 	prop: keyof StateEntry
-	data: StateEntry
+	data?: StateEntry
 }
 
 type DataMappingOf<T> = {

@@ -49,7 +49,9 @@ const App = () => {
 
 	// @ts-ignore
 	const title = statesMeta?.[hoveredState]?.n || 'Brazil'
-	const hoveredData = data?.find(({ st }) => st === hoveredState) || total
+	const hoveredData = hoveredState
+		? data?.find(({ st }) => st === hoveredState)
+		: total
 
 	useLayoutEffect(() => {
 		setDateIndex(dates.length - 1)
