@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 import Container from 'components/Container'
 import Spacer from 'components/Spacer'
@@ -38,7 +39,7 @@ const Footer = () => (
 			COVID — BR
 		</Text>
 		<Separator />
-		<Text weight={500} xs={1} md={2}>
+		<Text as={Link} to='?about' weight={500} xs={1} md={2}>
 			About
 		</Text>
 	</Wrapper>

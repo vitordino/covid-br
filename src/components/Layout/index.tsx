@@ -4,6 +4,7 @@ import { ThemeProvider } from 'theme'
 import Navbar from 'components/Navbar'
 import Footer from 'components/Footer'
 import SEO from 'components/Layout/SEO'
+import AboutModal from 'components/AboutModal'
 import GlobalStyle from 'components/Layout/GlobalStyle'
 
 type LayoutProps = {
@@ -33,6 +34,7 @@ const Layout = ({
 				<Navbar />
 				{children}
 				<Footer />
+				<AboutModal />
 			</>
 		</ThemeProvider>
 	)
