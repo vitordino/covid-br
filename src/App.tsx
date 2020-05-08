@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import useStore from 'store'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
+import ColorModeSwitcher from 'components/Layout/ColorModeSwitcher'
 import StatesTable from 'components/StatesTable'
 import StatesMap from 'components/StatesMap'
 import Container from 'components/Container'
@@ -59,7 +60,7 @@ const App = () => {
 		<Layout>
 			<Container>
 				<TitleHeader>
-					<Text as='h1' weight={400} xs={3} md={4} lg={5}>
+					<Text as='h1' weight={400} xs={3} md={4} lg={5} style={{ flex: 1 }}>
 						{title}
 					</Text>
 					<Text weight={400} xs={2} md={3}>
@@ -68,11 +69,13 @@ const App = () => {
 							onChange={({ target }) => setDateIndex(parseInt(target.value))}
 						>
 							{dates.map((x, i) => (
-								<option key={x} value={i}>{dateToString(x)}</option>
+								<option key={x} value={i}>
+									{dateToString(x)}
+								</option>
 							))}
 						</select>
-						{/* {dateToString(dates[dateIndex])} */}
 					</Text>
+					<ColorModeSwitcher />
 				</TitleHeader>
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>

@@ -5,32 +5,34 @@ import useColorMode from 'hooks/useColorMode'
 
 const Button = styled.button`
 	display: block;
-	padding: 1.75rem 1rem;
-	position: fixed;
+	padding: 1rem;
+	margin: -1rem -1rem -1rem 0;
 	bottom: 0;
 	right: 0;
 	opacity: 0.25;
 	transition: 0.2s opacity;
 	color: var(--color-base) !important;
 	transition: 0.25s opacity;
+	transform: translateY(0.125rem);
+	position: relative;
 	&:hover {
 		opacity: 1;
 	}
 `
 
-type InnerProps = {
-	size: number | string
-}
-
-const Inner = styled.svg<InnerProps>`
+const Inner = styled.svg`
 	display: block;
-	width: ${({ size }) => `${size}px`};
-	height: ${({ size }) => `${size}px`};
 	fill: none;
 	stroke: currentColor;
 	stroke-width: 2;
 	stroke-linecap: round;
 	stroke-linejoin: round;
+	width: 18px;
+	height: 18px;
+	${p => p.theme.above('md')`
+		width: 20px;
+		height: 20px;
+	`}
 	.rays {
 		transition: 0.375s opacity 0.375s;
 	}
@@ -83,7 +85,7 @@ const Inner = styled.svg<InnerProps>`
 	}
 `
 
-const ColorModeSwitcher = ({ size = 20, ...props }) => {
+const ColorModeSwitcher = () => {
 	const [colorMode, setColorMode] = useColorMode()
 
 	const colorSwitch = () => {
@@ -91,8 +93,8 @@ const ColorModeSwitcher = ({ size = 20, ...props }) => {
 	}
 
 	return (
-		<Button type='button' onClick={colorSwitch} {...props}>
-			<Inner size={size} viewBox='0 0 24 24'>
+		<Button type='button' onClick={colorSwitch}>
+			<Inner viewBox='0 0 24 24'>
 				<defs>
 					<mask id='mask' stroke='none'>
 						<circle className='maskMain' fill='#fff' />

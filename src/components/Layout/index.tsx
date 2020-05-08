@@ -3,7 +3,6 @@ import React, { ReactNode } from 'react'
 import { ThemeProvider } from 'theme'
 import SEO from 'components/Layout/SEO'
 import GlobalStyle from 'components/Layout/GlobalStyle'
-import ColorModeSwitcher from 'components/Layout/ColorModeSwitcher'
 
 type LayoutProps = {
 	children?: ReactNode
@@ -30,7 +29,6 @@ const Layout = ({
 				<SEO {...meta} lang={lang} />
 				<GlobalStyle />
 				{children}
-				<ColorModeSwitcher />
 			</>
 		</ThemeProvider>
 	)
