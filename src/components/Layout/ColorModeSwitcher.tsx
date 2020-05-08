@@ -13,7 +13,6 @@ const Button = styled.button`
 	transition: 0.2s opacity;
 	color: var(--color-base) !important;
 	transition: 0.25s opacity;
-	transform: translateY(0.125rem);
 	position: relative;
 	&:hover {
 		opacity: 1;

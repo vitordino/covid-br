@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import useStore from 'store'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
-import ColorModeSwitcher from 'components/Layout/ColorModeSwitcher'
 import StatesTable from 'components/StatesTable'
 import StatesMap from 'components/StatesMap'
 import RelativeSwitcher from 'components/RelativeSwitcher'
@@ -28,7 +27,7 @@ const TitleHeader = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-	padding: 2rem 0.5rem;
+	padding: 0 0.5rem 1rem;
 `
 
 const options = { day: 'numeric', month: 'numeric', year: 'numeric' }
@@ -78,7 +77,6 @@ const App = () => {
 							))}
 						</select>
 					</Text>
-					<ColorModeSwitcher />
 				</TitleHeader>
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>

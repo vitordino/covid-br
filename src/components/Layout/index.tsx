@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 
 import { ThemeProvider } from 'theme'
+import Navbar from 'components/Navbar'
 import SEO from 'components/Layout/SEO'
 import GlobalStyle from 'components/Layout/GlobalStyle'
 
@@ -28,6 +29,7 @@ const Layout = ({
 			<>
 				<SEO {...meta} lang={lang} />
 				<GlobalStyle />
+				<Navbar />
 				{children}
 			</>
 		</ThemeProvider>
