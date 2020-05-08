@@ -98,11 +98,14 @@ const HeaderWrapper = styled(Text)`
 	display: flex;
 	justify-content: space-between;
 	padding: 0.5rem 0.75rem;
-	border-radius: 0.25rem;
+	border-radius: 0 0 0.25rem 0.25rem;
 	background: var(--color-base06);
 	color: var(--color-base66);
 	box-shadow: 0 0 0 0.25rem var(--color-base00);
 	margin-bottom: 0.25rem;
+	${p => p.theme.above('md')`
+		border-radius: 0.25rem;
+	`}
 	&:hover {
 		background: var(--color-base);
 		color: var(--color-base00);
@@ -151,8 +154,11 @@ const Table = styled.table`
 	}
 	th {
 		position: sticky;
-		top: 0.25rem;
+		top: 2.75rem;
 		z-index: 1;
+		${p => p.theme.above('md')`
+			top: 0.25rem;
+		`}
 		&:nth-child(1) {
 			z-index: 3;
 		}

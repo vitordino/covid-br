@@ -4,18 +4,37 @@ import styled, { css } from 'styled-components'
 import useStore from 'store'
 import Text from 'components/Text'
 
-const Wrapper = styled.label`
+type WrapperProps = {
+	desktop?: boolean
+}
+
+const Wrapper = styled.label<WrapperProps>`
 	position: sticky;
 	top: 0.25rem;
 	display: flex;
 	background: var(--color-base06);
 	padding: 0.5rem 0.75rem;
-	border-radius: 0.25rem;
+	border-radius: 0.25rem 0.25rem 0 0;
 	box-shadow: 0 0 0 0.25rem var(--color-base00);
+	margin: 0 0.375rem 0.25rem -0.125rem;
+	z-index: 100;
 	&:hover {
 		background: var(--color-base);
 		color: var(--color-base00);
 	}
+	${p => p.theme.above('md')`
+    display: none;
+    border-radius: 0.25rem;
+    margin: 0;
+  `}
+	${p =>
+		p.desktop &&
+		css`
+			display: none;
+			${p.theme.above('md')`
+      display: flex;
+    `}
+		`}
 `
 
 type OptionProps = {
@@ -36,10 +55,10 @@ const Option = styled(Text)<OptionProps>`
 	}
 `
 
-const RelativeSwitcher = () => {
+const RelativeSwitcher = (props: WrapperProps) => {
 	const [relative, setRelative] = useStore(s => [s.relative, s.setRelative])
 	return (
-		<Wrapper>
+		<Wrapper {...props}>
 			<input
 				type='checkbox'
 				checked={relative}

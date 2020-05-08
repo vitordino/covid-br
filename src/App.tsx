@@ -82,10 +82,11 @@ const App = () => {
 				</TitleHeader>
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
+						<RelativeSwitcher />
 						<StatesTable data={data} total={total} statesMeta={statesMeta} />
 					</Grid.Column>
 					<Grid.Column xs={16} lg={6}>
-						<RelativeSwitcher />
+						<RelativeSwitcher desktop />
 						<StatesMap data={data} />
 						<Text xs={2} md={3} style={{ margin: '0 1rem -0.5rem' }}>
 							{hoveredTitle}
