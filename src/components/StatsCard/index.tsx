@@ -12,7 +12,10 @@ type WrapperProps = {
 	isSorted: boolean
 }
 
-const Wrapper = styled.div<WrapperProps>`
+const Wrapper = styled.button<WrapperProps>`
+	display: block;
+	width: 100%;
+	cursor: pointer;
 	padding: 0.25rem 1rem;
 	position: relative;
 	margin: 1rem 1rem 1rem 0;
