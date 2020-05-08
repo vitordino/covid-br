@@ -94,7 +94,12 @@ const Home = () => {
 					<Grid.Column xs={16} lg={6}>
 						<RelativeSwitcher desktop />
 						<CountryMap data={data} />
-						<Text xs={2} md={3} style={{ margin: '0 1rem -0.5rem' }}>
+						<Text
+							weight={400}
+							xs={2}
+							md={3}
+							style={{ margin: '0 1rem -0.5rem' }}
+						>
 							{hoveredTitle}
 						</Text>
 						<StatsCard
