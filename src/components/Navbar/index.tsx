@@ -1,18 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import useStore from 'store'
+import { getColorOf } from 'utils/colorScale'
 import Container from 'components/Container'
 import Spacer from 'components/Spacer'
 import Text from 'components/Text'
 import Logo from 'components/Logo'
 import ColorModeSwitcher from 'components/Layout/ColorModeSwitcher'
 
-const Wrapper = styled(Container)`
+type WrapperProps = {
+	sort: keyof StateEntry
+}
+
+const Wrapper = styled(Container)<WrapperProps>`
 	display: flex;
 	align-items: center;
 	padding-top: 1rem;
 	padding-bottom: 1rem;
 	color: var(--color-base88);
+	color: ${({ sort }) => getColorOf(sort, 5)};
 	svg {
 		display: block;
 		height: 1.5rem;
@@ -31,8 +38,9 @@ const Separator = styled.div`
 `
 
 const Navbar = () => {
+	const sort = useStore(s => s.sort)
 	return (
-		<Wrapper as='nav'>
+		<Wrapper as='nav' sort={sort}>
 			<Spacer.H xs={0.5} />
 			<Logo />
 			<Spacer.H xs={0.5} />
