@@ -239,6 +239,24 @@ const getCellRender = (relative: boolean, isNew?: boolean) => (
 	return <AbsoluteRender x={x} isNew={isNew} />
 }
 
+const range = (n: number) => Array.from(Array(n).keys())
+
+type EmptyCellsProps = {
+	count: number
+	isVisible?: boolean
+}
+
+const EmptyCells = ({ count, isVisible = true }: EmptyCellsProps) => {
+	if (!isVisible) return null
+	return (
+		<>
+			{range(count).map(x => (
+				<td key={x} />
+			))}
+		</>
+	)
+}
+
 const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const relative = useStore(s => s.relative)
@@ -475,13 +493,7 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 						<td>
 							<Cell transform='capitalize'>{total.st.toLowerCase()}</Cell>
 						</td>
-						{relative && (
-							<>
-								<td />
-								<td />
-								<td />
-							</>
-						)}
+						<EmptyCells count={3} isVisible={relative} />
 						<td>
 							<Cell left={getCellRender(relative, true)(total[caseLeftProp])}>
 								{getCellRender(relative)(total[caseProp])}
@@ -499,13 +511,7 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 								{getCellRender(relative)(total[recoveredProp]) || <>&nbsp;</>}
 							</Cell>
 						</td>
-						{!relative && (
-							<>
-								<td />
-								<td />
-								<td />
-							</>
-						)}
+						<EmptyCells count={3} isVisible={!relative} />
 					</TotalRow>
 				</tfoot>
 			</Table>
