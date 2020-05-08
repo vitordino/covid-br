@@ -469,6 +469,8 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 							</TableRow>
 						)
 					})}
+				</tbody>
+				<tfoot>
 					<TotalRow>
 						<td>
 							<Cell transform='capitalize'>{total.st.toLowerCase()}</Cell>
@@ -505,7 +507,7 @@ const StatesTable = ({ data, total, statesMeta }: StatesTableProps) => {
 							</>
 						)}
 					</TotalRow>
-				</tbody>
+				</tfoot>
 			</Table>
 		</Wrapper>
 	)
