@@ -43,7 +43,7 @@ const Chart = ({ width, height, data, prop = 'nc' }: ChartProps) => {
 				x={d => xScale(x(d))}
 				y={d => yScale(y(d))}
 				stroke={getColorOf(prop)}
-				strokeWidth={1}
+				strokeWidth={1.75}
 				curve={curveMonotoneX}
 			/>
 		</svg>
