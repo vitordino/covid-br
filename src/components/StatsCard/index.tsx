@@ -16,7 +16,7 @@ const Wrapper = styled.button<WrapperProps>`
 	display: block;
 	width: 100%;
 	cursor: pointer;
-	padding: 0.25rem 1rem;
+	padding: 0.25rem 1rem 0.75rem;
 	position: relative;
 	margin: 1rem 1rem 1rem 0;
 	${p => p.theme.above('md')`
@@ -26,7 +26,7 @@ const Wrapper = styled.button<WrapperProps>`
 		content: '';
 		position: absolute;
 		top: 0;
-		right: 0;
+		left: 0;
 		bottom: 0;
 		width: 2px;
 		background: ${({ prop }) => getColorOf(prop)};
@@ -34,13 +34,13 @@ const Wrapper = styled.button<WrapperProps>`
 	&:after {
 		content: '';
 		position: absolute;
-		right: 0;
-		bottom: 0;
+		left: 0;
+		top: 0;
 		width: 2px;
 		height: 0.75rem;
 		background: ${({ prop }) => getColorOf(prop)};
-		transform: rotate(35deg);
-		transform-origin: bottom right;
+		transform: rotate(-35deg);
+		transform-origin: top right;
 		opacity: ${p => (p.isSorted ? 1 : 0)};
 	}
 `
@@ -178,7 +178,6 @@ const Render = ({ bold, ...props }: RenderProps) => {
 
 const StatsCard = ({ prop, data, chartData }: StatsCardProps) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
-	const relative = useStore(s => s.relative)
 	const isSorted = sort === prop
 	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[prop] || {}
 
@@ -187,7 +186,7 @@ const StatsCard = ({ prop, data, chartData }: StatsCardProps) => {
 	return (
 		<Wrapper prop={prop} isSorted={isSorted} onClick={() => setSort(prop)}>
 			<ChartContainer>
-				{chartData && <Chart prop={relative ? sub : main} data={chartData} />}
+				{chartData && <Chart prop={prop} data={chartData} />}
 			</ChartContainer>
 			<Content>
 				{main && (
