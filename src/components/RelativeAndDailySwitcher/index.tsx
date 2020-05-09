@@ -68,7 +68,7 @@ const Option = styled(Text)<OptionProps>`
 	}
 `
 
-const RelativeSwitcher = (props: WrapperProps) => {
+const RelativeAndDailySwitcher = (props: WrapperProps) => {
 	const [relative, setRelative] = useStore(s => [s.relative, s.setRelative])
 	const [daily, setDaily] = useStore(s => [s.daily, s.setDaily])
 	return (
@@ -105,4 +105,4 @@ const RelativeSwitcher = (props: WrapperProps) => {
 	)
 }
 
-export default RelativeSwitcher
+export default RelativeAndDailySwitcher

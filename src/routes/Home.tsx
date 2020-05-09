@@ -5,7 +5,7 @@ import useStore from 'store'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
 import CountryTable from 'components/CountryTable'
 import CountryMap from 'components/CountryMap'
-import RelativeSwitcher from 'components/RelativeSwitcher'
+import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
 import Container from 'components/Container'
 import Grid from 'components/Grid'
 import Text from 'components/Text'
@@ -88,11 +88,11 @@ const Home = () => {
 				</TitleHeader>
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
-						<RelativeSwitcher />
+						<RelativeAndDailySwitcher />
 						<CountryTable data={data} total={total} statesMeta={statesMeta} />
 					</Grid.Column>
 					<Grid.Column xs={16} lg={6}>
-						<RelativeSwitcher desktop />
+						<RelativeAndDailySwitcher desktop />
 						<CountryMap data={data} />
 						<Text
 							weight={400}
