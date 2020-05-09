@@ -10,6 +10,9 @@ type Store = {
 	relative: boolean
 	setRelative: (v: boolean) => void
 
+	daily: boolean
+	setDaily: (v: boolean) => void
+
 	hoveredState: keyof typeof StatesEnum | null
 	setHoveredState: (v: keyof typeof StatesEnum | null) => void
 }
@@ -23,6 +26,9 @@ const [useStore] = create<Store>(set => ({
 
 	relative: false,
 	setRelative: v => set(s => ({ relative: v })),
+
+	daily: false,
+	setDaily: v => set(s => ({ daily: v })),
 
 	hoveredState: null,
 	setHoveredState: v => set(s => ({ hoveredState: v })),

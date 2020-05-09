@@ -265,15 +265,17 @@ const EmptyCells = ({ count, isVisible = true }: EmptyCellsProps) => {
 const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const relative = useStore(s => s.relative)
+	const daily = useStore(s => s.daily)
 	const [hoveredState, setHoveredState] = useStore(s => [
 		s.hoveredState,
 		s.setHoveredState,
 	])
-	const caseProp = relative ? 'ptc' : 'tc'
+
+	const caseProp = relative ? (daily ? 'pnc' : 'ptc') : daily ? 'nc' : 'tc'
 	const caseLeftProp = relative ? 'pnc' : 'nc'
-	const deathProp = relative ? 'ptd' : 'td'
+	const deathProp = relative ? (daily ? 'pnd' : 'ptd') : daily ? 'nd' : 'td'
 	const deathLeftProp = relative ? 'pnd' : 'nd'
-	const recoveredProp = relative ? 'ptr' : 'tr'
+	const recoveredProp = relative ? (daily ? 'pnr' : 'ptr') : daily ? 'nr' : 'tr'
 	const recoveredLeftProp = relative ? 'pnr' : 'nr'
 
 	const columns: Column<StateEntry>[] = useMemo(
@@ -310,9 +312,10 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						row={row}
 						column={column}
 						data={data}
+						prop={caseProp}
 						leftProp='nc'
 						leftRender={getCellRender(relative, true)}
-						mainRender={getCellRender(relative, false)}
+						mainRender={getCellRender(relative, daily)}
 						isVisible={!relative}
 					/>
 				),
@@ -329,9 +332,10 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						row={row}
 						column={column}
 						data={data}
+						prop={deathProp}
 						leftProp='nd'
 						leftRender={getCellRender(relative, true)}
-						mainRender={getCellRender(relative, false)}
+						mainRender={getCellRender(relative, daily)}
 						isVisible={!relative}
 					/>
 				),
@@ -348,9 +352,10 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						row={row}
 						column={column}
 						data={data}
+						prop={recoveredProp}
 						leftProp='nr'
 						leftRender={getCellRender(relative, true)}
-						mainRender={getCellRender(relative, false)}
+						mainRender={getCellRender(relative, daily)}
 						isVisible={!relative}
 					/>
 				),
@@ -368,9 +373,10 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						row={row}
 						column={column}
 						data={data}
+						prop={caseProp}
 						leftProp='pnc'
 						leftRender={getCellRender(relative, true)}
-						mainRender={getCellRender(relative, false)}
+						mainRender={getCellRender(relative, daily)}
 						isVisible={relative}
 					/>
 				),
@@ -388,9 +394,10 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						row={row}
 						column={column}
 						data={data}
+						prop={deathProp}
 						leftProp='pnd'
 						leftRender={getCellRender(relative, true)}
-						mainRender={getCellRender(relative, false)}
+						mainRender={getCellRender(relative, daily)}
 						isVisible={relative}
 					/>
 				),
@@ -408,16 +415,17 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						row={row}
 						column={column}
 						data={data}
+						prop={recoveredProp}
 						leftProp='pnr'
 						leftRender={getCellRender(relative, true)}
-						mainRender={getCellRender(relative, false)}
+						mainRender={getCellRender(relative, daily)}
 						isVisible={relative}
 					/>
 				),
 			},
 		],
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[data, relative],
+		[data, relative, daily],
 	)
 
 	const {
