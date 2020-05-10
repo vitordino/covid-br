@@ -5,7 +5,7 @@ enum StatesEnum { SP, MG, RJ, BA, PR, RS, PE, CE, PA, SC, MA, GO, AM, ES, PB, RN
 
 type StateEntry = {
 	date: DatesEnum
-	st: keyof typeof StatesEnum
+	st: keyof typeof StatesEnum | 'TOTAL'
 	td: number
 	nd: number
 	rtd: number | null
