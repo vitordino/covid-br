@@ -10,9 +10,12 @@ type HashMapOf<T> = { [key: string]: T }
 
 type ErrorType = Error | String
 
+// prettier-ignore
+enum StatesEnum { SP, MG, RJ, BA, PR, RS, PE, CE, PA, SC, MA, GO, AM, ES, PB, RN, MT, AL, PI, DF, MS, SE, RO, TO, AC, AP, RR }
+
 type StateEntry = {
 	date: string
-	state: string
+	state: keyof typeof StatesEnum | 'TOTAL'
 	deaths: string
 	newDeaths: string
 	newCases: string
@@ -21,14 +24,11 @@ type StateEntry = {
 	newRecovered?: string
 }
 
-// prettier-ignore
-enum StatesEnum { SP, MG, RJ, BA, PR, RS, PE, CE, PA, SC, MA, GO, AM, ES, PB, RN, MT, AL, PI, DF, MS, SE, RO, TO, AC, AP, RR }
-
 type StateEntries = StateEntry[]
 
 type StateOutput = {
 	date: string
-	st: string
+	st: keyof typeof StatesEnum | 'TOTAL'
 	td: number
 	nd: number
 	tc: number
@@ -39,7 +39,7 @@ type StateOutput = {
 
 type PopulationalEnhancedOutput = {
 	date: string
-	st: string
+	st: keyof typeof StatesEnum | 'TOTAL'
 	td: number
 	nd: number
 	ptd?: number
@@ -56,7 +56,7 @@ type PopulationalEnhancedOutput = {
 
 type EnhancedOutput = {
 	date: string
-	st: string
+	st: keyof typeof StatesEnum | 'TOTAL'
 	td: number
 	nd: number
 	rtd?: number
@@ -168,7 +168,7 @@ const renameData = (data: StateEntries) =>
 		}),
 	)
 
-type GetStateFn = ({ st }: StateOutput) => StateKeys | string
+type GetStateFn = ({ st }: StateOutput) => StateKeys | 'TOTAL'
 const getState: GetStateFn = ({ st }) => st
 const getDate = ({ date }: StateOutput) => date
 const groupByDate = groupBy(getDate)
