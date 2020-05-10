@@ -6,16 +6,22 @@ const { groupBy, uniq, values } = require('ramda')
 const states: StatesMeta = require('./meta.json')
 const totalPopulation = Object.values(states).reduce((a, { p }) => a + p, 0)
 
-type HashMapOf<T> = { [key: string]: T }
+type HashMapOf<T> = Record<string, T>
 
 type ErrorType = Error | String
 
 // prettier-ignore
 enum StatesEnum { SP, MG, RJ, BA, PR, RS, PE, CE, PA, SC, MA, GO, AM, ES, PB, RN, MT, AL, PI, DF, MS, SE, RO, TO, AC, AP, RR }
 
+type StateKeys = keyof typeof StatesEnum
+
+type StateMapOf<T> = {
+	[K in StateKeys]: T
+}
+
 type StateEntry = {
 	date: string
-	state: keyof typeof StatesEnum | 'TOTAL'
+	state: StateKeys | 'TOTAL'
 	deaths: string
 	newDeaths: string
 	newCases: string
@@ -28,7 +34,7 @@ type StateEntries = StateEntry[]
 
 type StateOutput = {
 	date: string
-	st: keyof typeof StatesEnum | 'TOTAL'
+	st: StateKeys | 'TOTAL'
 	td: number
 	nd: number
 	tc: number
@@ -39,7 +45,7 @@ type StateOutput = {
 
 type PopulationalEnhancedOutput = {
 	date: string
-	st: keyof typeof StatesEnum | 'TOTAL'
+	st: StateKeys | 'TOTAL'
 	td: number
 	nd: number
 	ptd?: number
@@ -56,7 +62,7 @@ type PopulationalEnhancedOutput = {
 
 type EnhancedOutput = {
 	date: string
-	st: keyof typeof StatesEnum | 'TOTAL'
+	st: StateKeys | 'TOTAL'
 	td: number
 	nd: number
 	rtd?: number
@@ -91,9 +97,7 @@ type NumericKeysOf<T> = keyof TypePropertiesOf<T, number>
 type NumericKey = NumericKeysOf<StateOutput>
 
 type StateMeta = { p: number; n: string }
-type StatesMeta = HashMapOf<StateMeta>
-
-type StateKeys = keyof typeof StatesEnum
+type StatesMeta = StateMapOf<StateMeta>
 
 type PickFirst<T extends {}> = (x: HashMapOf<T[]>) => HashMapOf<T>
 
@@ -254,7 +258,7 @@ type EnhanceWithPopulationalDataFn = (
 const enhanceWithPopulationalData: EnhanceWithPopulationalDataFn = toEnhance => data =>
 	data.map(x => {
 		const state = getState(x)
-		const population = states[state]?.p || totalPopulation
+		const population = state === 'TOTAL' ? totalPopulation : states?.[state]?.p
 		return toEnhance.reduce(
 			(acc, k) => ({ ...acc, [`p${k}`]: acc[k] / population }),
 			x,
