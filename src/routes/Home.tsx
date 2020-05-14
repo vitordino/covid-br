@@ -20,10 +20,10 @@ const TitleHeader = styled.div`
 	padding: 0 0.5rem 1rem;
 `
 
-const options = { day: 'numeric', month: 'numeric', year: 'numeric' }
-
-const dateToString = (d: string, l: string = 'pt') =>
-	new Date(d).toLocaleDateString(l, options)
+const dateToString = (date: string) => {
+	const [y, m, d] = date.split('-')
+	return `${d}/${m}/${y}`
+}
 
 type CountryDataType = {
 	main: Main
@@ -132,7 +132,11 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 const Home = () => {
-	const { data, error } = useSWR<CountryDataType>('/data/country.json', fetcher, { suspense: true })
+	const { data, error } = useSWR<CountryDataType>(
+		'/data/country.json',
+		fetcher,
+		{ suspense: true },
+	)
 	if (!data || error) return null
 	const { main, totals, dates, states } = data
 	return <Inner main={main} totals={totals} dates={dates} states={states} />
