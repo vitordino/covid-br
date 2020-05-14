@@ -10,6 +10,7 @@ import Logo from 'components/Logo'
 const Wrapper = styled(Container)`
 	display: flex;
 	align-items: center;
+	width: 100%;
 	padding-top: 3rem;
 	padding-bottom: 3rem;
 	color: var(--color-base88);

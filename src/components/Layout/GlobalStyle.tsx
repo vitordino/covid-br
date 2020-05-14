@@ -25,6 +25,13 @@ const GlobalStyle = createGlobalStyle`
 	body {
 		overflow-x: hidden;
 	}
+	#root {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		justify-content: space-between;
+		min-height: fill-available;
+	}
 	${({ theme }) => css`
 		:root,
 		[data-theme='light'] {

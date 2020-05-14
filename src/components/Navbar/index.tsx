@@ -16,6 +16,7 @@ type WrapperProps = {
 const Wrapper = styled(Container)<WrapperProps>`
 	display: flex;
 	align-items: center;
+	width: 100%;
 	padding-top: 1rem;
 	padding-bottom: 1rem;
 	color: var(--color-base88);

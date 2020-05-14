@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+import styled from 'styled-components'
 
 import { ThemeProvider } from 'theme'
 import Navbar from 'components/Navbar'
@@ -6,6 +7,10 @@ import Footer from 'components/Footer'
 import SEO from 'components/Layout/SEO'
 import AboutModal from 'components/AboutModal'
 import GlobalStyle from 'components/Layout/GlobalStyle'
+
+const Main = styled.main`
+	flex: 1;
+`
 
 type LayoutProps = {
 	children?: ReactNode
@@ -32,7 +37,9 @@ const Layout = ({
 				<SEO {...meta} lang={lang} />
 				<GlobalStyle />
 				<Navbar />
-				{children}
+				<Main>
+					{children}
+				</Main>
 				<Footer />
 				<AboutModal />
 			</>
