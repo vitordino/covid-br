@@ -92,7 +92,7 @@ const ColorModeSwitcher = () => {
 	}
 
 	return (
-		<Button type='button' onClick={colorSwitch}>
+		<Button type='button' aria-label='toggle dark mode' onClick={colorSwitch}>
 			<Inner viewBox='0 0 24 24'>
 				<defs>
 					<mask id='mask' stroke='none'>

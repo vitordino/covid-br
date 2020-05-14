@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import { Link, useLocation, useHistory } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import { parse } from 'query-string'
 
 import useScrollLock from 'hooks/useScrollLock'
@@ -49,7 +49,8 @@ const Backdrop = styled.div<Props>`
 	`}
 `
 
-const Background = styled(Link)<Props>`
+const Background = styled.button<Props>`
+	width: 100%;
 	display: block;
 	cursor: pointer;
 	background: #000;
@@ -102,18 +103,18 @@ const AboutModal = () => {
 	const { about } = parse(search)
 	const isVisible = typeof about !== 'undefined'
 
-	const onEsc = () => {
+	const exit = () => {
 		if (!isVisible) return
 		push(pathname, { query: '' })
 	}
 
 	useScrollLock(isVisible)
-	useKeyPress('Escape', onEsc)
+	useKeyPress('Escape', exit)
 	return (
 		<Portal>
 			<Wrapper isVisible={isVisible}>
 				<Backdrop isVisible={isVisible} />
-				<Background to='/' isVisible={isVisible} />
+				<Background aria-label='close modal' onClick={exit} isVisible={isVisible} />
 				<Inner isVisible={isVisible}>
 					<Text xs={3} as='h2' weight={500}>
 						About COVID — BR
@@ -151,7 +152,7 @@ const AboutModal = () => {
 					<Spacer.V xs={1} />
 					<Text xs={1} as='p' weight={500}>
 						The icon used is part of{' '}
-						<Anchor href='fontawesome.com'>fontawesome.com</Anchor>, and can be
+						<Anchor href='https://fontawesome.com'>fontawesome.com</Anchor>, and can be
 						found{' '}
 						<Anchor href='https://fontawesome.com/icons/shield-virus?style=solid'>
 							here

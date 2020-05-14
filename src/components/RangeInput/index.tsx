@@ -90,7 +90,7 @@ const RangeInput = ({ dates, totals }: RangeInputProps) => {
 	const sort = useStore(s => s.sort)
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
 	return (
-		<Wrapper>
+		<Wrapper aria-label='time slider'>
 			<Field
 				type='range'
 				min={0}

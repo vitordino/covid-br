@@ -75,6 +75,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 					</Text>
 					<Text weight={400} xs={2} md={3}>
 						<select
+							aria-label='date picker'
 							value={dateIndex}
 							onChange={({ target }) => setDateIndex(parseInt(target.value))}
 						>
