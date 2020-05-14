@@ -111,6 +111,11 @@ const destinies = [
 	`${__dirname}/../../src/data/country.json`,
 ]
 
+const numberDestinies = [
+	`${__dirname}/../../public/data/numbers.json`,
+	`${__dirname}/../../src/data/numbers.json`,
+]
+
 const url =
 	'https://cdn.jsdelivr.net/gh/wcota/covid19br@master/cases-brazil-states.csv'
 
@@ -276,7 +281,7 @@ const getNonTotals = (arr: PopulationalEnhancedOutput[]) =>
 const processLines = (input: StateEntries) => {
 	// arrays + hashmaps
 	const renamed: Outputs = renameData(input)
-	const dates = uniq(renamed.map(getDate))
+	const dates: string[] = uniq(renamed.map(getDate))
 	const withPopulationalTotals = getTotals(
 		enhanceWithPopulationalData(toEnhance)(renamed),
 	)
@@ -363,7 +368,9 @@ const processLines = (input: StateEntries) => {
 
 const handleEnd = (rowCount: number) => {
 	console.log(`Parsed ${rowCount} rows`)
-	write(destinies, processLines(lines), handleWrite)
+	const { main, totals, dates, states, ...rest } = processLines(lines)
+	write(destinies, { main, totals, dates, states }, handleWrite)
+	write(numberDestinies, rest, handleWrite)
 }
 
 module.exports = () =>
