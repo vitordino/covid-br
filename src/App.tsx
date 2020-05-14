@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
-import Home from 'routes/Home'
-import NotFound from 'routes/NotFound'
 import Layout from 'components/Layout'
+import Loader from 'components/Loader'
+
+const Home = lazy(() => import('./routes/Home')) 
+const NotFound = lazy(() => import('./routes/NotFound'))
 
 const App = () => (
 	<Router>
 		<Layout>
+			<Suspense fallback={<Loader />}>
 			<Switch>
 				<Route path='/' exact>
 					<Home />
@@ -16,6 +19,7 @@ const App = () => (
 					<NotFound />
 				</Route>
 			</Switch>
+			</Suspense>
 		</Layout>
 	</Router>
 )
