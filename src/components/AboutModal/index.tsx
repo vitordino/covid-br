@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { useLocation, useHistory } from 'react-router-dom'
 import { parse } from 'query-string'
 
-import useScrollLock from 'hooks/useScrollLock'
 import useKeyPress from 'hooks/useKeyPress'
 import Portal from 'components/Portal'
 import Text from 'components/Text'
@@ -110,7 +109,6 @@ const AboutModal = () => {
 		push(pathname, { query: '' })
 	}
 
-	useScrollLock(isVisible)
 	useKeyPress('Escape', exit)
 	return (
 		<Portal>
