@@ -1,5 +1,6 @@
 import React, { useMemo, useLayoutEffect } from 'react'
 import styled from 'styled-components'
+import useSWR from 'swr'
 
 import useStore from 'store'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
@@ -11,16 +12,6 @@ import Grid from 'components/Grid'
 import Text from 'components/Text'
 import RangeInput from 'components/RangeInput'
 import StatsCard from 'components/StatsCard'
-
-import data from 'data/country.json'
-
-// @ts-ignore
-const main: Main = data.main
-// @ts-ignore
-const totals: Totals = data.totals
-
-const dates: DatesEnum[] = data.dates
-const statesMeta: StatesMeta = data.states
 
 const TitleHeader = styled.div`
 	display: flex;
@@ -34,9 +25,17 @@ const options = { day: 'numeric', month: 'numeric', year: 'numeric' }
 const dateToString = (d: string, l: string = 'pt') =>
 	new Date(d).toLocaleDateString(l, options)
 
-const Home = () => {
+type CountryDataType = {
+	main: Main
+	totals: Totals
+	dates: DatesEnum[]
+	states: StatesMeta
+}
+
+const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 	const hoveredState = useStore(s => s.hoveredState)
 	const relative = useStore(s => s.relative)
+	/* eslint-disable react-hooks/exhaustive-deps */
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
 	const data: StateEntry[] = useMemo(() => main[dates[dateIndex]], [dateIndex])
 	const total: StateEntry = useMemo(() => totals[dates[dateIndex]], [dateIndex])
@@ -49,20 +48,21 @@ const Home = () => {
 				: Object.values(totals),
 		[hoveredState],
 	)
-
+	/* eslint-enable react-hooks/exhaustive-deps */
 	const caseProp = relative ? 'ptc' : 'tc'
 	const deathProp = relative ? 'ptd' : 'td'
 	const recoveredProp = relative ? 'ptr' : 'tr'
 
 	// @ts-ignore
-	const hoveredTitle = statesMeta?.[hoveredState]?.n || 'Total'
+	const hoveredTitle = states?.[hoveredState]?.n || 'Total'
 	const hoveredData = hoveredState
 		? data?.find(({ st }) => st === hoveredState)
 		: total
 
 	useLayoutEffect(() => {
 		setDateIndex(dates.length - 1)
-	}, [setDateIndex])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	useRelativeSortSync()
 
@@ -89,7 +89,7 @@ const Home = () => {
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
 						<RelativeAndDailySwitcher />
-						<CountryTable data={data} total={total} statesMeta={statesMeta} />
+						<CountryTable data={data} total={total} statesMeta={states} />
 					</Grid.Column>
 					<Grid.Column xs={16} lg={6}>
 						<RelativeAndDailySwitcher desktop />
@@ -123,6 +123,19 @@ const Home = () => {
 			<RangeInput dates={dates} totals={totals} />
 		</>
 	)
+}
+
+const fetcher = (url: string) => fetch(url).then(r => r.json())
+
+const Home = () => {
+	const { data, error } = useSWR<CountryDataType>('/data/country.json', fetcher)
+	useLayoutEffect(() => {
+		console.log(data)
+	}, [data])
+	if (error) return <div>error</div>
+	if (!data) return <div>loading</div>
+	const { main, totals, dates, states } = data
+	return <Inner main={main} totals={totals} dates={dates} states={states} />
 }
 
 export default Home
