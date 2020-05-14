@@ -1,8 +1,8 @@
-// const getCountryData = require('./getCountryData')
+const getCountryData = require('./getCountryData')
 const getStatesData = require('./getStatesData')
 
 const main = () => {
-	// getCountryData()
+	getCountryData()
 	getStatesData()
 }
 
