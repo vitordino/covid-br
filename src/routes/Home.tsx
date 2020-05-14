@@ -132,9 +132,6 @@ const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 const Home = () => {
 	const { data, error } = useSWR<CountryDataType>('/data/country.json', fetcher)
-	useLayoutEffect(() => {
-		console.log(data)
-	}, [data])
 	if (error) return <div>error</div>
 	if (!data) return <div>loading</div>
 	const { main, totals, dates, states } = data
