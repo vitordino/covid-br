@@ -131,9 +131,8 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 const Home = () => {
-	const { data, error } = useSWR<CountryDataType>('/data/country.json', fetcher)
-	if (error) return <div>error</div>
-	if (!data) return <div>loading</div>
+	const { data, error } = useSWR<CountryDataType>('/data/country.json', fetcher, { suspense: true })
+	if (!data || error) return null
 	const { main, totals, dates, states } = data
 	return <Inner main={main} totals={totals} dates={dates} states={states} />
 }
