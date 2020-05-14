@@ -3,7 +3,7 @@ const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
 const { groupBy, uniq, values } = require('ramda')
 
-const states: StatesMeta = require('./meta.json')
+const states: StatesMeta = require('./statesMeta.json')
 const totalPopulation = Object.values(states).reduce((a, { p }) => a + p, 0)
 
 type HashMapOf<T> = Record<string, T>
@@ -107,13 +107,12 @@ const pickFirst: PickFirst<EnhancedOutput> = x =>
 const lines: StateEntries = []
 
 const destinies = [
-	`${__dirname}/../../public/data/country.json`,
-	`${__dirname}/../../src/data/country.json`,
+	`${__dirname}/../public/data/country.json`,
 ]
 
 const numberDestinies = [
-	`${__dirname}/../../public/data/numbers.json`,
-	`${__dirname}/../../src/data/numbers.json`,
+	`${__dirname}/../public/data/numbers.json`,
+	`${__dirname}/../src/data/numbers.json`,
 ]
 
 const url =

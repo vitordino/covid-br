@@ -127,7 +127,7 @@ const handleData = ({ state, date, ...line }: CityEntry) => {
 }
 
 const getDestiny = (x: string) =>
-	`${__dirname}/../../public/data/${x.toLowerCase()}.json`
+	`${__dirname}/../public/data/${x.toLowerCase()}.json`
 
 const handleEnd = (rowCount: number) => {
 	console.log(`Parsed ${rowCount} rows`)
