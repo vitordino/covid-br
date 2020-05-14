@@ -12,10 +12,10 @@ type WrapperProps = {
 	isSorted: boolean
 }
 
+// prettier-ignore
 const Wrapper = styled.button<WrapperProps>`
 	display: block;
 	width: 100%;
-	cursor: pointer;
 	padding: 0.25rem 1rem 0.75rem;
 	position: relative;
 	margin: 1rem 1rem 1rem 0;
@@ -43,6 +43,9 @@ const Wrapper = styled.button<WrapperProps>`
 		transform-origin: top right;
 		opacity: ${p => (p.isSorted ? 1 : 0)};
 	}
+	${p => p.isSorted && `
+		cursor: default;
+	`}
 `
 
 const ChartContainer = styled.div`
