@@ -4,23 +4,78 @@ const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
 const { groupBy, uniq, values } = require('ramda')
 
-const url =
-	'https://cdn.jsdelivr.net/gh/wcota/covid19br@master/cases-brazil-cities-time.csv'
+enum StatesEnum {
+	SP,
+	MG,
+	RJ,
+	BA,
+	PR,
+	RS,
+	PE,
+	CE,
+	PA,
+	SC,
+	MA,
+	GO,
+	AM,
+	ES,
+	PB,
+	RN,
+	MT,
+	AL,
+	PI,
+	DF,
+	MS,
+	SE,
+	RO,
+	TO,
+	AC,
+	AP,
+	RR,
+}
 
-const outputs = {}
+type StateKeys = keyof typeof StatesEnum
 
-const statesMeta = require('./statesMeta.json')
+type StateMapOf<T> = {
+	[K in StateKeys]: T
+}
 
-const stateKeys = Object.keys(statesMeta)
+type CityEntry = {
+	state: StateKeys
+	date: string
+	country: 'Brazil'
+	city: string
+	ibgeID: string
+	newDeaths: string
+	deaths: string
+	newCases: string
+	totalCases: string
+	deaths_per_100k_inhabitants: string
+	totalCases_per_100k_inhabitants: string
+	deaths_by_totalCases: string
+}
+
+type CityOutput = {
+	ct: string
+	id: number
+	tc: number
+	nc: number
+	td: number
+	nd: number
+	ptd: number
+	ptc: number
+	dbc: number
+}
 
 const noop = () => ({})
 
-const getDestinies = (state: keyof typeof StatesEnum) => {
-	return [
-		`${__dirname}/../../public/data/${state.toLowerCase()}.json`,
-		`${__dirname}/../../src/data/${state.toLowerCase()}.json`,
-	]
-}
+const url =
+	'https://cdn.jsdelivr.net/gh/wcota/covid19br@master/cases-brazil-cities-time.csv'
+
+type Outputs = StateMapOf<Record<string, CityOutput[] | undefined>>
+
+// prettier-ignore
+const outputs: Outputs = { SP: {}, MG: {}, RJ: {}, BA: {}, PR: {}, RS: {}, PE: {}, CE: {}, PA: {}, SC: {}, MA: {}, GO: {}, AM: {}, ES: {}, PB: {}, RN: {}, MT: {}, AL: {}, PI: {}, DF: {}, MS: {}, SE: {}, RO: {}, TO: {}, AC: {}, AP: {}, RR: {} }
 
 const write = (
 	destinies: Array<string> = [],
@@ -33,8 +88,30 @@ const write = (
 	)
 }
 
-const pushLineToStateDate = (state: keyof typeof StatesEnum, date: string) => (
-	line: StateEntry,
+const renameLineData = ({
+	city,
+	ibgeID,
+	newDeaths,
+	deaths,
+	newCases,
+	totalCases,
+	deaths_per_100k_inhabitants,
+	totalCases_per_100k_inhabitants,
+	deaths_by_totalCases,
+}: CityEntry) => ({
+	ct: city,
+	id: parseInt(ibgeID),
+	tc: parseInt(totalCases),
+	nc: parseInt(newCases),
+	td: parseInt(deaths),
+	nd: parseInt(newDeaths),
+	ptd: parseFloat(deaths_per_100k_inhabitants),
+	ptc: parseFloat(totalCases_per_100k_inhabitants),
+	dbc: parseFloat(deaths_by_totalCases),
+})
+
+const pushLineToStateDate = (state: StateKeys, date: string) => (
+	line: object,
 ) => {
 	if (!(state in outputs)) outputs[state] = {}
 	if (!(date in outputs[state])) outputs[state][date] = []
@@ -45,11 +122,12 @@ const handleError = (err: string) => {
 	throw new Error(err)
 }
 
-const handleData = ({ state, date, ...line }: StateEntry) => {
-	pushLineToStateDate(state, date)(line)
+const handleData = ({ state, date, ...line }: CityEntry) => {
+	pushLineToStateDate(state, date)(renameLineData({ state, date, ...line }))
 }
 
-const getDestiny = x => `${__dirname}/../../public/data/${x.toLowerCase()}.json`
+const getDestiny = (x: string) =>
+	`${__dirname}/../../public/data/${x.toLowerCase()}.json`
 
 const handleEnd = (rowCount: number) => {
 	console.log(`Parsed ${rowCount} rows`)
