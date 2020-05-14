@@ -24,7 +24,7 @@ const Wrapper = styled.div<Props>`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: flex-end;
+	justify-content: center;
 	pointer-events: none;
 	${p =>
 		p.isVisible &&
@@ -33,6 +33,7 @@ const Wrapper = styled.div<Props>`
 	`}
 `
 
+// prettier-ignore
 const Backdrop = styled.div<Props>`
 	backdrop-filter: blur(0.25rem) grayscale(0.5);
 	position: absolute;
@@ -41,14 +42,14 @@ const Backdrop = styled.div<Props>`
 	bottom: 0;
 	right: 0;
 	opacity: 0;
-	transition: opacity 0.3s;
-	${p =>
-		p.isVisible &&
-		`
+	transition: opacity 0.2s cubic-bezier(0.4, 0, 1, 1);
+	${p => p.isVisible &&`
+		transition: opacity 0.2s cubic-bezier(0, 0, 0.2, 1);
 		opacity: 1;
 	`}
 `
 
+// prettier-ignore
 const Background = styled.button<Props>`
 	width: 100%;
 	display: block;
@@ -60,29 +61,30 @@ const Background = styled.button<Props>`
 	bottom: 0;
 	right: 0;
 	opacity: 0;
-	transition: opacity 0.3s;
-	${p =>
-		p.isVisible &&
-		`
+	transition: opacity 0.2s cubic-bezier(0.4, 0, 1, 1);
+	${p => p.isVisible && `
+		transition: opacity 0.2s cubic-bezier(0, 0, 0.2, 1);
 		opacity: 0.22;
 	`}
 `
 
+// prettier-ignore
 const Inner = styled(Container)<Props>`
 	padding: 1.5rem 1rem 2rem;
 	background: var(--color-base00);
 	width: 100%;
-	border-radius: 0.25rem 0.25rem 0 0;
+	border-radius: 0.25rem;
 	position: relative;
 	bottom: 0;
 	max-width: 32rem;
 	box-shadow: 0 0 2rem rgba(0, 0, 0, 0.44);
-	transition: transform 0.2s ease-out;
-	transform: translateY(100%);
-	${p =>
-		p.isVisible &&
-		`
-		transform: translateY(0);
+	transition: all 0.2s cubic-bezier(0.4, 0, 1, 1);
+	transform: translateY(60%) scale(0.8);
+	opacity: 0;
+	${p => p.isVisible && `
+		transition: all 0.2s cubic-bezier(0.0, 0.0, 0.2, 1);
+		opacity: 1;
+		transform: translateY(0) scale(1);
 	`}
 `
 
@@ -114,7 +116,11 @@ const AboutModal = () => {
 		<Portal>
 			<Wrapper isVisible={isVisible}>
 				<Backdrop isVisible={isVisible} />
-				<Background aria-label='close modal' onClick={exit} isVisible={isVisible} />
+				<Background
+					aria-label='close modal'
+					onClick={exit}
+					isVisible={isVisible}
+				/>
 				<Inner isVisible={isVisible}>
 					<Text xs={3} as='h2' weight={500}>
 						About COVID — BR
@@ -152,8 +158,8 @@ const AboutModal = () => {
 					<Spacer.V xs={1} />
 					<Text xs={1} as='p' weight={500}>
 						The icon used is part of{' '}
-						<Anchor href='https://fontawesome.com'>fontawesome.com</Anchor>, and can be
-						found{' '}
+						<Anchor href='https://fontawesome.com'>fontawesome.com</Anchor>, and
+						can be found{' '}
 						<Anchor href='https://fontawesome.com/icons/shield-virus?style=solid'>
 							here
 						</Anchor>{' '}
