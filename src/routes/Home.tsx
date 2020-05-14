@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import useSWR from 'swr'
 
 import useStore from 'store'
+import fetcher from 'utils/fetcher'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
 import CountryTable from 'components/CountryTable'
 import CountryMap from 'components/CountryMap'
@@ -128,8 +129,6 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 		</>
 	)
 }
-
-const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 const Home = () => {
 	const { data, error } = useSWR<CountryDataType>(
