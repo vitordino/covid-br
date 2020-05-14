@@ -106,16 +106,19 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 							prop={caseProp}
 							data={hoveredData}
 							chartData={hoveredTimeSeries}
+							dates={dates}
 						/>
 						<StatsCard
 							prop={deathProp}
 							data={hoveredData}
 							chartData={hoveredTimeSeries}
+							dates={dates}
 						/>
 						<StatsCard
 							prop={recoveredProp}
 							data={hoveredData}
 							chartData={hoveredTimeSeries}
+							dates={dates}
 						/>
 					</Grid.Column>
 				</Grid.Row>

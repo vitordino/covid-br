@@ -70,6 +70,7 @@ const FlexText = styled(Text)`
 
 type StatsCardProps = {
 	prop: keyof StateEntry
+	dates: DatesEnum[]
 	data?: StateEntry
 	chartData?: StateEntry[]
 }
@@ -176,7 +177,7 @@ const Render = ({ bold, ...props }: RenderProps) => {
 	)
 }
 
-const StatsCard = ({ prop, data, chartData }: StatsCardProps) => {
+const StatsCard = ({ prop, data, dates, chartData }: StatsCardProps) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const isSorted = sort === prop
 	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[prop] || {}
@@ -186,7 +187,7 @@ const StatsCard = ({ prop, data, chartData }: StatsCardProps) => {
 	return (
 		<Wrapper prop={prop} isSorted={isSorted} onClick={() => setSort(prop)}>
 			<ChartContainer>
-				{chartData && <Chart prop={prop} data={chartData} />}
+				{chartData && <Chart dates={dates} prop={prop} data={chartData} />}
 			</ChartContainer>
 			<Content>
 				{main && (

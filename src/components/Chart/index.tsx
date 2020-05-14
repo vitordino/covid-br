@@ -6,26 +6,23 @@ import { max } from 'd3-array'
 import { ParentSize } from '@vx/responsive'
 
 import useStore from 'store'
-import data from 'data/country.json'
 import { getColorOf } from 'utils/colorScale'
-
-const dates: DatesEnum[] = data.dates
-
-const x = (v: StateEntry) => dates.findIndex(x => x === v.date)
 
 type ChartProps = {
 	width: number
 	height: number
+	dates: DatesEnum[]
 	data?: StateEntry[]
 	prop?: keyof StateEntry
 }
 
-type YType = (v: StateEntry) => number
+type AxisFn = (v: StateEntry) => number
 
-const Chart = ({ width, height, data, prop = 'nc' }: ChartProps) => {
+const Chart = ({ width, height, data, dates, prop = 'nc' }: ChartProps) => {
 	const dateIndex = useStore(s => s.dateIndex)
 	if (!data || !prop) return null
-	const y: YType = v => v[prop]
+	const x: AxisFn = v => dates.findIndex(x => x === v.date)
+	const y: AxisFn = v => v[prop]
 	// scales
 	const xScale = scaleLinear({
 		range: [1, width - 1],
@@ -52,13 +49,14 @@ const Chart = ({ width, height, data, prop = 'nc' }: ChartProps) => {
 
 type ResponsiveChartProps = {
 	data: StateEntry[]
+	dates: DatesEnum[]
 	prop?: keyof StateEntry
 }
 
-const ResponsiveChart = ({ data, prop }: ResponsiveChartProps) => (
+const ResponsiveChart = (props: ResponsiveChartProps) => (
 	<ParentSize>
 		{({ width, height }) => (
-			<Chart width={width} height={height} data={data} prop={prop} />
+			<Chart width={width} height={height} {...props} />
 		)}
 	</ParentSize>
 )
