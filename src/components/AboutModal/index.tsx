@@ -19,6 +19,7 @@ const Wrapper = styled.div<Props>`
 	left: 0;
 	bottom: 0;
 	right: 0;
+	padding: 1rem;
 	z-index: 1000;
 	display: flex;
 	flex-direction: column;
@@ -30,6 +31,9 @@ const Wrapper = styled.div<Props>`
 		`
 		pointer-events: all;
 	`}
+	a {
+		text-decoration: underline;
+	}
 `
 
 // prettier-ignore
@@ -80,7 +84,9 @@ const Inner = styled(Container)<Props>`
 	transition: all 0.2s cubic-bezier(0.4, 0, 1, 1);
 	transform: translateY(60%) scale(0.8);
 	opacity: 0;
-	${p => p.isVisible && `
+	${p =>
+		p.isVisible &&
+		`
 		transition: all 0.2s cubic-bezier(0.0, 0.0, 0.2, 1);
 		opacity: 1;
 		transform: translateY(0) scale(1);
@@ -139,7 +145,7 @@ const AboutModal = () => {
 					</Text>
 					<Spacer.V xs={1} />
 					<Text xs={1} as='p' weight={500}>
-						The data is sourced from{' '}
+						Data is sourced from{' '}
 						<Anchor href='https://github.com/wcota/covid19br'>
 							<code>wcota/covid19br</code>
 						</Anchor>{' '}
@@ -150,6 +156,14 @@ const AboutModal = () => {
 							title='Creative Commons Attribution Share Alike 4.0 International'
 						>
 							<code>CC BY-SA 4.0</code> License
+						</Anchor>
+						.
+					</Text>
+					<Spacer.V xs={1} />
+					<Text xs={1} as='p' weight={500}>
+						Topography data is sourced from{' '}
+						<Anchor href='https://servicodados.ibge.gov.br/api/docs/malhas?versao=2'>
+							IBGE
 						</Anchor>
 						.
 					</Text>
