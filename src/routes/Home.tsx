@@ -1,5 +1,4 @@
 import React, { useMemo, useLayoutEffect } from 'react'
-import styled from 'styled-components'
 import useSWR from 'swr'
 
 import useStore from 'store'
@@ -13,13 +12,7 @@ import Grid from 'components/Grid'
 import Text from 'components/Text'
 import RangeInput from 'components/RangeInput'
 import StatsCard from 'components/StatsCard'
-
-const TitleHeader = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: baseline;
-	padding: 0 0.5rem 1rem;
-`
+import TitleHeader from 'components/TitleHeader'
 
 const dateToString = (date: string) => {
 	const [y, m, d] = date.split('-')
@@ -70,24 +63,13 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 	return (
 		<>
 			<Container>
-				<TitleHeader>
-					<Text as='h1' weight={400} xs={3} md={4} lg={5} style={{ flex: 1 }}>
-						Brazil
-					</Text>
-					<Text weight={400} xs={2} md={3}>
-						<select
-							aria-label='date picker'
-							value={dateIndex}
-							onChange={({ target }) => setDateIndex(parseInt(target.value))}
-						>
-							{dates.map((x, i) => (
-								<option key={x} value={i}>
-									{dateToString(x)}
-								</option>
-							))}
-						</select>
-					</Text>
-				</TitleHeader>
+				<TitleHeader
+					title='Brazil'
+					options={dates}
+					value={dateIndex.toString()}
+					onChange={v => setDateIndex(parseInt(v))}
+					renderOption={dateToString}
+				/>
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
 						<RelativeAndDailySwitcher />
