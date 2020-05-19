@@ -7,6 +7,11 @@ import Spacer from 'components/Spacer'
 import Text from 'components/Text'
 import Logo from 'components/Logo'
 
+const LogoLink = styled(Link)`
+	display: flex;
+	align-items: center;
+`
+
 const Wrapper = styled(Container)`
 	display: flex;
 	align-items: center;
@@ -33,12 +38,15 @@ const Separator = styled.div`
 
 const Footer = () => (
 	<Wrapper as='footer'>
-		<Spacer.H xs={0.5} />
-		<Logo />
-		<Spacer.H xs={0.5} />
-		<Text weight={600} xs={1} md={2}>
-			COVID — BR
-		</Text>
+		<LogoLink to='/'>
+			<Spacer.H xs={0.5} />
+			<Logo />
+			<Spacer.H xs={0.5} />
+			<Text weight={600} xs={1} md={2}>
+				COVID — BR
+			</Text>
+			<Spacer.H xs={0.5} />
+		</LogoLink>
 		<Separator />
 		<Text as={Link} to='?about' weight={500} xs={1} md={2}>
 			About
