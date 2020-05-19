@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 import useStore from 'store'
 import { getColorOf } from 'utils/colorScale'
@@ -12,6 +13,11 @@ import ColorModeSwitcher from 'components/Layout/ColorModeSwitcher'
 type WrapperProps = {
 	sort: keyof StateEntry
 }
+
+const LogoLink = styled(Link)`
+	display: flex;
+	align-items: center;
+`
 
 const Wrapper = styled(Container)<WrapperProps>`
 	display: flex;
@@ -42,12 +48,15 @@ const Navbar = () => {
 	const sort = useStore(s => s.sort)
 	return (
 		<Wrapper as='nav' sort={sort}>
-			<Spacer.H xs={0.5} />
-			<Logo />
-			<Spacer.H xs={0.5} />
-			<Text weight={600} xs={2} md={3}>
-				COVID — BR
-			</Text>
+			<LogoLink to='/'>
+				<Spacer.H xs={0.5} />
+				<Logo />
+				<Spacer.H xs={0.5} />
+				<Text weight={600} xs={2} md={3}>
+					COVID — BR
+				</Text>
+				<Spacer.H xs={0.5} />
+			</LogoLink>
 			<Separator />
 			<ColorModeSwitcher />
 		</Wrapper>
