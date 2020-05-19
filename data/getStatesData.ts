@@ -127,9 +127,9 @@ const renameLineData = ({
 	nc: parseInt(newCases),
 	td: parseInt(deaths),
 	nd: parseInt(newDeaths),
-	ptd: 10 * parseFloat(deaths_per_100k_inhabitants),
-	ptc: 10 * parseFloat(totalCases_per_100k_inhabitants),
-	dbc: parseFloat(deaths_by_totalCases),
+	ptd: + (10 * parseFloat(deaths_per_100k_inhabitants)).toFixed(6),
+	ptc: + (10 * parseFloat(totalCases_per_100k_inhabitants)).toFixed(6),
+	dbc: + parseFloat(deaths_by_totalCases).toFixed(6),
 })
 
 const pushLineToStateDate = (state: StateKeys, date: string) => (

@@ -189,21 +189,24 @@ const defaultFilter: FilterOf<any> = x => !!x
 const getHighest = <T extends StateOutput>(
 	filter: (value: T) => boolean = defaultFilter,
 ) => (prop: NumericKeysOf<T>) => (x: T[]) =>
-	values(x)
+	+ values(x)
 		.filter(filter)
 		.filter((x: T) => !!x[prop])
 		.map((x: T) => x[prop])
 		.reduce(higher, 0)
+		.toFixed(6)
+
 
 // i f***** hate TS
 const getHighestPop = <T extends PopulationalEnhancedOutput>(
 	filter: (value: T) => boolean = defaultFilter,
 ) => (prop: keyof T) => (x: T[]) =>
-	values(x)
+	+ values(x)
 		.filter(filter)
 		.filter((x: T) => !!x[prop])
 		.map((x: T) => x[prop])
 		.reduce(higher, 0)
+		.toFixed(6)
 
 const getHighestState = getHighest(({ st }) => st !== 'TOTAL')
 const getHighestTotal = getHighest(({ st }) => st === 'TOTAL')
@@ -239,7 +242,7 @@ type EnhanceReducerFn = (
 
 const enhance: EnhanceReducerFn = arr => (acc, k, i) => ({
 	...acc,
-	[`r${k}`]: acc[k] / getHighest()(k)(arr),
+	[`r${k}`]: + (acc[k] / getHighest()(k)(arr)).toFixed(6),
 })
 
 type EnhanceDataFunction = (
@@ -264,7 +267,7 @@ const enhanceWithPopulationalData: EnhanceWithPopulationalDataFn = toEnhance => 
 		const state = getState(x)
 		const population = state === 'TOTAL' ? totalPopulation : states?.[state]?.p
 		return toEnhance.reduce(
-			(acc, k) => ({ ...acc, [`p${k}`]: acc[k] / population }),
+			(acc, k) => ({ ...acc, [`p${k}`]: + (acc[k] / population).toFixed(6) }),
 			x,
 		)
 	})
