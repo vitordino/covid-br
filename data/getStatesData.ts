@@ -105,8 +105,8 @@ const renameLineData = ({
 	nc: parseInt(newCases),
 	td: parseInt(deaths),
 	nd: parseInt(newDeaths),
-	ptd: parseFloat(deaths_per_100k_inhabitants),
-	ptc: parseFloat(totalCases_per_100k_inhabitants),
+	ptd: 10 * parseFloat(deaths_per_100k_inhabitants),
+	ptc: 10 * parseFloat(totalCases_per_100k_inhabitants),
 	dbc: parseFloat(deaths_by_totalCases),
 })
 
