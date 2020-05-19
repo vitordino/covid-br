@@ -107,6 +107,7 @@ const pickFirst: PickFirst<EnhancedOutput> = x =>
 const lines: StateEntries = []
 
 const destinies = [
+	`${__dirname}/country.json`,
 	`${__dirname}/../public/data/country.json`,
 ]
 
@@ -375,7 +376,20 @@ const handleEnd = (rowCount: number) => {
 	write(numberDestinies, rest, handleWrite)
 }
 
-module.exports = () =>
+const promisify = (fn: () => any) => {
+   return (...args: any[]) => {
+     return new Promise((resolve, reject) => {
+       function customCallback(err: any, ...results: any) {
+         if (err) return reject(err)
+         return resolve(results.length === 1 ? results[0] : results) 
+        }
+        args.push(customCallback)
+        fn.call(args)
+      })
+   }
+}
+
+const exportedFunction = () =>
 	get(url, (res: any) =>
 		res
 			.pipe(parse({ headers: true }))
@@ -383,3 +397,5 @@ module.exports = () =>
 			.on('data', handleData)
 			.on('end', handleEnd),
 	)
+
+module.exports = promisify(exportedFunction)

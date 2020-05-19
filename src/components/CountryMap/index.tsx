@@ -4,8 +4,6 @@ import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 import useStore from 'store'
 import { getMapFill } from 'utils/colorScale'
 
-const geography = '/topo/country.json'
-
 const baseStyle = {
 	outline: 'none',
 	stroke: 'var(--color-base22)',
@@ -19,15 +17,17 @@ const mapStyle = {
 }
 
 type CountryMapProps = {
-	data: StateEntry[]
+	data?: StateEntry[]
+	id?: string
 }
 
-const CountryMap = ({ data }: CountryMapProps) => {
+const CountryMap = ({ data = [], id = 'country', }: CountryMapProps) => {
 	const sort = useStore(s => s.sort)
 	const [hoveredState, setHoveredState] = useStore(s => [
 		s.hoveredState,
 		s.setHoveredState,
 	])
+	const geography = `/topo/${id}.json`
 	return (
 		<ComposableMap
 			data-tip=''

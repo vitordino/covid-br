@@ -4,8 +4,7 @@ const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
 const { groupBy, uniq, values } = require('ramda')
 
-const { main, dates } = require('../public/data/country.json')
-
+const { main, dates } = require('./country.json')
 
 const selectKeys = (keys: string[]) => (obj: Record<string,any>) =>
 Object.entries(obj).reduce((acc, [k, v]) => {
