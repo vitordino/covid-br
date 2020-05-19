@@ -1,10 +1,13 @@
-const main = async () => {
-	await Promise.all([ 
+const main = () => {
+	Promise.all([
 		require('./copyStatesMeta')(),
 		require('./getCountryData')(),
-		require('./getStatesData')(),
-		require('./downloadTopo')(),
-	])
+	]).then(() => {
+		Promise.all([
+			require('./getStatesData')(),
+			require('./downloadTopo')(),
+		])
+	})
 }
 
 main()
