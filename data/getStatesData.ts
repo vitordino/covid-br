@@ -4,7 +4,7 @@ const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
 const { groupBy, uniq, values } = require('ramda')
 
-const { main } = require('../public/data/country.json')
+const { main, dates } = require('../public/data/country.json')
 
 const getTotals = id =>
 	Object.entries(main).reduce(
@@ -140,7 +140,7 @@ const getDestiny = (x: string) =>
 const handleEnd = (rowCount: number) => {
 	console.log(`Parsed ${rowCount} rows`)
 	Object.entries(outputs).forEach(([k, v]) =>
-		write([getDestiny(k)], { main: v, totals: getTotals(k) }, noop)
+		write([getDestiny(k)], { main: v, totals: getTotals(k), dates }, noop),
 	)
 }
 
