@@ -1,5 +1,6 @@
-// @ts-nocheck
+// @ts-ignore
 const fetch = require('isomorphic-fetch')
+// @ts-ignore
 const { writeFile } = require('fs')
 
 const fetchJSON = (url: string) => fetch(url).then(r => r.json())
@@ -9,13 +10,15 @@ const countryUrl =
 
 const statesUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados'
 
-const getUrlbyId = id =>
+const getUrlbyId = (id: number) =>
 	`https://servicodados.ibge.gov.br/api/v2/malhas/${id}?resolucao=5&formato=application/json`
 
+// @ts-ignore
 const getDestiny = (x: string) =>
 	`${__dirname}/../public/topo/${x.toLowerCase()}.json`
 
-const handleError = error => {
+// @ts-ignore
+const handleError = (error: any) => {
 	if (!error) return
 	throw new Error(error)
 }
@@ -27,8 +30,14 @@ const downloadCountry = async () => {
 	return writeFile(destiny, json, handleError)
 }
 
+type State = {
+	id: number
+	sigla: string
+	nome: string
+}
+
 const downloadStates = async () => {
-	const states = await fetchJSON(statesUrl)
+	const states: State[] = await fetchJSON(statesUrl)
 	states.forEach(async ({ id, sigla }) => {
 		const data = await fetchJSON(getUrlbyId(id))
 		const destiny = getDestiny(sigla)
