@@ -6,9 +6,23 @@ const { groupBy, uniq, values } = require('ramda')
 
 const { main, dates } = require('../public/data/country.json')
 
+
+const selectKeys = (keys: string[]) => (obj: Record<string,any>) =>
+Object.entries(obj).reduce((acc, [k, v]) => {
+	if(!keys.includes(k)) return acc
+	return {...acc, [k]: v}
+}, {})
+
+const keysToMaintainFromMain = ['tc', 'nc', 'ptc', 'td', 'nd', 'ptd']
+
+const clearMainKeys = selectKeys(keysToMaintainFromMain)
+
 const getTotals = id =>
 	Object.entries(main).reduce(
-		(acc, [k, v]) => ({ ...acc, [k]: v.filter(({ st }) => st === id) }),
+		(acc, [k, v]) => ({
+			...acc,
+			[k]: v.filter(({ st }) => st === id).map(clearMainKeys),
+		}),
 		{},
 	)
 
