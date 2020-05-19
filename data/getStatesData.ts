@@ -4,6 +4,14 @@ const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
 const { groupBy, uniq, values } = require('ramda')
 
+const { main } = require('../public/data/country.json')
+
+const getTotals = id =>
+	Object.entries(main).reduce(
+		(acc, [k, v]) => ({ ...acc, [k]: v.filter(({ st }) => st === id) }),
+		{},
+	)
+
 enum StatesEnum {
 	SP,
 	MG,
@@ -131,7 +139,9 @@ const getDestiny = (x: string) =>
 
 const handleEnd = (rowCount: number) => {
 	console.log(`Parsed ${rowCount} rows`)
-	Object.entries(outputs).forEach(([k, v]) => write([getDestiny(k)], v, noop))
+	Object.entries(outputs).forEach(([k, v]) =>
+		write([getDestiny(k)], { main: v, totals: getTotals(k) }, noop)
+	)
 }
 
 module.exports = () =>
