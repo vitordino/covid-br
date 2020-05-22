@@ -9,12 +9,10 @@ type StateProps = {
 }
 
 const State = ({ id }: StateProps) => {
-	const { data, error } = useSWR<any>(
-		`/data/${id}.json`,
-		fetcher,
-		{ suspense: true },
-	)
-	if(!data || error) return null
+	const { data, error } = useSWR<any>(`/data/${id}.json`, fetcher, {
+		suspense: true,
+	})
+	if (!data || error) return null
 	return (
 		<Container>
 			<pre>{JSON.stringify({ data }, null, 2)}</pre>

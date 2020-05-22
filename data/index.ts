@@ -1,5 +1,3 @@
-const wait = require('waait')
-
 const main = () => {
 	Promise.all([require('./copyStatesMeta')()]).finally(() =>
 		Promise.all([require('./getCountryData')()]).finally(() =>

@@ -37,9 +37,7 @@ const Layout = ({
 				<SEO {...meta} lang={lang} />
 				<GlobalStyle />
 				<Navbar />
-				<Main>
-					{children}
-				</Main>
+				<Main>{children}</Main>
 				<Footer />
 				<AboutModal />
 			</>

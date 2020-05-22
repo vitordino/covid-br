@@ -2,15 +2,14 @@
 const { get } = require('https')
 const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
-const { groupBy, uniq, values } = require('ramda')
 
 const { main, dates } = require('./country.json')
 
-const selectKeys = (keys: string[]) => (obj: Record<string,any>) =>
-Object.entries(obj).reduce((acc, [k, v]) => {
-	if(!keys.includes(k)) return acc
-	return {...acc, [k]: v}
-}, {})
+const selectKeys = (keys: string[]) => (obj: Record<string, any>) =>
+	Object.entries(obj).reduce((acc, [k, v]) => {
+		if (!keys.includes(k)) return acc
+		return { ...acc, [k]: v }
+	}, {})
 
 const keysToMaintainFromMain = ['tc', 'nc', 'ptc', 'td', 'nd', 'ptd']
 
@@ -126,9 +125,9 @@ const renameLineData = ({
 	nc: parseInt(newCases),
 	td: parseInt(deaths),
 	nd: parseInt(newDeaths),
-	ptd: + (10 * parseFloat(deaths_per_100k_inhabitants)).toFixed(6),
-	ptc: + (10 * parseFloat(totalCases_per_100k_inhabitants)).toFixed(6),
-	dbc: + parseFloat(deaths_by_totalCases).toFixed(6),
+	ptd: +(10 * parseFloat(deaths_per_100k_inhabitants)).toFixed(6),
+	ptc: +(10 * parseFloat(totalCases_per_100k_inhabitants)).toFixed(6),
+	dbc: +parseFloat(deaths_by_totalCases).toFixed(6),
 })
 
 const pushLineToStateDate = (state: StateKeys, date: string) => (

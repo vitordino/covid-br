@@ -71,7 +71,7 @@
     "prebuild": "npm run data:build",
     "build": "npm run frontend:build",
     "format": "prettier --write 'src/**/*.{ts,tsx,js}' 'data/**/*.{ts,tsx,js}'",
-    "lint": "eslint --ignore-path .gitignore src data"
+    "lint": "eslint --ignore-path .gitignore 'src/**/*.{ts,tsx,js}' 'data/**/*.{ts,tsx,js}'"
   },
   "eslintConfig": {
     "extends": "react-app"
