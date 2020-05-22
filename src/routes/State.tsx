@@ -33,8 +33,8 @@ interface InnerProps extends StateDataType {
 const Inner = ({ id, main, totals, dates }: InnerProps) => {
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
 	/* eslint-disable react-hooks/exhaustive-deps */
-	const total = useMemo(() => totals[dates[dateIndex]], [dateIndex])
-	const data = useMemo(() => main[dates[dateIndex]], [dateIndex])
+	const total = useMemo(() => totals[dates[dateIndex]] || {}, [dateIndex])
+	const data = useMemo(() => main[dates[dateIndex]] || [], [dateIndex])
 	/* eslint-enable react-hooks/exhaustive-deps */
 
 	useLayoutEffect(() => {
