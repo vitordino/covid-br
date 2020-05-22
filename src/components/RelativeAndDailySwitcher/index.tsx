@@ -1,11 +1,13 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
+import { useBreakpoints } from 'etymos'
 
 import useStore from 'store'
 import Text from 'components/Text'
 
 type WrapperProps = {
 	desktop?: boolean
+	controls?: string[]
 }
 
 // prettier-ignore
@@ -17,20 +19,23 @@ const Wrapper = styled.div<WrapperProps>`
 	z-index: 100;
 	background: var(--color-base00);
 	${p => p.theme.above('md')`
-    display: none;
     border-radius: 0.25rem;
+  `}
+	${p => p.theme.above('lg')`
     margin: 0;
   `}
-	${p => p.desktop && css`
+	${p => !p.desktop && p.theme.above('lg')`
 		display: none;
-		${p.theme.above('md')`
-			display: flex;
-		`}
 	`}
+
 `
 
+type EachWrapperProps = {
+	isVisible?: boolean
+}
+
 // prettier-ignore
-const Each = styled.label<WrapperProps>`
+const EachWrapper = styled.label<EachWrapperProps>`
 	display: flex;
 	flex: 1;
 	cursor: pointer;
@@ -42,12 +47,8 @@ const Each = styled.label<WrapperProps>`
 		background: var(--color-base);
 		color: var(--color-base00);
 	}
-	${p => p.theme.above('md')`
-    border-radius: 0.25rem;
-  `}
-	${p => !p.desktop && p.theme.above('md')`
-		display: none;
-	`}
+	${p => p.theme.above('md')`border-radius: 0.25rem;`}
+	${p => !p.isVisible && `display: none;`}
 `
 
 type OptionProps = {
@@ -60,7 +61,7 @@ const Option = styled(Text)<OptionProps>`
 	${p => p.active && css`
     color: var(--color-base88);
   `}
-	${Each}:hover & {
+	${EachWrapper}:hover & {
 		color: var(--color-base66);
     ${p => p.active && css`
       color: var(--color-base03);
@@ -68,39 +69,41 @@ const Option = styled(Text)<OptionProps>`
 	}
 `
 
-const RelativeAndDailySwitcher = (props: WrapperProps) => {
+type EachProps = {
+	checked: boolean
+	onChange: (v: boolean) => void
+	options: [string?, string?]
+	isVisible?: boolean
+}
+
+const Each = ({ checked, onChange, options = [], isVisible = true }: EachProps) => (
+	<EachWrapper isVisible={isVisible}>
+		<input
+			type='checkbox'
+			checked={checked}
+			onChange={({ target }) => onChange(target.checked)}
+		/>
+		<Option active={!checked} weight={500} xs={1}>
+			{options[0]}
+		</Option>
+		<Option xs={1}>&nbsp; / &nbsp;</Option>
+		<Option active={checked} weight={500} xs={1}>
+			{options[1]}
+		</Option>
+	</EachWrapper>
+)
+
+const RelativeAndDailySwitcher = ({ desktop, controls = ['relative', 'daily'] }: WrapperProps) => {
+	const breakpoints = useBreakpoints()
 	const [relative, setRelative] = useStore(s => [s.relative, s.setRelative])
 	const [daily, setDaily] = useStore(s => [s.daily, s.setDaily])
+	if(!controls.length) return <></>
 	return (
-		<Wrapper {...props}>
-			<Each {...props}>
-				<input
-					type='checkbox'
-					checked={relative}
-					onChange={({ target }) => setRelative(target.checked)}
-				/>
-				<Option active={!relative} weight={500} xs={1}>
-					Absolute
-				</Option>
-				<Option xs={1}>&nbsp; / &nbsp;</Option>
-				<Option active={relative} weight={500} xs={1}>
-					Relative
-				</Option>
-			</Each>
-			<Each desktop={false}>
-				<input
-					type='checkbox'
-					checked={daily}
-					onChange={({ target }) => setDaily(target.checked)}
-				/>
-				<Option active={!daily} weight={500} xs={1}>
-					Total
-				</Option>
-				<Option xs={1}>&nbsp; / &nbsp;</Option>
-				<Option active={daily} weight={500} xs={1}>
-					New
-				</Option>
-			</Each>
+		<Wrapper desktop={desktop}>
+			{controls.map(x => {
+				if(x === 'relative') return <Each checked={!relative} onChange={x => setRelative(!x)} options={['Absolute', 'Relative']} />
+				if(x === 'daily') return <Each checked={daily} onChange={setDaily} options={['Total', 'New']} isVisible={!breakpoints.includes('md')} />
+			})}
 		</Wrapper>
 	)
 }
