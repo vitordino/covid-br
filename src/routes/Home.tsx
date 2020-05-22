@@ -2,6 +2,7 @@ import React, { useMemo, useLayoutEffect } from 'react'
 import useSWR from 'swr'
 
 import useStore from 'store'
+import dateToString from 'utils/dateToString'
 import fetcher from 'utils/fetcher'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
 import CountryTable from 'components/Table/CountryTable'
@@ -13,11 +14,6 @@ import Text from 'components/Text'
 import RangeInput from 'components/RangeInput'
 import StatsCard from 'components/StatsCard'
 import TitleHeader from 'components/TitleHeader'
-
-const dateToString = (date: string) => {
-	const [y, m, d] = date.split('-')
-	return `${d}/${m}/${y}`
-}
 
 type CountryDataType = {
 	main: Main
