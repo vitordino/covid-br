@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
@@ -13,8 +14,8 @@ export type RowProps = {
 
 export type CellProps = {
 	row: RowProps
-	column: { id: keyof StateEntry }
-	data: StateEntry[]
+	column: { id: keyof StateEntry | keyof CityEntry }
+	data: StateEntry[] | CityEntry[]
 	[key: string]: any
 }
 
@@ -48,7 +49,7 @@ export const CellWrapper = styled(Text)`
 
 export const Left = styled(Text)`
 	display: none;
-	${p => p.theme.above('sm')`
+	${p => p.theme.above('md')`
 		display: block;
 	`}
 `
@@ -71,10 +72,10 @@ export const Cell = ({
 
 type DynamicCellProps = {
 	row: RowProps
-	data?: StateEntry[]
-	column: { id: keyof StateEntry }
-	prop?: keyof StateEntry
-	leftProp?: keyof StateEntry
+	data?: StateEntry[] | CityEntry[]
+	column: { id: keyof StateEntry | keyof CityEntry }
+	prop?: keyof StateEntry | keyof CityEntry
+	leftProp?: keyof StateEntry | keyof CityEntry
 	leftRender?: (x: ReactNode) => ReactNode
 	mainRender?: (x: ReactNode) => ReactNode
 	children?: ReactNode
@@ -91,7 +92,7 @@ export const DynamicCell = ({
 	leftRender = x => `+${x}`,
 	mainRender = x => x,
 	children,
-	isVisible,
+	isVisible = true,
 	to,
 }: DynamicCellProps) => {
 	if (!isVisible) return null
@@ -211,7 +212,7 @@ export const TableRow = styled.tr<TableRowProps>`
 `
 
 type SortByOptions = {
-	id: keyof StateEntry
+	id: keyof StateEntry | keyof CityEntry
 	desc: boolean
 }
 
