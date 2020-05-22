@@ -144,6 +144,7 @@ const Wrapper = styled.div`
 	padding: 0 0.125rem;
 `
 
+// prettier-ignore
 const Table = styled.table`
 	width: 100%;
 	text-align: right;
@@ -160,12 +161,14 @@ const Table = styled.table`
 		${p => p.theme.above('md')`
 			top: 0.25rem;
 		`}
-		&:nth-child(1) {
-			z-index: 3;
-		}
-		&:nth-child(2) {
-			z-index: 2;
-		}
+		&:nth-child(1) { z-index: 8 }
+		&:nth-child(2) { z-index: 7 }
+		&:nth-child(3) { z-index: 6 }
+		&:nth-child(4) { z-index: 5 }
+		&:nth-child(5) { z-index: 4 }
+		&:nth-child(6) { z-index: 3 }
+		&:nth-child(7) { z-index: 2 }
+		&:nth-child(8) { z-index: 1 }
 	}
 	tr:nth-child(2n) > * {
 		background: var(--color-base03);

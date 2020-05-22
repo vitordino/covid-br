@@ -2,7 +2,27 @@
 const { get } = require('https')
 const { writeFile } = require('fs')
 const { parse } = require('@fast-csv/parse')
-const { groupBy, uniq, values } = require('ramda')
+
+const { main, dates } = require('./country.json')
+
+const selectKeys = (keys: string[]) => (obj: Record<string, any>) =>
+	Object.entries(obj).reduce((acc, [k, v]) => {
+		if (!keys.includes(k)) return acc
+		return { ...acc, [k]: v }
+	}, {})
+
+const keysToMaintainFromMain = ['tc', 'nc', 'ptc', 'td', 'nd', 'ptd']
+
+const clearMainKeys = selectKeys(keysToMaintainFromMain)
+
+const getTotals = id =>
+	Object.entries(main).reduce(
+		(acc, [k, v]) => ({
+			...acc,
+			[k]: v.filter(({ st }) => st === id).map(clearMainKeys),
+		}),
+		{},
+	)
 
 enum StatesEnum {
 	SP,
@@ -105,9 +125,9 @@ const renameLineData = ({
 	nc: parseInt(newCases),
 	td: parseInt(deaths),
 	nd: parseInt(newDeaths),
-	ptd: parseFloat(deaths_per_100k_inhabitants),
-	ptc: parseFloat(totalCases_per_100k_inhabitants),
-	dbc: parseFloat(deaths_by_totalCases),
+	ptd: +(10 * parseFloat(deaths_per_100k_inhabitants)).toFixed(6),
+	ptc: +(10 * parseFloat(totalCases_per_100k_inhabitants)).toFixed(6),
+	dbc: +parseFloat(deaths_by_totalCases).toFixed(6),
 })
 
 const pushLineToStateDate = (state: StateKeys, date: string) => (
@@ -131,7 +151,9 @@ const getDestiny = (x: string) =>
 
 const handleEnd = (rowCount: number) => {
 	console.log(`Parsed ${rowCount} rows`)
-	Object.entries(outputs).forEach(([k, v]) => write([getDestiny(k)], v, noop))
+	Object.entries(outputs).forEach(([k, v]) =>
+		write([getDestiny(k)], { main: v, totals: getTotals(k), dates }, noop),
+	)
 }
 
 module.exports = () =>

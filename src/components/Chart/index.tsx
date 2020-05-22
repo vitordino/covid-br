@@ -55,9 +55,7 @@ type ResponsiveChartProps = {
 
 const ResponsiveChart = (props: ResponsiveChartProps) => (
 	<ParentSize>
-		{({ width, height }) => (
-			<Chart width={width} height={height} {...props} />
-		)}
+		{({ width, height }) => <Chart width={width} height={height} {...props} />}
 	</ParentSize>
 )
 

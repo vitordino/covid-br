@@ -1,11 +1,11 @@
-const getCountryData = require('./getCountryData')
-const getStatesData = require('./getStatesData')
-const copyStatesMeta = require('./copyStatesMeta')
-
 const main = () => {
-	getCountryData()
-	getStatesData()
-	copyStatesMeta()
+	Promise.all([require('./copyStatesMeta')()]).finally(() =>
+		Promise.all([require('./getCountryData')()]).finally(() =>
+			Promise.all([require('./downloadTopo')()]).finally(() =>
+				Promise.all([require('./getStatesData')()]),
+			),
+		),
+	)
 }
 
 main()

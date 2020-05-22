@@ -13,7 +13,9 @@
 
 # data
 /public/data
+/public/topo
 /src/data
+/data/country.json
 
 # misc
 .DS_Store
