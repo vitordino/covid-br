@@ -7,7 +7,8 @@ import dateToString from 'utils/dateToString'
 import fetcher from 'utils/fetcher'
 import Container from 'components/Container'
 import TitleHeader from 'components/TitleHeader'
-import RangeInput from 'components/RangeInput'
+import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
+import StateTable from 'components/Table/StateTable'
 
 type StateProps = {
 	id: keyof typeof StatesEnum
@@ -16,8 +17,12 @@ type StateProps = {
 const getStateName = (id: keyof typeof StatesEnum) => statesMeta?.[id]?.n
 
 type StateDataType = {
-	main: Main
-	totals: Totals
+	main: {
+		[key: string]: CityEntry[]
+	}
+	totals: {
+		[key: string]: CityEntry
+	}
 	dates: DatesEnum[]
 }
 
@@ -47,10 +52,9 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 					onChange={v => setDateIndex(parseInt(v))}
 					renderOption={dateToString}
 				/>
-
-				<pre>{JSON.stringify({ data, total }, null, 2)}</pre>
+				<RelativeAndDailySwitcher />
+				<StateTable data={data} total={total} />
 			</Container>
-			<RangeInput dates={dates} totals={totals} />
 		</>
 	)
 }
