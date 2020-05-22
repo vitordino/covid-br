@@ -23,6 +23,18 @@ type StateEntry = {
 	pnr: number | null
 }
 
+type CityEntry = {
+	ct?: string
+	id?: number
+	tc: number
+	nc: number
+	td: number
+	nd: number
+	ptd: number
+	ptc: number
+	dbc?: number
+}
+
 type DateMapOf<T> = { [K in DatesEnum]: T }
 
 type Main = DateMapOf<StateEntry[]>
