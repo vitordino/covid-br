@@ -3,12 +3,8 @@ import styled, { css } from 'styled-components'
 
 import Text from 'components/Text'
 
-type SwitchWrapperProps = {
-	isVisible?: boolean
-}
-
 // prettier-ignore
-const SwitchWrapper = styled.label<SwitchWrapperProps>`
+const SwitchWrapper = styled.label`
 	display: flex;
 	flex: 1;
 	cursor: pointer;
@@ -21,7 +17,6 @@ const SwitchWrapper = styled.label<SwitchWrapperProps>`
 		color: var(--color-base00);
 	}
 	${p => p.theme.above('md')`border-radius: 0.25rem;`}
-	${p => !p.isVisible && `display: none;`}
 `
 
 type OptionProps = {
@@ -53,9 +48,8 @@ const Switch = ({
 	checked,
 	onChange,
 	options = [],
-	isVisible = true,
 }: SwitchProps) => (
-	<SwitchWrapper isVisible={isVisible}>
+	<SwitchWrapper>
 		<input
 			type='checkbox'
 			checked={checked}
