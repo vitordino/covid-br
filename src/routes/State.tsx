@@ -6,6 +6,7 @@ import useStore from 'store'
 import dateToString from 'utils/dateToString'
 import fetcher from 'utils/fetcher'
 import Container from 'components/Container'
+import Grid from 'components/Grid'
 import TitleHeader from 'components/TitleHeader'
 import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
 import StateTable from 'components/Table/StateTable'
@@ -52,8 +53,15 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 					onChange={v => setDateIndex(parseInt(v))}
 					renderOption={dateToString}
 				/>
-				<RelativeAndDailySwitcher />
-				<StateTable data={data} total={total} />
+				<Grid.Row>
+					<Grid.Column xs={16} lg={10}>
+						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
+						<StateTable data={data} total={total} />
+					</Grid.Column>
+					<Grid.Column xs={16} lg={6}>
+						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
+					</Grid.Column>
+				</Grid.Row>
 			</Container>
 		</>
 	)
