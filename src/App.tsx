@@ -21,7 +21,7 @@ const App = () => (
 						{({ match }) => {
 							const id: string | null = match?.params?.id
 							if (!id || !(id.toUpperCase() in statesMeta)) return <NotFound />
-							return <State id={match?.params?.id?.toLowerCase()} />
+							return <State id={match?.params?.id.toUpperCase()} />
 						}}
 					</Route>
 					<Route path='*'>
