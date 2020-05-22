@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useMemo, useEffect } from 'react'
 import { useTable, useSortBy, Column } from 'react-table'
 
