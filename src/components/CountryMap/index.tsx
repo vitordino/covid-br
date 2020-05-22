@@ -1,5 +1,6 @@
 import React from 'react'
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
+import { useHistory } from 'react-router-dom'
 
 import useStore from 'store'
 import { getMapFill } from 'utils/colorScale'
@@ -10,6 +11,7 @@ const baseStyle = {
 	outline: 'none',
 	stroke: 'var(--color-base22)',
 	strokeWidth: 0.5,
+	cursor: 'pointer',
 }
 
 const mapStyle = {
@@ -23,6 +25,7 @@ type CountryMapProps = {
 }
 
 const CountryMap = ({ data }: CountryMapProps) => {
+	const { push } = useHistory()
 	const sort = useStore(s => s.sort)
 	const [hoveredState, setHoveredState] = useStore(s => [
 		s.hoveredState,
@@ -44,6 +47,7 @@ const CountryMap = ({ data }: CountryMapProps) => {
 							key={geo.rsmKey}
 							geography={geo}
 							style={mapStyle}
+							onClick={() => push(`/${geo.id}`)}
 							fill={
 								geo.id === hoveredState
 									? 'yellow'
