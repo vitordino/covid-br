@@ -68,11 +68,11 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 				/>
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
-						<RelativeAndDailySwitcher />
+						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
 						<CountryTable data={data} total={total} statesMeta={states} />
 					</Grid.Column>
 					<Grid.Column xs={16} lg={6}>
-						<RelativeAndDailySwitcher desktop />
+						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
 						<CountryMap data={data} />
 						<Text
 							weight={400}

@@ -6,12 +6,12 @@ import useStore from 'store'
 import Text from 'components/Text'
 
 type WrapperProps = {
-	desktop?: boolean
+	visibleOn?: string[]
 	controls?: string[]
 }
 
 // prettier-ignore
-const Wrapper = styled.div<WrapperProps>`
+const Wrapper = styled.div`
 	position: sticky;
 	top: 0.25rem;
 	display: flex;
@@ -24,10 +24,6 @@ const Wrapper = styled.div<WrapperProps>`
 	${p => p.theme.above('lg')`
     margin: 0;
   `}
-	${p => !p.desktop && p.theme.above('lg')`
-		display: none;
-	`}
-
 `
 
 type EachWrapperProps = {
@@ -76,7 +72,12 @@ type EachProps = {
 	isVisible?: boolean
 }
 
-const Each = ({ checked, onChange, options = [], isVisible = true }: EachProps) => (
+const Each = ({
+	checked,
+	onChange,
+	options = [],
+	isVisible = true,
+}: EachProps) => (
 	<EachWrapper isVisible={isVisible}>
 		<input
 			type='checkbox'
@@ -93,16 +94,37 @@ const Each = ({ checked, onChange, options = [], isVisible = true }: EachProps) 
 	</EachWrapper>
 )
 
-const RelativeAndDailySwitcher = ({ desktop, controls = ['relative', 'daily'] }: WrapperProps) => {
+const RelativeAndDailySwitcher = ({
+	visibleOn = ['xs', 'sm', 'md', 'lg', 'xg'],
+	controls = ['relative', 'daily'],
+}: WrapperProps) => {
 	const breakpoints = useBreakpoints()
+	const currentBreakpoint = breakpoints[breakpoints.length - 1]
 	const [relative, setRelative] = useStore(s => [s.relative, s.setRelative])
 	const [daily, setDaily] = useStore(s => [s.daily, s.setDaily])
-	if(!controls.length) return <></>
+	const isVisible = visibleOn.find(x => x === currentBreakpoint)
+	if (!controls.length || !isVisible) return <></>
 	return (
-		<Wrapper desktop={desktop}>
+		<Wrapper>
 			{controls.map(x => {
-				if(x === 'relative') return <Each checked={!relative} onChange={x => setRelative(!x)} options={['Absolute', 'Relative']} />
-				if(x === 'daily') return <Each checked={daily} onChange={setDaily} options={['Total', 'New']} isVisible={!breakpoints.includes('md')} />
+				if (x === 'relative')
+					return (
+						<Each
+							checked={!relative}
+							onChange={x => setRelative(!x)}
+							options={['Absolute', 'Relative']}
+						/>
+					)
+				if (x === 'daily')
+					return (
+						<Each
+							checked={daily}
+							onChange={setDaily}
+							options={['Total', 'New']}
+							isVisible={!breakpoints.includes('md')}
+						/>
+					)
+				return null
 			})}
 		</Wrapper>
 	)
