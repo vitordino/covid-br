@@ -1,9 +1,9 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { useBreakpoints } from 'etymos'
 
 import useStore from 'store'
-import Text from 'components/Text'
+import Switch from 'components/Switch'
 
 type WrapperProps = {
 	visibleOn?: string[]
@@ -26,67 +26,6 @@ const Wrapper = styled.div`
   `}
 `
 
-// prettier-ignore
-const EachWrapper = styled.label`
-	display: flex;
-	flex: 1;
-	cursor: pointer;
-	background: var(--color-base06);
-	padding: 0.5rem 0.75rem;
-	border-radius: 0.25rem 0.25rem 0 0;
-	box-shadow: 0 0 0 0.25rem var(--color-base00);
-	&:hover {
-		background: var(--color-base);
-		color: var(--color-base00);
-	}
-	${p => p.theme.above('md')`border-radius: 0.25rem;`}
-`
-
-type OptionProps = {
-	active?: boolean
-}
-
-// prettier-ignore
-const Option = styled(Text)<OptionProps>`
-	color: var(--color-base44);
-	${p => p.active && css`
-    color: var(--color-base88);
-  `}
-	${EachWrapper}:hover & {
-		color: var(--color-base66);
-    ${p => p.active && css`
-      color: var(--color-base03);
-    `}
-	}
-`
-
-type EachProps = {
-	checked: boolean
-	onChange: (v: boolean) => void
-	options: [string?, string?]
-}
-
-const Each = ({
-	checked,
-	onChange,
-	options = [],
-}: EachProps) => (
-	<EachWrapper>
-		<input
-			type='checkbox'
-			checked={checked}
-			onChange={({ target }) => onChange(target.checked)}
-		/>
-		<Option active={!checked} weight={500} xs={1}>
-			{options[0]}
-		</Option>
-		<Option xs={1}>&nbsp; / &nbsp;</Option>
-		<Option active={checked} weight={500} xs={1}>
-			{options[1]}
-		</Option>
-	</EachWrapper>
-)
-
 const RelativeAndDailySwitcher = ({
 	visibleOn = ['xs', 'sm', 'md', 'lg', 'xg'],
 	controls = ['relative', 'daily'],
@@ -102,7 +41,7 @@ const RelativeAndDailySwitcher = ({
 			{controls.map(x => {
 				if (x === 'relative')
 					return (
-						<Each
+						<Switch
 							checked={!relative}
 							onChange={x => setRelative(!x)}
 							options={['Absolute', 'Relative']}
@@ -110,7 +49,7 @@ const RelativeAndDailySwitcher = ({
 					)
 				if (x === 'daily' && !breakpoints.includes('md'))
 					return (
-						<Each
+						<Switch
 							checked={daily}
 							onChange={setDaily}
 							options={['Total', 'New']}
