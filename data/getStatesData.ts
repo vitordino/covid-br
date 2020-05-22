@@ -19,7 +19,7 @@ const getTotals = id =>
 	Object.entries(main).reduce(
 		(acc, [k, v]) => ({
 			...acc,
-			[k]: clearMainKeys(v.find(({ st }) => st === id)),
+			[k]: v.filter(({ st }) => st === id).map(clearMainKeys)[0],
 		}),
 		{},
 	)
