@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
+import { Link } from 'react-router-dom'
 
 import range from 'utils/range'
 import type { Transform } from 'components/Text'
@@ -32,6 +33,7 @@ type StaticCellProps = {
 	children?: ReactNode
 	bold?: boolean
 	transform?: Transform
+	to?: string
 }
 
 export const CellWrapper = styled(Text)`
@@ -56,8 +58,10 @@ export const Cell = ({
 	children,
 	transform,
 	bold = true,
+	to,
 }: StaticCellProps) => (
-	<CellWrapper transform={transform}>
+	// @ts-ignore
+	<CellWrapper as={to ? Link : null} to={to} transform={transform}>
 		{!!left && <Left>{left}</Left>}
 		{!!left && '\t'}
 		{bold && <strong>{children}</strong>}
@@ -75,6 +79,7 @@ type DynamicCellProps = {
 	mainRender?: (x: ReactNode) => ReactNode
 	children?: ReactNode
 	isVisible: boolean
+	to?: string
 }
 
 export const DynamicCell = ({
@@ -87,10 +92,11 @@ export const DynamicCell = ({
 	mainRender = x => x,
 	children,
 	isVisible,
+	to,
 }: DynamicCellProps) => {
 	if (!isVisible) return null
 	return (
-		<Cell left={leftProp && leftRender(data?.[row.index]?.[leftProp])}>
+		<Cell to={to} left={leftProp && leftRender(data?.[row.index]?.[leftProp])}>
 			{children || mainRender(row.values?.[prop || column.id])}
 		</Cell>
 	)
