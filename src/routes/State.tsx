@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useMemo, useLayoutEffect } from 'react'
 import useSWR from 'swr'
 
@@ -10,6 +11,7 @@ import Grid from 'components/Grid'
 import TitleHeader from 'components/TitleHeader'
 import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
 import StateTable from 'components/Table/StateTable'
+import RangeInput from 'components/RangeInput'
 
 type StateProps = {
 	id: keyof typeof StatesEnum
@@ -63,6 +65,7 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 					</Grid.Column>
 				</Grid.Row>
 			</Container>
+			<RangeInput dates={dates} totals={totals} />
 		</>
 	)
 }

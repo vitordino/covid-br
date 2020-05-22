@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { scaleLinear } from 'd3-scale'
 import { schemeReds, schemeGreys, schemeGreens } from 'd3-scale-chromatic'
 import range from 'utils/range'
@@ -135,8 +136,8 @@ const getSafeProp: GetSafeProp = (prop, fallbackProp) => {
 // @ts-ignore
 export const colorScale = (domain, range) => scaleLinear(domain, range)
 
-export const getRangeFill = (data: StateEntry) => (
-	prop: keyof StateEntry,
+export const getRangeFill = (data: StateEntry | CityEntry) => (
+	prop: keyof StateEntry | CityEntry,
 	fallbackProp: PropUnion = 'tc',
 ) => {
 	const safeProp = getSafeProp(prop, fallbackProp)
