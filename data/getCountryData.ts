@@ -376,19 +376,6 @@ const handleEnd = (rowCount: number) => {
 	write(numberDestinies, rest, handleWrite)
 }
 
-const promisify = (fn: () => any) => {
-   return (...args: any[]) => {
-     return new Promise((resolve, reject) => {
-       function customCallback(err: any, ...results: any) {
-         if (err) return reject(err)
-         return resolve(results.length === 1 ? results[0] : results) 
-        }
-        args.push(customCallback)
-        fn.call(args)
-      })
-   }
-}
-
 const exportedFunction = () =>
 	get(url, (res: any) =>
 		res
@@ -398,4 +385,4 @@ const exportedFunction = () =>
 			.on('end', handleEnd),
 	)
 
-module.exports = promisify(exportedFunction)
+module.exports = exportedFunction

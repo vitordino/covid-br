@@ -1,13 +1,13 @@
 const wait = require('waait')
 
-const main = async () => {
-	await Promise.all([
-		require('./copyStatesMeta')(),
-		require('./getCountryData')(),
-		await wait(1),
-		require('./downloadTopo')(),
-		require('./getStatesData')(),
-	])
+const main = () => {
+	Promise.all([require('./copyStatesMeta')()]).finally(() =>
+		Promise.all([require('./getCountryData')()]).finally(() =>
+			Promise.all([require('./downloadTopo')()]).finally(() =>
+				Promise.all([require('./getStatesData')()]),
+			),
+		),
+	)
 }
 
 main()
