@@ -66,7 +66,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 				),
 				sortInverted: true,
 				Cell: ({ row }: CellProps) => (
-					<Cell>
+					<Cell to={`/${row.values.st.toLowerCase()}`}>
 						<span
 							// @ts-ignore
 							title={statesMeta?.[row.values.st].n}
@@ -93,6 +93,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						leftRender={getCellRender(relative, true)}
 						mainRender={getCellRender(relative, daily)}
 						isVisible={!relative}
+						to={`/${row.values.st.toLowerCase()}`}
 					/>
 				),
 			},
@@ -113,6 +114,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						leftRender={getCellRender(relative, true)}
 						mainRender={getCellRender(relative, daily)}
 						isVisible={!relative}
+						to={`/${row.values.st.toLowerCase()}`}
 					/>
 				),
 			},
@@ -133,6 +135,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						leftRender={getCellRender(relative, true)}
 						mainRender={getCellRender(relative, daily)}
 						isVisible={!relative}
+						to={`/${row.values.st.toLowerCase()}`}
 					/>
 				),
 			},
@@ -154,6 +157,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						leftRender={getCellRender(relative, true)}
 						mainRender={getCellRender(relative, daily)}
 						isVisible={relative}
+						to={`/${row.values.st.toLowerCase()}`}
 					/>
 				),
 			},
@@ -175,6 +179,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						leftRender={getCellRender(relative, true)}
 						mainRender={getCellRender(relative, daily)}
 						isVisible={relative}
+						to={`/${row.values.st.toLowerCase()}`}
 					/>
 				),
 			},
@@ -196,6 +201,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						leftRender={getCellRender(relative, true)}
 						mainRender={getCellRender(relative, daily)}
 						isVisible={relative}
+						to={`/${row.values.st.toLowerCase()}`}
 					/>
 				),
 			},
