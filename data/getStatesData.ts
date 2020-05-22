@@ -24,35 +24,8 @@ const getTotals = id =>
 		{},
 	)
 
-enum StatesEnum {
-	SP,
-	MG,
-	RJ,
-	BA,
-	PR,
-	RS,
-	PE,
-	CE,
-	PA,
-	SC,
-	MA,
-	GO,
-	AM,
-	ES,
-	PB,
-	RN,
-	MT,
-	AL,
-	PI,
-	DF,
-	MS,
-	SE,
-	RO,
-	TO,
-	AC,
-	AP,
-	RR,
-}
+// prettier-ignore
+enum StatesEnum { SP,	MG,	RJ,	BA,	PR,	RS,	PE,	CE,	PA,	SC,	MA,	GO,	AM,	ES,	PB,	RN,	MT,	AL,	PI,	DF,	MS,	SE,	RO,	TO,	AC,	AP,	RR }
 
 type StateKeys = keyof typeof StatesEnum
 
