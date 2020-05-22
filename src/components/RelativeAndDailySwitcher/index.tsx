@@ -26,12 +26,8 @@ const Wrapper = styled.div`
   `}
 `
 
-type EachWrapperProps = {
-	isVisible?: boolean
-}
-
 // prettier-ignore
-const EachWrapper = styled.label<EachWrapperProps>`
+const EachWrapper = styled.label`
 	display: flex;
 	flex: 1;
 	cursor: pointer;
@@ -44,7 +40,6 @@ const EachWrapper = styled.label<EachWrapperProps>`
 		color: var(--color-base00);
 	}
 	${p => p.theme.above('md')`border-radius: 0.25rem;`}
-	${p => !p.isVisible && `display: none;`}
 `
 
 type OptionProps = {
@@ -69,16 +64,14 @@ type EachProps = {
 	checked: boolean
 	onChange: (v: boolean) => void
 	options: [string?, string?]
-	isVisible?: boolean
 }
 
 const Each = ({
 	checked,
 	onChange,
 	options = [],
-	isVisible = true,
 }: EachProps) => (
-	<EachWrapper isVisible={isVisible}>
+	<EachWrapper>
 		<input
 			type='checkbox'
 			checked={checked}
@@ -115,13 +108,12 @@ const RelativeAndDailySwitcher = ({
 							options={['Absolute', 'Relative']}
 						/>
 					)
-				if (x === 'daily')
+				if (x === 'daily' && !breakpoints.includes('md'))
 					return (
 						<Each
 							checked={daily}
 							onChange={setDaily}
 							options={['Total', 'New']}
-							isVisible={!breakpoints.includes('md')}
 						/>
 					)
 				return null
