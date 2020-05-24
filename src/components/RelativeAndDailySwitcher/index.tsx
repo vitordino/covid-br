@@ -1,15 +1,17 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
+import { useBreakpoints } from 'etymos'
 
 import useStore from 'store'
-import Text from 'components/Text'
+import Switch from 'components/Switch'
 
 type WrapperProps = {
-	desktop?: boolean
+	visibleOn?: string[]
+	controls?: string[]
 }
 
 // prettier-ignore
-const Wrapper = styled.div<WrapperProps>`
+const Wrapper = styled.div`
 	position: sticky;
 	top: 0.25rem;
 	display: flex;
@@ -17,90 +19,44 @@ const Wrapper = styled.div<WrapperProps>`
 	z-index: 100;
 	background: var(--color-base00);
 	${p => p.theme.above('md')`
-    display: none;
     border-radius: 0.25rem;
+  `}
+	${p => p.theme.above('lg')`
     margin: 0;
   `}
-	${p => p.desktop && css`
-		display: none;
-		${p.theme.above('md')`
-			display: flex;
-		`}
-	`}
 `
 
-// prettier-ignore
-const Each = styled.label<WrapperProps>`
-	display: flex;
-	flex: 1;
-	cursor: pointer;
-	background: var(--color-base06);
-	padding: 0.5rem 0.75rem;
-	border-radius: 0.25rem 0.25rem 0 0;
-	box-shadow: 0 0 0 0.25rem var(--color-base00);
-	&:hover {
-		background: var(--color-base);
-		color: var(--color-base00);
-	}
-	${p => p.theme.above('md')`
-    border-radius: 0.25rem;
-  `}
-	${p => !p.desktop && p.theme.above('md')`
-		display: none;
-	`}
-`
-
-type OptionProps = {
-	active?: boolean
-}
-
-// prettier-ignore
-const Option = styled(Text)<OptionProps>`
-	color: var(--color-base44);
-	${p => p.active && css`
-    color: var(--color-base88);
-  `}
-	${Each}:hover & {
-		color: var(--color-base66);
-    ${p => p.active && css`
-      color: var(--color-base03);
-    `}
-	}
-`
-
-const RelativeAndDailySwitcher = (props: WrapperProps) => {
+const RelativeAndDailySwitcher = ({
+	visibleOn = ['xs', 'sm', 'md', 'lg', 'xg'],
+	controls = ['relative', 'daily'],
+}: WrapperProps) => {
+	const breakpoints = useBreakpoints()
+	const currentBreakpoint = breakpoints[breakpoints.length - 1]
 	const [relative, setRelative] = useStore(s => [s.relative, s.setRelative])
 	const [daily, setDaily] = useStore(s => [s.daily, s.setDaily])
+	const isVisible = visibleOn.find(x => x === currentBreakpoint)
+	if (!controls.length || !isVisible) return <></>
 	return (
-		<Wrapper {...props}>
-			<Each {...props}>
-				<input
-					type='checkbox'
-					checked={relative}
-					onChange={({ target }) => setRelative(target.checked)}
-				/>
-				<Option active={!relative} weight={500} xs={1}>
-					Absolute
-				</Option>
-				<Option xs={1}>&nbsp; / &nbsp;</Option>
-				<Option active={relative} weight={500} xs={1}>
-					Relative
-				</Option>
-			</Each>
-			<Each desktop={false}>
-				<input
-					type='checkbox'
-					checked={daily}
-					onChange={({ target }) => setDaily(target.checked)}
-				/>
-				<Option active={!daily} weight={500} xs={1}>
-					Total
-				</Option>
-				<Option xs={1}>&nbsp; / &nbsp;</Option>
-				<Option active={daily} weight={500} xs={1}>
-					New
-				</Option>
-			</Each>
+		<Wrapper>
+			{controls.map(x => {
+				if (x === 'relative')
+					return (
+						<Switch
+							checked={!relative}
+							onChange={x => setRelative(!x)}
+							options={['Absolute', 'Relative']}
+						/>
+					)
+				if (x === 'daily' && !breakpoints.includes('md'))
+					return (
+						<Switch
+							checked={daily}
+							onChange={setDaily}
+							options={['Total', 'New']}
+						/>
+					)
+				return null
+			})}
 		</Wrapper>
 	)
 }

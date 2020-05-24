@@ -1,5 +1,7 @@
 import { scaleLinear } from 'd3-scale'
 import { schemeReds, schemeGreys, schemeGreens } from 'd3-scale-chromatic'
+import { values }  from 'ramda'
+
 import range from 'utils/range'
 
 import {
@@ -133,21 +135,47 @@ const getSafeProp: GetSafeProp = (prop, fallbackProp) => {
 }
 
 // @ts-ignore
-export const colorScale = (domain, range) => scaleLinear(domain, range)
+const colorScale = (domain, range) => scaleLinear(domain, range)
 
-export const getRangeFill = (data: StateEntry) => (
-	prop: keyof StateEntry,
-	fallbackProp: PropUnion = 'tc',
-) => {
-	const safeProp = getSafeProp(prop, fallbackProp)
+const higher = (a: number, b: number) => Math.max(a, b)
 
-	const x = data?.[safeProp]
+const defaultFilter = (x: any) => !!x
+
+type GetHighestType = {
+	<T extends object>(filter?: (x: any) => boolean): (prop: keyof T) => (x: T[]) => number
+}
+
+const getHighest: GetHighestType = (filter = defaultFilter) => prop => x =>
+	+values(x)
+		.filter(filter)
+		// @ts-ignore
+		.filter(x => !!x?.[prop])
+		// @ts-ignore
+		.map(x => x?.[prop])
+		.reduce(higher, 0)
+		.toFixed(6)
+
+type GetRangeFill = {
+  <T>(data: T[]): (prop: keyof T, fallbackProp?: string) => (entry: T) => string
+}
+
+export const getRangeFill: GetRangeFill = data => prop => entry => {
+	// @ts-ignore
+	const safeProp = getSafeProp(prop, 'tc')
+	
+	// @ts-ignore
+	const x = entry?.[safeProp]
 	if (typeof x !== 'number') return '#eee'
+	
+	// @ts-ignore
+	const highest = getHighest()(safeProp)(data)
+
 	return colorScale(
-		totalDomains[safeProp],
+		getDomain(highest * multipliers[safeProp]),
 		scales[safeProp],
 	)(x * multipliers[safeProp])
 }
+
 
 export const getMapFill = (data: StateEntry[], id?: string) => (
 	prop: keyof StateEntry,

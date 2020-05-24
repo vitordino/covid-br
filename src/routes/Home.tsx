@@ -2,9 +2,10 @@ import React, { useMemo, useLayoutEffect } from 'react'
 import useSWR from 'swr'
 
 import useStore from 'store'
+import dateToString from 'utils/dateToString'
 import fetcher from 'utils/fetcher'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
-import CountryTable from 'components/CountryTable'
+import CountryTable from 'components/Table/CountryTable'
 import CountryMap from 'components/CountryMap'
 import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
 import Container from 'components/Container'
@@ -13,11 +14,6 @@ import Text from 'components/Text'
 import RangeInput from 'components/RangeInput'
 import StatsCard from 'components/StatsCard'
 import TitleHeader from 'components/TitleHeader'
-
-const dateToString = (date: string) => {
-	const [y, m, d] = date.split('-')
-	return `${d}/${m}/${y}`
-}
 
 type CountryDataType = {
 	main: Main
@@ -72,11 +68,11 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 				/>
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
-						<RelativeAndDailySwitcher />
+						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
 						<CountryTable data={data} total={total} statesMeta={states} />
 					</Grid.Column>
 					<Grid.Column xs={16} lg={6}>
-						<RelativeAndDailySwitcher desktop />
+						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
 						<CountryMap data={data} />
 						<Text
 							weight={400}
@@ -107,7 +103,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 					</Grid.Column>
 				</Grid.Row>
 			</Container>
-			<RangeInput dates={dates} totals={totals} />
+			<RangeInput<StateEntry> dates={dates} totals={totals} />
 		</>
 	)
 }
