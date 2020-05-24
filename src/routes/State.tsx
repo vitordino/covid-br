@@ -65,7 +65,7 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 					</Grid.Column>
 				</Grid.Row>
 			</Container>
-			<RangeInput dates={dates} totals={totals} />
+			<RangeInput<CityEntry> dates={dates} totals={totals} />
 		</>
 	)
 }

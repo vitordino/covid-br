@@ -103,7 +103,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 					</Grid.Column>
 				</Grid.Row>
 			</Container>
-			<RangeInput dates={dates} totals={totals} />
+			<RangeInput<StateEntry> dates={dates} totals={totals} />
 		</>
 	)
 }
