@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useMemo, useLayoutEffect } from 'react'
+import styled from 'styled-components'
 import useSWR from 'swr'
 
 import statesMeta from 'data/statesMeta.json'
@@ -12,6 +13,10 @@ import TitleHeader from 'components/TitleHeader'
 import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
 import StateTable from 'components/Table/StateTable'
 import RangeInput from 'components/RangeInput'
+
+const OuterGrid = styled(Grid.Row)`
+	align-items: stretch;
+`
 
 type StateProps = {
 	id: keyof typeof StatesEnum
@@ -55,7 +60,7 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 					onChange={v => setDateIndex(parseInt(v))}
 					renderOption={dateToString}
 				/>
-				<Grid.Row>
+				<OuterGrid>
 					<Grid.Column xs={16} lg={10}>
 						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
 						<StateTable data={data} total={total} />
@@ -63,7 +68,7 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 					<Grid.Column xs={16} lg={6}>
 						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
 					</Grid.Column>
-				</Grid.Row>
+				</OuterGrid>
 			</Container>
 			<RangeInput<CityEntry> dates={dates} totals={totals} />
 		</>

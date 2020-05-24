@@ -1,4 +1,5 @@
 import React, { useMemo, useLayoutEffect } from 'react'
+import styled from 'styled-components'
 import useSWR from 'swr'
 
 import useStore from 'store'
@@ -14,6 +15,10 @@ import Text from 'components/Text'
 import RangeInput from 'components/RangeInput'
 import StatsCard from 'components/StatsCard'
 import TitleHeader from 'components/TitleHeader'
+
+const OuterGrid = styled(Grid.Row)`
+	align-items: stretch;
+`
 
 type CountryDataType = {
 	main: Main
@@ -66,7 +71,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 					onChange={v => setDateIndex(parseInt(v))}
 					renderOption={dateToString}
 				/>
-				<Grid.Row>
+				<OuterGrid>
 					<Grid.Column xs={16} lg={10}>
 						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
 						<CountryTable data={data} total={total} statesMeta={states} />
@@ -101,7 +106,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 							dates={dates}
 						/>
 					</Grid.Column>
-				</Grid.Row>
+				</OuterGrid>
 			</Container>
 			<RangeInput<StateEntry> dates={dates} totals={totals} />
 		</>
