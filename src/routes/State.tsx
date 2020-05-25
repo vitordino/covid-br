@@ -7,6 +7,7 @@ import statesMeta from 'data/statesMeta.json'
 import useStore from 'store'
 import dateToString from 'utils/dateToString'
 import fetcher from 'utils/fetcher'
+import useRelativeSortSync from 'hooks/useRelativeSortSync'
 import Container from 'components/Container'
 import Grid from 'components/Grid'
 import TitleHeader from 'components/TitleHeader'
@@ -49,6 +50,8 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 		setDateIndex(dates.length - 1)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+
+	useRelativeSortSync()
 
 	return (
 		<>
