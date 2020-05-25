@@ -41,9 +41,9 @@ const RelativeAndDailySwitcher = ({
 				if (x === 'relative')
 					return (
 						<Switch
-							checked={!relative}
-							onChange={x => setRelative(!x)}
-							options={['Absolute', 'Relative']}
+							checked={relative}
+							onChange={x => setRelative(x)}
+							options={['Relative', 'Absolute']}
 						/>
 					)
 				return null
