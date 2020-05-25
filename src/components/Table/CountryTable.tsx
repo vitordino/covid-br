@@ -208,7 +208,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 			},
 		],
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[data, relative, daily],
+		[data, relative],
 	)
 
 	const {

@@ -33,7 +33,6 @@ const RelativeAndDailySwitcher = ({
 	const breakpoints = useBreakpoints()
 	const currentBreakpoint = breakpoints[breakpoints.length - 1]
 	const [relative, setRelative] = useStore(s => [s.relative, s.setRelative])
-	const [daily, setDaily] = useStore(s => [s.daily, s.setDaily])
 	const isVisible = visibleOn.find(x => x === currentBreakpoint)
 	if (!controls.length || !isVisible) return <></>
 	return (
@@ -45,14 +44,6 @@ const RelativeAndDailySwitcher = ({
 							checked={!relative}
 							onChange={x => setRelative(!x)}
 							options={['Absolute', 'Relative']}
-						/>
-					)
-				if (x === 'daily' && !breakpoints.includes('md'))
-					return (
-						<Switch
-							checked={daily}
-							onChange={setDaily}
-							options={['Total', 'New']}
 						/>
 					)
 				return null
