@@ -18,6 +18,7 @@ import {
 	TableRow,
 	initialState,
 	getCellRender,
+	EmptyCells,
 } from './shared'
 
 type Cell = {
@@ -82,8 +83,9 @@ const StateTable = ({ data, total }: StateTableProps) => {
 						data={data}
 						prop={caseProp}
 						leftProp={caseLeftProp}
-						leftRender={getCellRender(relative, true)}
-						mainRender={getCellRender(relative, false)}
+						leftRender={getCellRender(false, true)}
+						mainRender={getCellRender(false, false)}
+						isVisible={!relative}
 					/>
 				),
 			},
@@ -101,14 +103,55 @@ const StateTable = ({ data, total }: StateTableProps) => {
 						data={data}
 						prop={deathProp}
 						leftProp={deathLeftProp}
-						leftRender={getCellRender(relative, true)}
-						mainRender={getCellRender(relative, false)}
+						leftRender={getCellRender(false, true)}
+						mainRender={getCellRender(false, false)}
+						isVisible={!relative}
+					/>
+				),
+			},
+			{
+				accessor: 'ptc',
+				Header: (x: any) => (
+					<Header isVisible={relative} {...x}>
+						Confirmed
+					</Header>
+				),
+				Cell: ({ row, column }: Cell) => (
+					<DynamicCell
+						row={row}
+						column={column}
+						data={data}
+						prop={caseProp}
+						leftProp={caseLeftProp}
+						leftRender={getCellRender(true, true)}
+						mainRender={getCellRender(true, false)}
+						isVisible={relative}
+					/>
+				),
+			},
+			{
+				accessor: 'ptd',
+				Header: (x: any) => (
+					<Header isVisible={relative} {...x}>
+						Deaths
+					</Header>
+				),
+				Cell: ({ row, column }: Cell) => (
+					<DynamicCell
+						row={row}
+						column={column}
+						data={data}
+						prop={deathProp}
+						leftProp={deathLeftProp}
+						leftRender={getCellRender(true, true)}
+						mainRender={getCellRender(true, false)}
+						isVisible={relative}
 					/>
 				),
 			},
 		],
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[data],
+		[data, relative],
 	)
 
 	const {
@@ -183,16 +226,18 @@ const StateTable = ({ data, total }: StateTableProps) => {
 						<td>
 							<Cell transform='capitalize'>Total</Cell>
 						</td>
+						<EmptyCells count={2} isVisible={relative} />
 						<td>
 							<Cell left={getCellRender(relative, true)(total[caseLeftProp])}>
-								{total[caseProp]}
+								{getCellRender(relative)(total[caseProp])}
 							</Cell>
 						</td>
 						<td>
 							<Cell left={getCellRender(relative, true)(total[deathLeftProp])}>
-								{total[deathProp]}
+								{getCellRender(relative)(total[deathProp])}
 							</Cell>
 						</td>
+						<EmptyCells count={2} isVisible={!relative} />
 					</TotalRow>
 				</tfoot>
 			</Table>
