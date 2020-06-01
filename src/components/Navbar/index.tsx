@@ -27,16 +27,9 @@ const Wrapper = styled(Container)<WrapperProps>`
 	padding-bottom: 1rem;
 	color: var(--color-base88);
 	color: ${({ sort }) => getColorOf(sort, 5)};
-	svg {
-		display: block;
-		height: 1.5rem;
-	}
 	${p => p.theme.above('md')`
     padding-top: 2rem;
     padding-bottom: 2rem;
-    svg {
-      height: 2rem;
-    }
   `}
 `
 
@@ -50,7 +43,7 @@ const Navbar = () => {
 		<Wrapper as='nav' sort={sort}>
 			<LogoLink to='/'>
 				<Spacer.H xs={0.5} />
-				<Logo />
+				<Logo xs={1.5} md={2} />
 				<Spacer.H xs={0.5} />
 				<Text weight={600} xs={2} md={3}>
 					COVID — BR
