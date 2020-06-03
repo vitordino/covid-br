@@ -143,7 +143,8 @@ type RenderValueProps = {
 const MULTIPLIER = 10000
 
 const RenderValue = ({ value, isNew, kind }: RenderValueProps) => {
-	if (typeof value !== 'number') return <>{value}</>
+	if (!value) return <br />
+	if (!isFinite(value)) return <>{value}</>
 	if (kind === 'relative')
 		return (
 			<>
