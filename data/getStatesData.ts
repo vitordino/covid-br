@@ -11,7 +11,7 @@ const selectKeys = (keys: string[]) => (obj: Record<string, any>) =>
 		return { ...acc, [k]: v }
 	}, {})
 
-const keysToMaintainFromMain = ['tc', 'nc', 'ptc', 'td', 'nd', 'ptd']
+const keysToMaintainFromMain = ['date', 'tc', 'nc', 'ptc', 'td', 'nd', 'ptd']
 
 const clearMainKeys = selectKeys(keysToMaintainFromMain)
 
@@ -49,6 +49,7 @@ type CityEntry = {
 }
 
 type CityOutput = {
+	date: string
 	ct: string
 	id: number
 	tc: number
