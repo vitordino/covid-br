@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
@@ -71,11 +72,15 @@ const FlexText = styled(Text)`
 	}
 `
 
-type StatsCardProps = {
-	prop: keyof StateEntry
+type StatsCardProps<T> = {
+	prop: keyof T
 	dates: DatesEnum[]
-	data?: StateEntry
-	chartData?: StateEntry[]
+	data?: T
+	chartData?: T[]
+}
+
+type StatsCardType = {
+	<T extends object>(props: StatsCardProps<T>): ReactNode
 }
 
 type DataMappingOf<T> = {
@@ -89,14 +94,14 @@ type DataMappingsOf<T> = {
 	[K in keyof T]?: DataMappingOf<T>
 }
 
-const dataMappingsBySort: DataMappingsOf<StateEntry> = {
+const dataMappingsBySort = {
 	tc: { main: 'tc', mainAlt: 'nc', sub: 'ptc', subAlt: 'pnc' },
 	td: { main: 'td', mainAlt: 'nd', sub: 'ptd', subAlt: 'pnd' },
 	tr: { main: 'tr', mainAlt: 'nr', sub: 'ptr', subAlt: 'pnr' },
 	ptc: { main: 'ptc', mainAlt: 'pnc', sub: 'tc', subAlt: 'nc' },
 	ptd: { main: 'ptd', mainAlt: 'pnd', sub: 'td', subAlt: 'nd' },
 	ptr: { main: 'ptr', mainAlt: 'pnr', sub: 'tr', subAlt: 'nr' },
-}
+} as const
 
 enum Scopes {
 	confirmed,
@@ -181,17 +186,19 @@ const Render = ({ bold, ...props }: RenderProps) => {
 	)
 }
 
-const StatsCard = ({ prop, data, dates, chartData }: StatsCardProps) => {
+const StatsCard: StatsCardType = ({ prop, data, dates, chartData }) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const isSorted = sort === prop
 	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[prop] || {}
 
-	if (!main || !data?.[main]) return null
+	if (!main || !data) return null
 
 	return (
 		<Wrapper prop={prop} isSorted={isSorted} onClick={() => setSort(prop)}>
 			<ChartContainer>
-				{chartData && <Chart dates={dates} prop={prop} data={chartData} />}
+				{!!dates && !!prop && !!chartData && (
+					<Chart dates={dates} prop={prop} data={chartData} />
+				)}
 			</ChartContainer>
 			<Content>
 				{main && (
@@ -201,21 +208,15 @@ const StatsCard = ({ prop, data, dates, chartData }: StatsCardProps) => {
 				)}
 				<Spacer.V xs={0.125} />
 				<FlexText xs={2}>
-					{!!main && (
-						<Render bold value={data?.[main]} {...typeMapping[main]} />
-					)}
+					<Render bold value={data?.[main]} {...typeMapping[main]} />
 					{!!main && !!mainAlt && ' '}
-					{!!mainAlt && (
-						<Render value={data?.[mainAlt]} {...typeMapping[mainAlt]} />
-					)}
+					<Render value={data?.[mainAlt]} {...typeMapping[mainAlt]} />
 				</FlexText>
 				<Spacer.V xs={0.125} />
 				<FlexText xs={0}>
-					{!!sub && <Render bold value={data?.[sub]} {...typeMapping[sub]} />}
+					<Render bold value={data?.[sub]} {...typeMapping[sub]} />
 					{!!sub && !!subAlt && ' '}
-					{!!subAlt && (
-						<Render value={data?.[subAlt]} {...typeMapping[subAlt]} />
-					)}
+					<Render value={data?.[subAlt]} {...typeMapping[subAlt]} />
 				</FlexText>
 			</Content>
 		</Wrapper>

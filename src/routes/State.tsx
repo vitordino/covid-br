@@ -12,6 +12,7 @@ import Container from 'components/Container'
 import Grid from 'components/Grid'
 import TitleHeader from 'components/TitleHeader'
 import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
+import StatsCard from 'components/StatsCard'
 import StateTable from 'components/Table/StateTable'
 import RangeInput from 'components/RangeInput'
 
@@ -41,10 +42,29 @@ interface InnerProps extends StateDataType {
 
 const Inner = ({ id, main, totals, dates }: InnerProps) => {
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
+	const relative = useStore(s => s.relative)
+	const hoveredState = useStore(s => s.hoveredState)
 	/* eslint-disable react-hooks/exhaustive-deps */
 	const total = useMemo(() => totals[dates[dateIndex]] || {}, [dateIndex])
 	const data = useMemo(() => main[dates[dateIndex]] || [], [dateIndex])
+
+	const hoveredData = hoveredState
+		? data?.find(({ id }) => id === hoveredState)
+		: total
+
+	const hoveredTimeSeries: CityEntry[] = useMemo(
+		() =>
+			hoveredState
+				? Object.values(main)
+						.flatMap(x => x)
+						.filter(x => x.id === hoveredState)
+				: Object.values(totals),
+		[hoveredState],
+	)
 	/* eslint-enable react-hooks/exhaustive-deps */
+
+	const caseProp = relative ? 'ptc' : 'tc'
+	const deathProp = relative ? 'ptd' : 'td'
 
 	useLayoutEffect(() => {
 		setDateIndex(dates.length - 1)
@@ -70,6 +90,18 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 					</Grid.Column>
 					<Grid.Column xs={16} lg={6}>
 						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
+						<StatsCard<CityEntry>
+							prop={caseProp}
+							data={hoveredData}
+							chartData={hoveredTimeSeries}
+							dates={dates}
+						/>
+						<StatsCard<CityEntry>
+							prop={deathProp}
+							data={hoveredData}
+							chartData={hoveredTimeSeries}
+							dates={dates}
+						/>
 					</Grid.Column>
 				</OuterGrid>
 			</Container>

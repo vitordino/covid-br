@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useMemo, useLayoutEffect } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
@@ -87,19 +88,19 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 						>
 							{hoveredTitle}
 						</Text>
-						<StatsCard
+						<StatsCard<StateEntry>
 							prop={caseProp}
 							data={hoveredData}
 							chartData={hoveredTimeSeries}
 							dates={dates}
 						/>
-						<StatsCard
+						<StatsCard<StateEntry>
 							prop={deathProp}
 							data={hoveredData}
 							chartData={hoveredTimeSeries}
 							dates={dates}
 						/>
-						<StatsCard
+						<StatsCard<StateEntry>
 							prop={recoveredProp}
 							data={hoveredData}
 							chartData={hoveredTimeSeries}
