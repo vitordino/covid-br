@@ -18,7 +18,7 @@ type Store = {
 }
 
 const [useStore] = create<Store>(set => ({
-	sort: 'st',
+	sort: 'tc',
 	setSort: v => set(s => ({ sort: v })),
 
 	dateIndex: 0,
