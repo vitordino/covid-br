@@ -18,6 +18,17 @@ const Wrapper = styled.div`
 	padding: 0 0.5rem 1rem;
 `
 
+const SelectLabel = styled(Text)`
+	display: flex;
+	&:after {
+		display: block;
+		right: 0;
+		margin-left: 0.5em;
+		transform: rotate(90deg);
+		content: '›';
+	}
+`
+
 const TitleHeader = ({
 	title = null,
 	options = [],
@@ -31,7 +42,7 @@ const TitleHeader = ({
 				{title}
 			</Text>
 		)}
-		<Text weight={400} xs={2} md={3}>
+		<SelectLabel as='label' weight={400} xs={2} md={3}>
 			<select
 				aria-label='date picker'
 				value={value}
@@ -43,7 +54,7 @@ const TitleHeader = ({
 					</option>
 				))}
 			</select>
-		</Text>
+		</SelectLabel>
 	</Wrapper>
 )
 
