@@ -8,7 +8,7 @@ type Props = {
 }
 
 const Wrapper = styled.div<Props>`
-	position: fixed;
+	position: absolute;
 	display: flex;
 	top: 0;
 	left: 0;
