@@ -42,7 +42,7 @@ const Footer = () => (
 		</LogoLink>
 		<Separator />
 		<Text as={Link} to='?about' weight={500} xs={1} md={2}>
-			About
+			Sobre
 		</Text>
 	</Wrapper>
 )
