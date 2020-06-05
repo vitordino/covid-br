@@ -30,7 +30,7 @@ const GlobalStyle = createGlobalStyle`
 		flex-direction: column;
 		align-items: stretch;
 		justify-content: space-between;
-		min-height: fill-available;
+		min-height: 100vh;
 	}
 	${({ theme }) => css`
 		:root,
