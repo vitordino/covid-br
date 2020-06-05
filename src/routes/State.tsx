@@ -10,6 +10,8 @@ import fetcher from 'utils/fetcher'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
 import Container from 'components/Container'
 import Grid from 'components/Grid'
+import Text from 'components/Text'
+import Spacer from 'components/Spacer'
 import TitleHeader from 'components/TitleHeader'
 import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
 import StatsCard from 'components/StatsCard'
@@ -92,6 +94,15 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 					</Grid.Column>
 					<Sidebar xs={16} lg={6}>
 						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
+						<Spacer.V xs={1.5} />
+						<Text
+							weight={400}
+							xs={2}
+							md={3}
+							style={{ margin: '0 1rem -0.5rem' }}
+						>
+							{hoveredState || 'Total'}
+						</Text>
 						<StatsCard<CityEntry>
 							prop={caseProp}
 							data={hoveredData}
