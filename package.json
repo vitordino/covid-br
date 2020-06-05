@@ -58,7 +58,7 @@
     "typescript": "^3.7.5",
     "waait": "^1.0.5",
     "wipe.css": "^1.3.0",
-    "zustand": "^2.2.3"
+    "zustand": "2.2.1"
   },
   "scripts": {
     "frontend:start": "react-scripts start",
