@@ -65,8 +65,8 @@ export const Cell = ({
 	<CellWrapper as={to ? Link : null} to={to} transform={transform}>
 		{!!left && <Left>{left}</Left>}
 		{!!left && '\t'}
-		{bold && <strong>{children}</strong>}
-		{!bold && <div>{children}</div>}
+		{bold && <strong>{children || <br />}</strong>}
+		{!bold && <div>{children || <br />}</div>}
 	</CellWrapper>
 )
 
