@@ -83,6 +83,7 @@ const write = (
 }
 
 const renameLineData = ({
+	date,
 	city,
 	ibgeID,
 	newDeaths,
@@ -93,6 +94,7 @@ const renameLineData = ({
 	totalCases_per_100k_inhabitants,
 	deaths_by_totalCases,
 }: CityEntry) => ({
+	date,
 	ct: city.split('/')[0],
 	id: parseInt(ibgeID),
 	tc: parseInt(totalCases),
