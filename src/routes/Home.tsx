@@ -17,8 +17,10 @@ import RangeInput from 'components/RangeInput'
 import StatsCard from 'components/StatsCard'
 import TitleHeader from 'components/TitleHeader'
 
-const OuterGrid = styled(Grid.Row)`
-	align-items: stretch;
+const Sidebar = styled(Grid.Column)`
+	position: sticky;
+	top: 0.25rem;
+	align-self: flex-start;
 `
 
 type CountryDataType = {
@@ -72,12 +74,12 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 					onChange={v => setDateIndex(parseInt(v))}
 					renderOption={dateToString}
 				/>
-				<OuterGrid>
-					<Grid.Column xs={16} lg={10}>
+				<Grid.Row>
+					<Grid.Column xs={16} lg={10} xg={12}>
 						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
 						<CountryTable data={data} total={total} statesMeta={states} />
 					</Grid.Column>
-					<Grid.Column xs={16} lg={6}>
+					<Sidebar xs={16} lg={6} xg={4}>
 						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
 						<CountryMap data={data} />
 						<Text
@@ -106,8 +108,8 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 							chartData={hoveredTimeSeries}
 							dates={dates}
 						/>
-					</Grid.Column>
-				</OuterGrid>
+					</Sidebar>
+				</Grid.Row>
 			</Container>
 			<RangeInput<StateEntry> dates={dates} totals={totals} />
 		</>
