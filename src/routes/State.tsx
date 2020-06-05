@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useMemo, useLayoutEffect } from 'react'
+import React, { useMemo, useLayoutEffect, lazy, Suspense } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 
@@ -10,13 +10,15 @@ import fetcher from 'utils/fetcher'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
 import Container from 'components/Container'
 import Grid from 'components/Grid'
+import Loader from 'components/Loader'
 import Text from 'components/Text'
 import Spacer from 'components/Spacer'
 import TitleHeader from 'components/TitleHeader'
 import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
-import StatsCard from 'components/StatsCard'
 import StateTable from 'components/Table/StateTable'
 import RangeInput from 'components/RangeInput'
+
+const StatsCard = lazy(() => import('../components/StatsCard'))
 
 const Sidebar = styled(Grid.Column)`
 	position: sticky;
@@ -103,18 +105,20 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 						>
 							{hoveredState || 'Total'}
 						</Text>
-						<StatsCard<CityEntry>
-							prop={caseProp}
-							data={hoveredData}
-							chartData={hoveredTimeSeries}
-							dates={dates}
-						/>
-						<StatsCard<CityEntry>
-							prop={deathProp}
-							data={hoveredData}
-							chartData={hoveredTimeSeries}
-							dates={dates}
-						/>
+						<Suspense fallback={<Loader />}>
+							<StatsCard<CityEntry>
+								prop={caseProp}
+								data={hoveredData}
+								chartData={hoveredTimeSeries}
+								dates={dates}
+							/>
+							<StatsCard<CityEntry>
+								prop={deathProp}
+								data={hoveredData}
+								chartData={hoveredTimeSeries}
+								dates={dates}
+							/>
+						</Suspense>
 					</Sidebar>
 				</Grid.Row>
 			</Container>

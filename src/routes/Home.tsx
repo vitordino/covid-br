@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useMemo, useLayoutEffect } from 'react'
+import React, { useMemo, useLayoutEffect, lazy, Suspense } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 
@@ -8,14 +8,16 @@ import dateToString from 'utils/dateToString'
 import fetcher from 'utils/fetcher'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
 import CountryTable from 'components/Table/CountryTable'
-import CountryMap from 'components/CountryMap'
 import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
 import Container from 'components/Container'
+import Loader from 'components/Loader'
 import Grid from 'components/Grid'
 import Text from 'components/Text'
 import RangeInput from 'components/RangeInput'
-import StatsCard from 'components/StatsCard'
 import TitleHeader from 'components/TitleHeader'
+
+const CountryMap = lazy(() => import('../components/CountryMap'))
+const StatsCard = lazy(() => import('../components/StatsCard'))
 
 const Sidebar = styled(Grid.Column)`
 	position: sticky;
@@ -81,33 +83,35 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 					</Grid.Column>
 					<Sidebar xs={16} lg={6} xg={4}>
 						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
-						<CountryMap data={data} />
-						<Text
-							weight={400}
-							xs={2}
-							md={3}
-							style={{ margin: '0 1rem -0.5rem' }}
-						>
-							{hoveredTitle}
-						</Text>
-						<StatsCard<StateEntry>
-							prop={caseProp}
-							data={hoveredData}
-							chartData={hoveredTimeSeries}
-							dates={dates}
-						/>
-						<StatsCard<StateEntry>
-							prop={deathProp}
-							data={hoveredData}
-							chartData={hoveredTimeSeries}
-							dates={dates}
-						/>
-						<StatsCard<StateEntry>
-							prop={recoveredProp}
-							data={hoveredData}
-							chartData={hoveredTimeSeries}
-							dates={dates}
-						/>
+						<Suspense fallback={<Loader />}>
+							<CountryMap data={data} />
+							<Text
+								weight={400}
+								xs={2}
+								md={3}
+								style={{ margin: '0 1rem -0.5rem' }}
+							>
+								{hoveredTitle}
+							</Text>
+							<StatsCard<StateEntry>
+								prop={caseProp}
+								data={hoveredData}
+								chartData={hoveredTimeSeries}
+								dates={dates}
+							/>
+							<StatsCard<StateEntry>
+								prop={deathProp}
+								data={hoveredData}
+								chartData={hoveredTimeSeries}
+								dates={dates}
+							/>
+							<StatsCard<StateEntry>
+								prop={recoveredProp}
+								data={hoveredData}
+								chartData={hoveredTimeSeries}
+								dates={dates}
+							/>
+						</Suspense>
 					</Sidebar>
 				</Grid.Row>
 			</Container>
