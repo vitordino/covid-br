@@ -13,8 +13,8 @@ type Store = {
 	daily: boolean
 	setDaily: (v: boolean) => void
 
-	hoveredState: keyof typeof StatesEnum | null
-	setHoveredState: (v: keyof typeof StatesEnum | null) => void
+	hoveredState: string | null
+	setHoveredState: (v: string | null) => void
 }
 
 const [useStore] = create<Store>(set => ({
