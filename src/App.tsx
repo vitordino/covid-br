@@ -8,6 +8,7 @@ import Loader from 'components/Loader'
 const Home = lazy(() => import('./routes/Home'))
 const State = lazy(() => import('./routes/State'))
 const NotFound = lazy(() => import('./routes/NotFound'))
+const OpenGraph = lazy(() => import('./routes/OpenGraph'))
 
 const App = () => (
 	<Router>
@@ -16,6 +17,9 @@ const App = () => (
 				<Switch>
 					<Route path='/' exact>
 						<Home />
+					</Route>
+					<Route path='/open-graph' exact>
+						<OpenGraph />
 					</Route>
 					<Route path='/:id' exact>
 						{({ match }) => {
