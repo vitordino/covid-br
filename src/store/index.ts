@@ -17,21 +17,22 @@ type Store = {
 	setHoveredState: (v: string | null) => void
 }
 
-const [useStore] = create<Store>(set => ({
+const initialState = {
 	sort: 'tc',
-	setSort: v => set(s => ({ sort: v })),
-
 	dateIndex: 0,
-	setDateIndex: v => set(s => ({ dateIndex: v })),
-
 	relative: false,
-	setRelative: v => set(s => ({ relative: v })),
-
 	daily: false,
-	setDaily: v => set(s => ({ daily: v })),
-
 	hoveredState: null,
-	setHoveredState: v => set(s => ({ hoveredState: v })),
+} as const
+
+const [useStore] = create<Store>(set => ({
+	...initialState,
+	setSort: v => set({ sort: v }),
+	setDateIndex: v => set({ dateIndex: v }),
+	setRelative: v => set({ relative: v }),
+	setDaily: v => set({ daily: v }),
+	setHoveredState: v => set({ hoveredState: v }),
+	reset: () => set(initialState),
 }))
 
 export default useStore

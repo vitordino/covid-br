@@ -50,6 +50,7 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
 	const relative = useStore(s => s.relative)
 	const hoveredState = useStore(s => s.hoveredState)
+	const reset = useStore(s => s.reset)
 	/* eslint-disable react-hooks/exhaustive-deps */
 	const total = useMemo(() => totals[dates[dateIndex]] || {}, [dateIndex])
 	const data = useMemo(() => main[dates[dateIndex]] || [], [dateIndex])
@@ -73,6 +74,7 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 	const deathProp = relative ? 'ptd' : 'td'
 
 	useLayoutEffect(() => {
+		reset()
 		setDateIndex(dates.length - 1)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])

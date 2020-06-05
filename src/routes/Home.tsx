@@ -35,10 +35,19 @@ type CountryDataType = {
 const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 	const hoveredState = useStore(s => s.hoveredState)
 	const relative = useStore(s => s.relative)
-	/* eslint-disable react-hooks/exhaustive-deps */
+	const reset = useStore(s => s.reset)
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
-	const data: StateEntry[] = useMemo(() => main[dates[dateIndex]], [dateIndex])
-	const total: StateEntry = useMemo(() => totals[dates[dateIndex]], [dateIndex])
+	/* eslint-disable react-hooks/exhaustive-deps */
+	const data: StateEntry[] = useMemo(() => main[dates[dateIndex]], [
+		dateIndex,
+		dates,
+		main,
+	])
+	const total: StateEntry = useMemo(() => totals[dates[dateIndex]], [
+		dateIndex,
+		dates,
+		totals,
+	])
 	const hoveredTimeSeries: StateEntry[] = useMemo(
 		() =>
 			hoveredState
@@ -46,7 +55,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 						.flatMap(x => x)
 						.filter(x => x.st === hoveredState)
 				: Object.values(totals),
-		[hoveredState],
+		[hoveredState, main, totals],
 	)
 	/* eslint-enable react-hooks/exhaustive-deps */
 	const caseProp = relative ? 'ptc' : 'tc'
@@ -60,6 +69,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 		: total
 
 	useLayoutEffect(() => {
+		reset()
 		setDateIndex(dates.length - 1)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
