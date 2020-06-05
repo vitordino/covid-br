@@ -16,8 +16,10 @@ import StatsCard from 'components/StatsCard'
 import StateTable from 'components/Table/StateTable'
 import RangeInput from 'components/RangeInput'
 
-const OuterGrid = styled(Grid.Row)`
-	align-items: stretch;
+const Sidebar = styled(Grid.Column)`
+	position: sticky;
+	top: 0.25rem;
+	align-self: flex-start;
 `
 
 type StateProps = {
@@ -83,12 +85,12 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 					onChange={v => setDateIndex(parseInt(v))}
 					renderOption={dateToString}
 				/>
-				<OuterGrid>
+				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
 						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
 						<StateTable data={data} total={total} />
 					</Grid.Column>
-					<Grid.Column xs={16} lg={6}>
+					<Sidebar xs={16} lg={6}>
 						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
 						<StatsCard<CityEntry>
 							prop={caseProp}
@@ -102,8 +104,8 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 							chartData={hoveredTimeSeries}
 							dates={dates}
 						/>
-					</Grid.Column>
-				</OuterGrid>
+					</Sidebar>
+				</Grid.Row>
 			</Container>
 			<RangeInput<CityEntry> dates={dates} totals={totals} />
 		</>
