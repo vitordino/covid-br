@@ -41,6 +41,10 @@ type StateTableProps = {
 const StateTable = ({ data, total }: StateTableProps) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const relative = useStore(s => s.relative)
+	const [hoveredState, setHoveredState] = useStore(s => [
+		s.hoveredState,
+		s.setHoveredState,
+	])
 
 	const caseProp = relative ? 'ptc' : 'tc'
 	const caseLeftProp = relative ? null : 'nc'
@@ -213,7 +217,13 @@ const StateTable = ({ data, total }: StateTableProps) => {
 					{rows.map((row: any) => {
 						prepareRow(row)
 						return (
-							<TableRow {...row.getRowProps()}>
+							<TableRow
+								{...row.getRowProps({
+									onMouseEnter: () => setHoveredState(row.original.ct),
+									onMouseLeave: () => setHoveredState(null),
+									active: row.original.ct === hoveredState,
+								})}
+							>
 								{row.cells.map((cell: any) => (
 									<td {...cell.getCellProps()}>{cell.render('Cell')}</td>
 								))}
