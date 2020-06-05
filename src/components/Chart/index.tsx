@@ -21,6 +21,8 @@ type ChartType = {
 
 type AxisFn<T> = (v: T) => number
 
+const isBefore = (a, b) => new Date(a) < new Date(b)
+
 const Chart: ChartType = ({ data, dates, prop }) => {
 	const dateIndex = useStore(s => s.dateIndex)
 	const x: AxisFn = v => dates.findIndex(x => x === v.date)
@@ -41,7 +43,7 @@ const Chart: ChartType = ({ data, dates, prop }) => {
 			{({ width, height }) => (
 				<svg width={width} height={height}>
 					<LinePath
-						data={data.slice(0, dateIndex + 1)}
+						data={data.filter(({ date }) => isBefore(date, dates[dateIndex]))}
 						x={d => xScale(width)(x(d))}
 						y={d => yScale(height)(y(d))}
 						stroke={getColorOf(prop)}
