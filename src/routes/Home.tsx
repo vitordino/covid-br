@@ -1,7 +1,8 @@
 // @ts-nocheck
-import React, { useMemo, useLayoutEffect, lazy, Suspense } from 'react'
+import React, { useLayoutEffect, lazy, Suspense, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
+import { useWorker } from '@koale/useworker'
 
 import useStore from 'store'
 import dateToString from 'utils/dateToString'
@@ -32,32 +33,32 @@ type CountryDataType = {
 	states: StatesMeta
 }
 
+const getData = (main, dates, dateIndex) => main[dates[dateIndex]]
+
+const getHoveredTimeSeries = (hoveredState, main, totals) => {
+	if(!hoveredState) return Object.values(totals)
+	return Object.values(main).flatMap(x => x).filter(x => x.st === hoveredState)
+}
+
 const Inner = ({ main, totals, dates, states }: CountryDataType) => {
+	const [state, setState] = useState({})
+	const [getDataWorker] = useWorker(getData)
+	const [getHoveredTimeSeriesWorker] = useWorker(getHoveredTimeSeries)
 	const hoveredState = useStore(s => s.hoveredState)
 	const relative = useStore(s => s.relative)
 	const reset = useStore(s => s.reset)
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
-	/* eslint-disable react-hooks/exhaustive-deps */
-	const data: StateEntry[] = useMemo(() => main[dates[dateIndex]], [
-		dateIndex,
-		dates,
-		main,
-	])
-	const total: StateEntry = useMemo(() => totals[dates[dateIndex]], [
-		dateIndex,
-		dates,
-		totals,
-	])
-	const hoveredTimeSeries: StateEntry[] = useMemo(
-		() =>
-			hoveredState
-				? Object.values(main)
-						.flatMap(x => x)
-						.filter(x => x.st === hoveredState)
-				: Object.values(totals),
-		[hoveredState, main, totals],
-	)
-	/* eslint-enable react-hooks/exhaustive-deps */
+
+	const runWorkers = async () => {
+		const data = await getDataWorker(main, dates, dateIndex)
+		const total = await getDataWorker(totals, dates, dateIndex)	
+		const hoveredTimeSeries = await getHoveredTimeSeriesWorker(hoveredState, main, totals)
+		setState({ data, total, hoveredTimeSeries })
+	}
+
+	const { data, total, hoveredTimeSeries } = state
+
+
 	const caseProp = relative ? 'ptc' : 'tc'
 	const deathProp = relative ? 'ptd' : 'td'
 	const recoveredProp = relative ? 'ptr' : 'tr'
@@ -71,10 +72,17 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 	useLayoutEffect(() => {
 		reset()
 		setDateIndex(dates.length - 1)
+		runWorkers()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
+	useEffect(() => {
+		runWorkers()
+	})
+
 	useRelativeSortSync()
+
+	if(!data || !total || !hoveredTimeSeries) return <Loader />
 
 	return (
 		<>
