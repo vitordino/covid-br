@@ -30,16 +30,20 @@ const transposeKeys: KeyToKey<StateEntry> = {
 	...relativeToAbsolute,
 } as const
 
-const getNextSort = (sort: keyof typeof transposeKeys) => transposeKeys?.[sort]
+const getNextSort = (sort: keyof typeof transposeKeys, relative: boolean) => {
+	if (relative && absoluteToRelative[sort]) return absoluteToRelative[sort]
+	if (!relative && relativeToAbsolute[sort]) return relativeToAbsolute[sort]
+	return null
+}
 
 const useRelativeSortSync = () => {
 	const relative = useStore(s => s.relative)
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 
-	const nextSort = getNextSort(sort)
+	const nextSort = getNextSort(sort, relative) || 'tc'
 
 	useEffect(() => {
-		if (nextSort) setSort(nextSort)
+		setSort(nextSort)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [relative])
 	return null
