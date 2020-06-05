@@ -47,7 +47,7 @@ const CountryMap = ({ data }: CountryMapProps) => {
 							key={geo.rsmKey}
 							geography={geo}
 							style={mapStyle}
-							onClick={() => push(`/${geo.id}`)}
+							onClick={() => push(`/${geo.id.toLowerCase()}`)}
 							fill={
 								geo.id === hoveredState
 									? 'yellow'
