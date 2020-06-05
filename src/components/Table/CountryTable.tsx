@@ -13,8 +13,6 @@ import {
 	TotalRow,
 	Wrapper,
 	Table,
-	Mobile,
-	Desktop,
 	TableRow,
 	initialState,
 	getCellRender,
@@ -61,8 +59,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 				accessor: 'st',
 				Header: (x: any) => (
 					<Header isVisible={true} {...x}>
-						<Mobile>St</Mobile>
-						<Desktop>State</Desktop>
+						UF
 					</Header>
 				),
 				sortInverted: true,
@@ -81,7 +78,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 				accessor: 'tc',
 				Header: (x: any) => (
 					<Header isVisible={!relative} {...x}>
-						Confirmed
+						Confirmados
 					</Header>
 				),
 				Cell: ({ row, column }: Cell) => (
@@ -102,7 +99,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 				accessor: 'td',
 				Header: (x: any) => (
 					<Header isVisible={!relative} {...x}>
-						Deaths
+						Óbitos
 					</Header>
 				),
 				Cell: ({ row, column }: Cell) => (
@@ -123,7 +120,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 				accessor: 'tr',
 				Header: (x: any) => (
 					<Header isVisible={!relative} {...x}>
-						Recovered
+						Recuperados
 					</Header>
 				),
 				Cell: ({ row, column }: Cell) => (
@@ -145,7 +142,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 				sortType: 'basic',
 				Header: (x: any) => (
 					<Header isVisible={relative} {...x}>
-						Confirmed
+						Confirmados
 					</Header>
 				),
 				Cell: ({ row, column }: Cell) => (
@@ -167,7 +164,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 				sortType: 'basic',
 				Header: (x: any) => (
 					<Header isVisible={relative} {...x}>
-						Deaths
+						Óbitos
 					</Header>
 				),
 				Cell: ({ row, column }: Cell) => (
@@ -189,7 +186,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 				sortType: 'basic',
 				Header: (x: any) => (
 					<Header isVisible={relative} {...x}>
-						Recovered
+						Recuperados
 					</Header>
 				),
 				Cell: ({ row, column }: Cell) => (

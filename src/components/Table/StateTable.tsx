@@ -77,7 +77,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 				accessor: 'tc',
 				Header: (x: any) => (
 					<Header isVisible={!relative} {...x}>
-						Confirmed
+						Confirmados
 					</Header>
 				),
 				Cell: ({ row, column }: Cell) => (
@@ -97,7 +97,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 				accessor: 'td',
 				Header: (x: any) => (
 					<Header isVisible={!relative} {...x}>
-						Deaths
+						Óbitos
 					</Header>
 				),
 				Cell: ({ row, column }: Cell) => (
@@ -117,7 +117,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 				accessor: 'ptc',
 				Header: (x: any) => (
 					<Header isVisible={relative} {...x}>
-						Confirmed
+						Confirmados
 					</Header>
 				),
 				Cell: ({ row, column }: Cell) => (
@@ -137,7 +137,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 				accessor: 'ptd',
 				Header: (x: any) => (
 					<Header isVisible={relative} {...x}>
-						Deaths
+						Óbitos
 					</Header>
 				),
 				Cell: ({ row, column }: Cell) => (

@@ -4,8 +4,8 @@ import { Helmet } from 'react-helmet'
 const siteMetadata = {
 	siteUrl: 'https://covid.vitordino.com/',
 	author: 'vitordino',
-	title: 'Covid-19 Brazil',
-	description: 'covid-19 statis in brazilian states',
+	title: 'Covid-19 no Brasil',
+	description: 'Mapa da Covid-19 no Brasil',
 	keywords: ['covid19', 'coronavirus', 'brazil', 'brasil'],
 	image: '',
 }

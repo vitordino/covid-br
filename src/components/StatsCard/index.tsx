@@ -125,18 +125,18 @@ type TypeMappings = {
 }
 
 const typeMapping: TypeMappings = {
-	tc: { scope: 'confirmed', isNew: false, kind: 'absolute' },
-	nc: { scope: 'confirmed', isNew: true, kind: 'absolute' },
-	ptc: { scope: 'confirmed', isNew: false, kind: 'relative' },
-	pnc: { scope: 'confirmed', isNew: true, kind: 'relative' },
-	td: { scope: 'deaths', isNew: false, kind: 'absolute' },
-	nd: { scope: 'deaths', isNew: true, kind: 'absolute' },
-	ptd: { scope: 'deaths', isNew: false, kind: 'relative' },
-	pnd: { scope: 'deaths', isNew: true, kind: 'relative' },
-	tr: { scope: 'recovered', isNew: false, kind: 'absolute' },
-	nr: { scope: 'recovered', isNew: true, kind: 'absolute' },
-	ptr: { scope: 'recovered', isNew: false, kind: 'relative' },
-	pnr: { scope: 'recovered', isNew: true, kind: 'relative' },
+	tc: { scope: 'confirmados', isNew: false, kind: 'absolute' },
+	nc: { scope: 'confirmados', isNew: true, kind: 'absolute' },
+	ptc: { scope: 'confirmados', isNew: false, kind: 'relative' },
+	pnc: { scope: 'confirmados', isNew: true, kind: 'relative' },
+	td: { scope: 'óbitos', isNew: false, kind: 'absolute' },
+	nd: { scope: 'óbitos', isNew: true, kind: 'absolute' },
+	ptd: { scope: 'óbitos', isNew: false, kind: 'relative' },
+	pnd: { scope: 'óbitos', isNew: true, kind: 'relative' },
+	tr: { scope: 'recuperados', isNew: false, kind: 'absolute' },
+	nr: { scope: 'recuperados', isNew: true, kind: 'absolute' },
+	ptr: { scope: 'recuperados', isNew: false, kind: 'relative' },
+	pnr: { scope: 'recuperados', isNew: true, kind: 'relative' },
 }
 
 type RenderValueProps = {

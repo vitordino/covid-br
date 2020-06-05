@@ -127,17 +127,17 @@ const AboutModal = () => {
 				/>
 				<Inner isVisible={isVisible}>
 					<Text xs={3} as='h2' weight={500}>
-						About COVID — BR
+						Sobre COVID — BR
 					</Text>
 					<Spacer.V xs={1} />
 					<Text xs={1} as='p' weight={500}>
-						This project is done by{' '}
-						<Anchor href='https://vitordino.com'>Vitor Dino</Anchor>, open
-						sourced on
+						Este projeto é feito por{' '}
+						<Anchor href='https://vitordino.com'>Vitor Dino</Anchor>, com seu
+						código aberto no repositório{' '}
 						<Anchor href='https://github.com/vitordino/covid-br'>
 							<code>vitordino/covid-br</code>
 						</Anchor>{' '}
-						github repository with a{' '}
+						sob a{' '}
 						<Anchor href='https://github.com/vitordino/covid-br/blob/master/LICENSE'>
 							<code>MIT</code> License
 						</Anchor>
@@ -145,23 +145,23 @@ const AboutModal = () => {
 					</Text>
 					<Spacer.V xs={1} />
 					<Text xs={1} as='p' weight={500}>
-						Data is sourced from{' '}
+						Os dados provém do repositório{' '}
 						<Anchor href='https://github.com/wcota/covid19br'>
 							<code>wcota/covid19br</code>
 						</Anchor>{' '}
-						github repository under a{' '}
+						com a licensa{' '}
 						<Anchor
 							target='_blank'
 							href='https://github.com/wcota/covid19br/blob/master/LICENSE.md'
 							title='Creative Commons Attribution Share Alike 4.0 International'
 						>
-							<code>CC BY-SA 4.0</code> License
+							<code>CC BY-SA 4.0</code>
 						</Anchor>
 						.
 					</Text>
 					<Spacer.V xs={1} />
 					<Text xs={1} as='p' weight={500}>
-						Topography data is sourced from{' '}
+						Os dados Topográficos e Demográficos são do{' '}
 						<Anchor href='https://servicodados.ibge.gov.br/api/docs/malhas?versao=2'>
 							IBGE
 						</Anchor>
@@ -169,18 +169,18 @@ const AboutModal = () => {
 					</Text>
 					<Spacer.V xs={1} />
 					<Text xs={1} as='p' weight={500}>
-						The icon used is part of{' '}
-						<Anchor href='https://fontawesome.com'>fontawesome.com</Anchor>, and
-						can be found{' '}
+						O ícone usado é parte do{' '}
+						<Anchor href='https://fontawesome.com'>fontawesome.com</Anchor>, e
+						pode ser encontrado{' '}
 						<Anchor href='https://fontawesome.com/icons/shield-virus?style=solid'>
-							here
+							aqui
 						</Anchor>{' '}
-						and is using a{' '}
+						ele possui uma licensa{' '}
 						<Anchor
 							href='https://fontawesome.com/license'
 							title='Creative Commons Attribution Share Alike 4.0 International'
 						>
-							<code>CC BY-SA 4.0</code> License
+							<code>CC BY-SA 4.0</code>
 						</Anchor>
 						.
 					</Text>

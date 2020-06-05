@@ -80,7 +80,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 		<>
 			<Container>
 				<TitleHeader
-					title='Brazil'
+					title='Brasil'
 					options={dates}
 					value={dateIndex.toString()}
 					onChange={v => setDateIndex(parseInt(v))}
