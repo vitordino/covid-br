@@ -51,7 +51,7 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 	const data = useMemo(() => main[dates[dateIndex]] || [], [dateIndex])
 
 	const hoveredData = hoveredState
-		? data?.find(({ id }) => id === hoveredState)
+		? data?.find(({ ct }) => ct === hoveredState)
 		: total
 
 	const hoveredTimeSeries: CityEntry[] = useMemo(
@@ -59,7 +59,7 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 			hoveredState
 				? Object.values(main)
 						.flatMap(x => x)
-						.filter(x => x.id === hoveredState)
+						.filter(x => x.ct === hoveredState)
 				: Object.values(totals),
 		[hoveredState],
 	)
