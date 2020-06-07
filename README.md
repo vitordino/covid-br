@@ -15,6 +15,16 @@ $ yarn start # build data files and starts dev server
 $ yarn build # build data files and outputs the app to ./build directory
 ```
 
+## Credits
+
+Covid-19 data sourced from [wcota/covid19br](https://github.com/wcota/covid19br) github repo
+
+Geographical and Demographics from [IBGE](https://www.ibge.gov.br/)
+
+Icon is a part of [Font Awesome](https://fontawesome.com/icons/shield-virus?style=solid) 
+
+Typeface is [Inter](https://rsms.me/inter/)
+
 ## Tech Stack
 
 | name | license | description |
