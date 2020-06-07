@@ -33,7 +33,10 @@ Typeface is [Inter](https://rsms.me/inter/)
 | [`styled-components`](https://styled-components.com) | [`MIT`](https://github.com/styled-components/styled-components/blob/master/LICENSE) | visual primitives for the component age |
 | [`etymos`](https://github.com/vitordino/etymos) | [`MIT`](https://github.com/vitordino/etymos/blob/master/LICENSE) | responsive toolkit for declarative styled-components |
 | [`swr`](https://swr.now.sh/) | [`MIT`](https://github.com/vercel/swr/blob/master/LICENSE) | React Hooks library for remote data fetching |
-
+| [`vx`](https://vx-demo.now.sh/) | [`MIT`](https://github.com/hshoff/vx/blob/master/LICENSE) | collection of reusable low-level visualization components |
+| [`@fast-csv/parse`](https://c2fo.io/fast-csv/) | [`MIT`](https://github.com/C2FO/fast-csv/blob/master/LICENSE) | CSV parser and formatter for node |
+| [`zustand`](https://zustand.surge.sh/) | [`MIT`](https://github.com/react-spring/zustand/blob/master/LICENSE) | Bare necessities for state management in React |
+| [`react-table`](https://github.com/tannerlinsley/react-table) | [`MIT`](https://github.com/tannerlinsley/react-table/blob/master/LICENSE) | Hooks for building fast and extendable tables and datagrids for React |
 
 
 #### System Dependencies
