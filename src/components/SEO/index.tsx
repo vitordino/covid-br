@@ -4,8 +4,8 @@ import { Helmet } from 'react-helmet'
 const siteMetadata = {
 	siteUrl: 'https://covid.vitordino.com/',
 	author: 'vitordino',
-	title: 'Covid-19 no Brasil',
-	description: 'Mapa da Covid-19 no Brasil',
+	title: 'COVID — BR',
+	description: 'Mapa da Covid-19 no Brasil, com dados de estados e municípios',
 	keywords: ['covid19', 'coronavirus', 'brazil', 'brasil'],
 	image: '',
 }
@@ -39,7 +39,7 @@ const SEO = ({
 	const currentTitle = title || siteMetadata.title
 	const currentImage = image || siteMetadata.image
 	const defaultTitleTemplate = title
-		? `%s | ${siteMetadata.title}`
+		? `%s ⠿ ${siteMetadata.title}`
 		: siteMetadata.title
 
 	const metaTags = tags || siteMetadata.keywords

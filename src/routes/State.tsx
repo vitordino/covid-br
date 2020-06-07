@@ -8,6 +8,7 @@ import useStore from 'store'
 import dateToString from 'utils/dateToString'
 import fetcher from 'utils/fetcher'
 import useRelativeSortSync from 'hooks/useRelativeSortSync'
+import SEO from 'components/SEO'
 import Container from 'components/Container'
 import Grid from 'components/Grid'
 import Loader from 'components/Loader'
@@ -83,6 +84,7 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 
 	return (
 		<>
+			<SEO title={getStateName(id)} />
 			<Container>
 				<TitleHeader
 					title={getStateName(id)}

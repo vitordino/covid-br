@@ -15,6 +15,7 @@ import Grid from 'components/Grid'
 import Text from 'components/Text'
 import RangeInput from 'components/RangeInput'
 import TitleHeader from 'components/TitleHeader'
+import SEO from 'components/SEO'
 
 const CountryMap = lazy(() => import('../components/CountryMap'))
 const StatsCard = lazy(() => import('../components/StatsCard'))
@@ -78,6 +79,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 
 	return (
 		<>
+			<SEO title='Covid-19 no Brasil' />
 			<Container>
 				<TitleHeader
 					title='Brasil'
