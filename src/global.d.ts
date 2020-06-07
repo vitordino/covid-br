@@ -1,9 +1,7 @@
-type HashMapOf<T> = { [key: string]: T }
-
 // prettier-ignore
-enum StatesEnum { SP, MG, RJ, BA, PR, RS, PE, CE, PA, SC, MA, GO, AM, ES, PB, RN, MT, AL, PI, DF, MS, SE, RO, TO, AC, AP, RR }
+export enum StatesEnum { SP, MG, RJ, BA, PR, RS, PE, CE, PA, SC, MA, GO, AM, ES, PB, RN, MT, AL, PI, DF, MS, SE, RO, TO, AC, AP, RR }
 
-type StateEntry = {
+export type StateEntry = {
 	date: DatesEnum
 	st: keyof typeof StatesEnum | 'TOTAL'
 	td: number
@@ -23,7 +21,7 @@ type StateEntry = {
 	pnr: number | null
 }
 
-type CityEntry = {
+export type CityEntry = {
 	ct?: string
 	id?: number
 	tc: number
@@ -35,19 +33,19 @@ type CityEntry = {
 	dbc?: number
 }
 
-type DateMapOf<T> = { [K in DatesEnum]: T }
+export type DateMapOf<T> = { [K in DatesEnum]: T }
 
-type Main = DateMapOf<StateEntry[]>
-type Totals = DateMapOf<StateEntry>
-type StateMeta = {
+export type Main = DateMapOf<StateEntry[]>
+export type Totals = DateMapOf<StateEntry>
+export type StateMeta = {
 	p: number
 	n: string
 }
 
-type StatesMeta = {
+export type StatesMeta = {
 	[K in StatesEnum]: StateMeta
 }
 
-type ValuesOf<T extends string[]> = T[number]
+export type ValuesOf<T extends string[]> = T[number]
 
-type DatesEnum = ValuesOf<typeof data.dates>
+export type DatesEnum = ValuesOf<typeof data.dates>
