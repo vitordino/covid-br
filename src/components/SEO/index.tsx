@@ -81,7 +81,7 @@ const SEO = ({
 				},
 				{
 					property: `og:image`,
-					content: `${siteUrl}${currentImage}`,
+					content: currentImage,
 				},
 				{
 					name: `twitter:card`,
@@ -89,7 +89,7 @@ const SEO = ({
 				},
 				{
 					name: `twitter:image`,
-					content: `${siteUrl}${currentImage}`,
+					content: currentImage,
 				},
 				{
 					name: `twitter:site`,
