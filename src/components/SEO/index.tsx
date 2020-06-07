@@ -7,7 +7,7 @@ const siteMetadata = {
 	title: 'COVID — BR',
 	description: 'Mapa da Covid-19 no Brasil, com dados de estados e municípios',
 	keywords: ['covid19', 'coronavirus', 'brazil', 'brasil'],
-	image: '',
+	image: 'https://covid.vitordino.com/og-image.png',
 }
 
 type Meta = {
