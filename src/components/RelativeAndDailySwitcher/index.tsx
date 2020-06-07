@@ -44,7 +44,7 @@ const RelativeAndDailySwitcher = ({
 							key={x}
 							checked={relative}
 							onChange={x => setRelative(x)}
-							options={['Absoluto', 'Relativo']}
+							options={['Absoluto', 'Por 10 mil habitantes']}
 						/>
 					)
 				return null
