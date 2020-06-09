@@ -1,8 +1,13 @@
+import copyStatesMeta from './copyStatesMeta'
+import getCountryData from './getCountryData'
+import downloadTopo from './downloadTopo'
+import getStatesData from './getStatesData'
+
 const main = () => {
-	Promise.all([require('./copyStatesMeta')()]).finally(() =>
-		Promise.all([require('./getCountryData')()]).finally(() =>
-			Promise.all([require('./downloadTopo')()]).finally(() =>
-				Promise.all([require('./getStatesData')()]),
+	Promise.all([copyStatesMeta()]).finally(() =>
+		Promise.all([getCountryData()]).finally(() =>
+			Promise.all([downloadTopo()]).finally(() =>
+				Promise.all([getStatesData()]),
 			),
 		),
 	)
@@ -10,4 +15,4 @@ const main = () => {
 
 main()
 
-module.exports = main
+export default main

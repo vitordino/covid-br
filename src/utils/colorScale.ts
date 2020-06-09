@@ -1,6 +1,6 @@
 import { scaleLinear } from 'd3-scale'
 import { schemeReds, schemeGreys, schemeGreens } from 'd3-scale-chromatic'
-import { values }  from 'ramda'
+import { values } from 'ramda'
 
 import range from 'utils/range'
 
@@ -128,13 +128,11 @@ type GetSafeProp = (
 	fallbackProp: PropUnion,
 ) => PropUnion
 
-// @ts-ignore
 const getSafeProp: GetSafeProp = (prop, fallbackProp) => {
 	if (isPropSafe(prop)) return prop
 	return fallbackProp
 }
 
-// @ts-ignore
 const colorScale = (domain, range) => scaleLinear(domain, range)
 
 const higher = (a: number, b: number) => Math.max(a, b)
@@ -142,32 +140,31 @@ const higher = (a: number, b: number) => Math.max(a, b)
 const defaultFilter = (x: any) => !!x
 
 type GetHighestType = {
-	<T extends object>(filter?: (x: any) => boolean): (prop: keyof T) => (x: T[]) => number
+	<T extends object>(filter?: (x: any) => boolean): (
+		prop: keyof T,
+	) => (x: T[]) => number
 }
 
 const getHighest: GetHighestType = (filter = defaultFilter) => prop => x =>
 	+values(x)
 		.filter(filter)
-		// @ts-ignore
+
 		.filter(x => !!x?.[prop])
-		// @ts-ignore
+
 		.map(x => x?.[prop])
 		.reduce(higher, 0)
 		.toFixed(6)
 
 type GetRangeFill = {
-  <T>(data: T[]): (prop: keyof T, fallbackProp?: string) => (entry: T) => string
+	<T>(data: T[]): (prop: keyof T, fallbackProp?: string) => (entry: T) => string
 }
 
 export const getRangeFill: GetRangeFill = data => prop => entry => {
-	// @ts-ignore
 	const safeProp = getSafeProp(prop, 'tc')
-	
-	// @ts-ignore
+
 	const x = entry?.[safeProp]
 	if (typeof x !== 'number') return '#eee'
-	
-	// @ts-ignore
+
 	const highest = getHighest()(safeProp)(data)
 
 	return colorScale(
@@ -175,7 +172,6 @@ export const getRangeFill: GetRangeFill = data => prop => entry => {
 		scales[safeProp],
 	)(x * multipliers[safeProp])
 }
-
 
 export const getMapFill = (data: StateEntry[], id?: string) => (
 	prop: keyof StateEntry,
@@ -192,5 +188,5 @@ export const getMapFill = (data: StateEntry[], id?: string) => (
 }
 
 type GetColorOfType = (p: keyof StateEntry, n?: number) => string
-// @ts-ignore
+
 export const getColorOf: GetColorOfType = (p, n = 4) => scales?.[p]?.[n]

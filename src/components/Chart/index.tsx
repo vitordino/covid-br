@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { ReactNode } from 'react'
 import { LinePath } from '@vx/shape'
 import { curveMonotoneX } from '@vx/curve'

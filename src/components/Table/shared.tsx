@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
@@ -61,7 +60,6 @@ export const Cell = ({
 	bold = true,
 	to,
 }: StaticCellProps) => (
-	// @ts-ignore
 	<CellWrapper as={to ? Link : null} to={to} transform={transform}>
 		{!!left && <Left>{left}</Left>}
 		{!!left && '\t'}

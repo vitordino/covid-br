@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo, useLayoutEffect, lazy, Suspense } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'

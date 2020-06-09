@@ -26,7 +26,6 @@ const Column = styled.div<ColumnProps>`
 	)}
 	${mapBreakpoints(
 		(value, props) =>
-			// @ts-ignore
 			`display: ${value > 0 ? getColumnDisplay(props) : 'none'};
 			width: ${(value / props.theme.columns || 1) * 100}%;
 		`,

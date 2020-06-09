@@ -1,14 +1,14 @@
-const { get } = require('https')
-const { writeFile } = require('fs')
-const { parse } = require('@fast-csv/parse')
-const { groupBy, uniq, values } = require('ramda')
+import { writeFile } from 'fs'
+import { get } from 'https'
+import { parse } from '@fast-csv/parse'
+import { groupBy, uniq, values } from 'ramda'
 
 const states: StatesMeta = require('./statesMeta.json')
 const totalPopulation = Object.values(states).reduce((a, { p }) => a + p, 0)
 
 type HashMapOf<T> = Record<string, T>
 
-type ErrorType = Error | String
+export type ErrorType = Error | String
 
 // prettier-ignore
 enum StatesEnum { SP, MG, RJ, BA, PR, RS, PE, CE, PA, SC, MA, GO, AM, ES, PB, RN, MT, AL, PI, DF, MS, SE, RO, TO, AC, AP, RR }
@@ -384,4 +384,4 @@ const exportedFunction = () =>
 			.on('end', handleEnd),
 	)
 
-module.exports = exportedFunction
+export default exportedFunction

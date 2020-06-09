@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo, useEffect } from 'react'
 import { useTable, useSortBy, Column } from 'react-table'
 
@@ -64,12 +63,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 				sortInverted: true,
 				Cell: ({ row }: CellProps) => (
 					<Cell>
-						<span
-							// @ts-ignore
-							title={row.values.ct}
-						>
-							{row.values.ct}
-						</span>
+						<span title={row.values.ct}>{row.values.ct}</span>
 					</Cell>
 				),
 			},
@@ -169,7 +163,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 	} = useTable(
 		{
 			columns,
-			// @ts-ignore
+
 			initialState,
 			data,
 			footerGroups: total,

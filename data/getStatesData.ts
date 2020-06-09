@@ -1,9 +1,8 @@
-// @ts-nocheck
-const { get } = require('https')
-const { writeFile } = require('fs')
-const { parse } = require('@fast-csv/parse')
-
-const { main, dates } = require('./country.json')
+import { writeFile } from 'fs'
+import { get } from 'https'
+import { parse } from '@fast-csv/parse'
+import { main, dates } from './country.json'
+import { ErrorType } from './getCountryData'
 
 const selectKeys = (keys: string[]) => (obj: Record<string, any>) =>
 	Object.entries(obj).reduce((acc, [k, v]) => {
@@ -107,7 +106,7 @@ const renameLineData = ({
 })
 
 const pushLineToStateDate = (state: StateKeys, date: string) => (
-	line: object,
+	line: Record<string, any>,
 ) => {
 	if (!(state in outputs)) outputs[state] = {}
 	if (!(date in outputs[state])) outputs[state][date] = []
@@ -132,7 +131,7 @@ const handleEnd = (rowCount: number) => {
 	)
 }
 
-module.exports = () =>
+export default () =>
 	get(url, (res: any) =>
 		res
 			.pipe(parse({ headers: true }))

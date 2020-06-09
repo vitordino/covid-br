@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo, useLayoutEffect, lazy, Suspense } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
@@ -63,8 +62,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 	const deathProp = relative ? 'ptd' : 'td'
 	const recoveredProp = relative ? 'ptr' : 'tr'
 
-	// @ts-ignore
-	const hoveredTitle = states?.[hoveredState]?.n || 'Total'
+	const hoveredTitle = states[hoveredState]?.n || 'Total'
 	const hoveredData = hoveredState
 		? data?.find(({ st }) => st === hoveredState)
 		: total
