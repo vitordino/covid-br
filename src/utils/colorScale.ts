@@ -122,10 +122,7 @@ export type PropUnion = keyof typeof domains &
 	keyof typeof multipliers &
 	keyof typeof scales
 
-type GetSafeProp = (
-	prop: string,
-	fallbackProp?: PropUnion,
-) => PropUnion & keyof EntryUnion
+type GetSafeProp = (prop: string, fallbackProp?: PropUnion) => PropUnion
 
 // @ts-ignore
 const getSafeProp: GetSafeProp = (prop, fallbackProp) => {
@@ -155,15 +152,14 @@ const getHighest: GetHighestType = (filter = defaultFilter) => prop => x =>
 
 type GetRangeFill = (
 	data: EntryArrayUnion,
-) => (
-	prop: string,
-	fallbackProp?: keyof EntryUnion,
-) => (entry: EntryUnion) => string
+) => (prop: string, fallbackProp?: string) => (entry: EntryUnion) => string
 
 export const getRangeFill: GetRangeFill = data => prop => entry => {
 	const safeProp = getSafeProp(prop, 'tc')
+	// @ts-ignore
 	const x = entry[safeProp]
 	if (typeof x !== 'number') return '#eee'
+	// @ts-ignore
 	const highest = getHighest<EntryUnion>()(safeProp)(data)
 
 	return colorScale(

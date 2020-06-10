@@ -64,7 +64,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 	const recoveredProp = relative ? 'ptr' : 'tr'
 
 	// @ts-ignore
-	const hoveredTitle = states?.[hoveredState]?.n || 'Total'
+	const hoveredTitle = states[hoveredState]?.n || 'Total'
 	const hoveredData = hoveredState
 		? data?.find(({ st }) => st === hoveredState)
 		: total
