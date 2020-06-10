@@ -75,7 +75,7 @@ const FlexText = styled(Text)`
 
 type StatsCardProps<T> = {
 	prop: keyof T
-	dates: DatesEnum[]
+	dates: string[]
 	data?: T
 	chartData?: T[]
 }
