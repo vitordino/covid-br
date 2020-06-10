@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
 
 import range from 'utils/range'
+import numToString from 'utils/numToString'
 import type { Transform } from 'components/Text'
 import Text from 'components/Text'
 
@@ -231,9 +232,14 @@ export const RelativeRender = ({
 	x: number
 	isNew?: boolean
 }) => (
-	<span title={`${isNew ? '+ ' : ''}${x * 10000} a cada 10 mil hab`}>
+	<span
+		title={`${isNew && x > 0 ? '+ ' : ''}${numToString(
+			x * 10000,
+			true,
+		)} a cada 10 mil hab`}
+	>
 		{!!isNew && x > 0 && '+ '}
-		{(x * 10000).toFixed(2)}‱
+		{numToString(x * 10000, true)}‱
 	</span>
 )
 
@@ -246,7 +252,7 @@ export const AbsoluteRender = ({
 }) => (
 	<span>
 		{!!isNew && x > 0 && '+ '}
-		{x}
+		{numToString(x)}
 	</span>
 )
 
