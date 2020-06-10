@@ -21,8 +21,9 @@ type ChartType = {
 
 type AxisFn<T> = (v: T) => number
 
-const dateStringToNumber = s => +s.replace(/-/g, '')
-const isBefore = (a, b) => dateStringToNumber(a) < dateStringToNumber(b)
+const dateStringToNumber = (s: string) => +s.replace(/-/g, '')
+const isBefore = (a: string, b: string) =>
+	dateStringToNumber(a) < dateStringToNumber(b)
 
 const Chart: ChartType = ({ data, dates, prop }) => {
 	const dateIndex = useStore(s => s.dateIndex)

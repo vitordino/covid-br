@@ -35,10 +35,11 @@ type CityEntry = {
 	dbc?: number
 }
 
-type DateMapOf<T> = { [K in DatesEnum]: T }
+type EntryUnion = StateEntry | CityEntry
+type EntryArrayUnion = (StateEntry | CityEntry)[]
 
-type Main = DateMapOf<StateEntry[]>
-type Totals = DateMapOf<StateEntry>
+type Main = Record<string, EntryArrayUnion>
+type Totals = Record<string, EntryUnion>
 type StateMeta = {
 	p: number
 	n: string
