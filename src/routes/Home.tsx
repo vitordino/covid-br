@@ -17,6 +17,7 @@ import TitleHeader from 'components/TitleHeader'
 import SEO from 'components/SEO'
 
 const CountryMap = lazy(() => import('../components/CountryMap'))
+// @ts-ignore
 const StatsCard = lazy(() => import('../components/StatsCard'))
 
 const Sidebar = styled(Grid.Column)`
@@ -26,9 +27,9 @@ const Sidebar = styled(Grid.Column)`
 `
 
 type CountryDataType = {
-	main: Main
-	totals: Totals
-	dates: DatesEnum[]
+	main: Record<string, StateEntry[]>
+	totals: Record<string, StateEntry>
+	dates: string[]
 	states: StatesMeta
 }
 
@@ -62,6 +63,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 	const deathProp = relative ? 'ptd' : 'td'
 	const recoveredProp = relative ? 'ptr' : 'tr'
 
+	// @ts-ignore
 	const hoveredTitle = states[hoveredState]?.n || 'Total'
 	const hoveredData = hoveredState
 		? data?.find(({ st }) => st === hoveredState)
@@ -125,7 +127,7 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 					</Sidebar>
 				</Grid.Row>
 			</Container>
-			<RangeInput<StateEntry> dates={dates} totals={totals} />
+			<RangeInput dates={dates} totals={totals} />
 		</>
 	)
 }

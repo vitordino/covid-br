@@ -12,7 +12,7 @@ const Wrapper = styled.div`
 	position: relative;
 `
 
-const MapWithProps = (props?: Record<string, any>) => (
+const MapWithProps = (props?: object) => (
 	<ComposableMap
 		projectionConfig={{ scale: 550, center: [-54, -13] }}
 		height={440}

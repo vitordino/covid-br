@@ -11,7 +11,7 @@ import Logo from 'components/Logo'
 import ColorModeSwitcher from 'components/Layout/ColorModeSwitcher'
 
 type WrapperProps = {
-	sort: keyof StateEntry
+	sort: string
 }
 
 const LogoLink = styled(Link)`

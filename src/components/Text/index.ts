@@ -17,6 +17,7 @@ type TextProps = {
 	[key: string]: any
 }
 
+// @ts-ignore
 const mapping = mapBreakpoints(getTypeStyle)
 
 const Text = styled.div<TextProps>`

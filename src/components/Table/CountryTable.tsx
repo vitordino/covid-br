@@ -2,8 +2,9 @@ import React, { useMemo, useEffect } from 'react'
 import { useTable, useSortBy, Column } from 'react-table'
 
 import useStore from 'store'
+import { isStateProp } from 'utils/isPropOf'
 
-import type { RowProps, CellProps } from './shared'
+import type { CellProps } from './shared'
 
 import {
 	Cell,
@@ -17,13 +18,6 @@ import {
 	getCellRender,
 	EmptyCells,
 } from './shared'
-
-type Cell = {
-	row: RowProps
-	column: { id: keyof StateEntry }
-	data: StateEntry[]
-	[key: string]: any
-}
 
 type StateMeta = {
 	p: number
@@ -62,9 +56,15 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 					</Header>
 				),
 				sortInverted: true,
-				Cell: ({ row }: CellProps) => (
+				Cell: ({ row }: CellProps<StateEntry>) => (
+					// @ts-ignore
 					<Cell to={`/${row.values.st.toLowerCase()}`}>
-						<span title={statesMeta?.[row.values.st].n}>{row.values.st}</span>
+						<span
+							// @ts-ignore
+							title={statesMeta[row.values.st].n}
+						>
+							{row.values.st}
+						</span>
 					</Cell>
 				),
 			},
@@ -75,8 +75,8 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						Confirmados
 					</Header>
 				),
-				Cell: ({ row, column }: Cell) => (
-					<DynamicCell
+				Cell: ({ row, column }: CellProps<StateEntry>) => (
+					<DynamicCell<StateEntry>
 						row={row}
 						column={column}
 						data={data}
@@ -96,7 +96,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						Óbitos
 					</Header>
 				),
-				Cell: ({ row, column }: Cell) => (
+				Cell: ({ row, column }: CellProps<StateEntry>) => (
 					<DynamicCell
 						row={row}
 						column={column}
@@ -117,7 +117,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						Recuperados
 					</Header>
 				),
-				Cell: ({ row, column }: Cell) => (
+				Cell: ({ row, column }: CellProps<StateEntry>) => (
 					<DynamicCell
 						row={row}
 						column={column}
@@ -139,7 +139,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						Confirmados
 					</Header>
 				),
-				Cell: ({ row, column }: Cell) => (
+				Cell: ({ row, column }: CellProps<StateEntry>) => (
 					<DynamicCell
 						row={row}
 						column={column}
@@ -161,7 +161,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						Óbitos
 					</Header>
 				),
-				Cell: ({ row, column }: Cell) => (
+				Cell: ({ row, column }: CellProps<StateEntry>) => (
 					<DynamicCell
 						row={row}
 						column={column}
@@ -183,7 +183,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 						Recuperados
 					</Header>
 				),
-				Cell: ({ row, column }: Cell) => (
+				Cell: ({ row, column }: CellProps<StateEntry>) => (
 					<DynamicCell
 						row={row}
 						column={column}
@@ -213,7 +213,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 	} = useTable(
 		{
 			columns,
-
+			// @ts-ignore
 			initialState,
 			data,
 			footerGroups: total,
@@ -230,7 +230,8 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 	}, [sort])
 
 	useEffect(() => {
-		setSort(initialState.sortBy[0].id)
+		const id = initialState.sortBy[0].id
+		if (isStateProp(id, data[0])) setSort(id)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 

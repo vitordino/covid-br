@@ -7,7 +7,7 @@ type KeyToKey<T> = {
 	[K in keyof T]?: keyof T
 }
 
-const absoluteToRelative: KeyToKey<StateEntry> = {
+const absoluteToRelative: KeyToKey<EntryUnion> = {
 	tc: 'ptc',
 	nc: 'pnc',
 	td: 'ptd',
@@ -16,7 +16,7 @@ const absoluteToRelative: KeyToKey<StateEntry> = {
 	nr: 'pnr',
 }
 
-const relativeToAbsolute: KeyToKey<StateEntry> = {
+const relativeToAbsolute: KeyToKey<EntryUnion> = {
 	ptc: 'tc',
 	pnc: 'nc',
 	ptd: 'td',
@@ -25,7 +25,7 @@ const relativeToAbsolute: KeyToKey<StateEntry> = {
 	pnr: 'nr',
 }
 
-const transposeKeys: KeyToKey<StateEntry> = {
+const transposeKeys: KeyToKey<EntryUnion> = {
 	...absoluteToRelative,
 	...relativeToAbsolute,
 } as const
@@ -40,6 +40,7 @@ const useRelativeSortSync = () => {
 	const relative = useStore(s => s.relative)
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 
+	// @ts-ignore
 	const nextSort = getNextSort(sort, relative) || 'tc'
 
 	useEffect(() => {

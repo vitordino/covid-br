@@ -14,8 +14,8 @@ const useColorMode: UseColorMode = () => {
 		if (colorMode) {
 			setTheme(colorMode)
 			document.documentElement.dataset.theme = colorMode
-			// @ts-ignore __setTheme global has no type yet
-			window.__setTheme?.(colorMode)
+			// @ts-ignore
+			window?.__setTheme?.(colorMode)
 		}
 	}, [colorMode])
 
