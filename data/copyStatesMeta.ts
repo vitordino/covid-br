@@ -8,4 +8,4 @@ const callback = (err: any) => {
 	return console.log('statesMeta.json was copied')
 }
 
-module.exports = () => copyFile(input, output, callback)
+export default () => copyFile(input, output, callback)
