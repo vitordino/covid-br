@@ -15,6 +15,8 @@ type Store = {
 
 	hoveredState: string | null
 	setHoveredState: (v: string | null) => void
+
+	reset: () => void
 }
 
 const initialState = {
