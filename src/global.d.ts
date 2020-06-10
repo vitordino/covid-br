@@ -4,7 +4,7 @@ type HashMapOf<T> = { [key: string]: T }
 enum StatesEnum { SP, MG, RJ, BA, PR, RS, PE, CE, PA, SC, MA, GO, AM, ES, PB, RN, MT, AL, PI, DF, MS, SE, RO, TO, AC, AP, RR }
 
 type StateEntry = {
-	date: DatesEnum
+	date: string
 	st: keyof typeof StatesEnum | 'TOTAL'
 	td: number
 	nd: number
@@ -24,6 +24,7 @@ type StateEntry = {
 }
 
 type CityEntry = {
+	date: string
 	ct?: string
 	id?: number
 	tc: number

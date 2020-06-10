@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo, useEffect } from 'react'
 import { useTable, useSortBy, Column } from 'react-table'
 
@@ -37,6 +36,11 @@ type CountryTableProps = {
 	statesMeta: StatesMeta
 }
 
+const isStateProp = (prop: string, entry: EntryUnion): prop is keyof StateEntry => {
+	if(prop in entry) return true
+	return false
+}
+
 const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const relative = useStore(s => s.relative)
@@ -64,7 +68,8 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 				),
 				sortInverted: true,
 				Cell: ({ row }: CellProps) => (
-					<Cell to={`/${row.values.st.toLowerCase()}`}>
+					// @ts-ignore
+					<Cell to={`/${row.values?.st?.toLowerCase()}`}>
 						<span
 							// @ts-ignore
 							title={statesMeta?.[row.values.st].n}
@@ -236,7 +241,8 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 	}, [sort])
 
 	useEffect(() => {
-		setSort(initialState.sortBy[0].id)
+		const id = initialState.sortBy[0].id
+		if(isStateProp(id, data[0])) setSort(id)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
