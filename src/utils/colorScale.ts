@@ -1,6 +1,5 @@
 import { scaleLinear } from 'd3-scale'
 import { schemeReds, schemeGreys, schemeGreens } from 'd3-scale-chromatic'
-import { values } from 'ramda'
 
 import range from 'utils/range'
 
@@ -123,7 +122,10 @@ export type PropUnion = keyof typeof domains &
 	keyof typeof multipliers &
 	keyof typeof scales
 
-type GetSafeProp = (prop: string, fallbackProp?: PropUnion) => PropUnion
+type GetSafeProp = (
+	prop: string,
+	fallbackProp?: PropUnion,
+) => PropUnion & keyof EntryUnion
 
 // @ts-ignore
 const getSafeProp: GetSafeProp = (prop, fallbackProp) => {
@@ -138,34 +140,31 @@ const higher = (a: number, b: number) => Math.max(a, b)
 
 const defaultFilter = (x: any) => !!x
 
-type GetHighestType = (
-	filter?: (x: any) => boolean,
-) => (prop: keyof EntryUnion) => (x: EntryArrayUnion) => number
+type FilterOf<T> = (x: T) => boolean
+
+type GetHighestType = {
+	<T>(filter?: FilterOf<T>): (prop: keyof T) => (x: T[]) => number
+}
 
 const getHighest: GetHighestType = (filter = defaultFilter) => prop => x =>
-	+values(x)
+	+Object.values(x)
 		.filter(filter)
-		// @ts-ignore
-		.filter(x => !!x?.[prop])
-		// @ts-ignore
-		.map(x => x?.[prop])
+		.map(x => (isFinite(+x[prop]) ? +x[prop] : 0))
 		.reduce(higher, 0)
 		.toFixed(6)
 
 type GetRangeFill = (
 	data: EntryArrayUnion,
-) => (prop: string, fallbackProp?: string) => (entry: EntryUnion) => string
+) => (
+	prop: string,
+	fallbackProp?: keyof EntryUnion,
+) => (entry: EntryUnion) => string
 
 export const getRangeFill: GetRangeFill = data => prop => entry => {
-	// @ts-ignore
 	const safeProp = getSafeProp(prop, 'tc')
-
-	// @ts-ignore
-	const x = entry?.[safeProp]
+	const x = entry[safeProp]
 	if (typeof x !== 'number') return '#eee'
-
-	// @ts-ignore
-	const highest = getHighest()(safeProp)(data)
+	const highest = getHighest<EntryUnion>()(safeProp)(data)
 
 	return colorScale(
 		getDomain(highest * multipliers[safeProp]),
