@@ -34,7 +34,7 @@ type StaticCellProps = {
 	children?: ReactNode
 	bold?: boolean
 	transform?: Transform
-	to?: string
+	to?: string | null
 }
 
 export const CellWrapper = styled(Text)`
@@ -72,15 +72,15 @@ export const Cell = ({
 
 type DynamicCellProps<T> = {
 	row: RowProps<T>
-	data?: T[]
+	data?: T[] | null
 	column: { id: keyof T }
-	prop?: keyof T
-	leftProp?: keyof T
+	prop?: keyof T | null
+	leftProp?: keyof T | null
 	leftRender?: (x: ReactNode) => ReactNode
 	mainRender?: (x: ReactNode) => ReactNode
 	children?: ReactNode
 	isVisible: boolean
-	to?: string
+	to?: string | null
 }
 
 type DynamicCellType = {
@@ -262,6 +262,7 @@ export const AbsoluteRender = ({
 export const getCellRender = (relative: boolean, isNew?: boolean) => (
 	x: ReactNode,
 ) => {
+	if (typeof x !== 'number' && !x) return null
 	if (typeof x !== 'number') return x
 	if (relative) return <RelativeRender x={x} isNew={isNew} />
 	return <AbsoluteRender x={x} isNew={isNew} />

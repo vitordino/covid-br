@@ -1,8 +1,8 @@
 import create from 'zustand'
 
 type Store = {
-	sort: keyof StateEntry
-	setSort: (v: keyof StateEntry) => void
+	sort: keyof StateEntry | keyof CityEntry
+	setSort: (v: keyof StateEntry | keyof CityEntry) => void
 
 	dateIndex: number
 	setDateIndex: (v: number) => void

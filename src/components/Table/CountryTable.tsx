@@ -2,6 +2,7 @@ import React, { useMemo, useEffect } from 'react'
 import { useTable, useSortBy, Column } from 'react-table'
 
 import useStore from 'store'
+import { isStateProp } from 'utils/isPropOf'
 
 import type { CellProps } from './shared'
 
@@ -27,14 +28,6 @@ type CountryTableProps = {
 	data: StateEntry[]
 	total: StateEntry
 	statesMeta: StatesMeta
-}
-
-const isStateProp = (
-	prop: string,
-	entry: EntryUnion,
-): prop is keyof StateEntry => {
-	if (prop in entry) return true
-	return false
 }
 
 const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
