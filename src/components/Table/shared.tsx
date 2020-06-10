@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
@@ -8,15 +7,15 @@ import numToString from 'utils/numToString'
 import type { Transform } from 'components/Text'
 import Text from 'components/Text'
 
-export type RowProps = {
-	values: StateEntry
+export type RowProps<T> = {
+	values: T
 	index: number
 }
 
-export type CellProps = {
-	row: RowProps
-	column: { id: keyof StateEntry | keyof CityEntry }
-	data: StateEntry[] | CityEntry[]
+export type CellProps<T> = {
+	row: RowProps<T>
+	column: { id: keyof T }
+	data: T[]
 	[key: string]: any
 }
 
@@ -71,12 +70,12 @@ export const Cell = ({
 	</CellWrapper>
 )
 
-type DynamicCellProps = {
-	row: RowProps
-	data?: StateEntry[] | CityEntry[]
-	column: { id: keyof StateEntry | keyof CityEntry }
-	prop?: keyof StateEntry | keyof CityEntry
-	leftProp?: keyof StateEntry | keyof CityEntry
+type DynamicCellProps<T> = {
+	row: RowProps<T>
+	data?: T[]
+	column: { id: keyof T }
+	prop?: keyof T
+	leftProp?: keyof T
 	leftRender?: (x: ReactNode) => ReactNode
 	mainRender?: (x: ReactNode) => ReactNode
 	children?: ReactNode
@@ -84,7 +83,11 @@ type DynamicCellProps = {
 	to?: string
 }
 
-export const DynamicCell = ({
+type DynamicCellType = {
+	<T>(props: DynamicCellProps<T>): JSX.Element | null
+}
+
+export const DynamicCell: DynamicCellType = ({
 	row,
 	column,
 	data,
@@ -95,7 +98,7 @@ export const DynamicCell = ({
 	children,
 	isVisible = true,
 	to,
-}: DynamicCellProps) => {
+}) => {
 	if (!isVisible) return null
 	return (
 		<Cell to={to} left={leftProp && leftRender(data?.[row.index]?.[leftProp])}>
