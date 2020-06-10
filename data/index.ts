@@ -1,16 +1,16 @@
-import copyStatesMeta from './copyStatesMeta'
-import getCountryData from './getCountryData'
-import downloadTopo from './downloadTopo'
-import getStatesData from './getStatesData'
+const paths = [
+	'./copyStatesMeta',
+	'./getCountryData',
+	'./downloadTopo',
+	'./getStatesData',
+]
 
-const main = () => {
-	Promise.all([copyStatesMeta()]).finally(() =>
-		Promise.all([getCountryData()]).finally(() =>
-			Promise.all([downloadTopo()]).finally(() =>
-				Promise.all([getStatesData()]),
-			),
-		),
-	)
+const main = async () => {
+	for (let i = 0; i < paths.length; ) {
+		const x = await import(paths[i])
+		await x.default()
+		i++
+	}
 }
 
 main()
