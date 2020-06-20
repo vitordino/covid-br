@@ -15,6 +15,7 @@ import Loader from 'components/Loader'
 import Text from 'components/Text'
 import Spacer from 'components/Spacer'
 import TitleHeader from 'components/TitleHeader'
+import SummaryCard from 'components/SummaryCard'
 import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
 import StateTable from 'components/Table/StateTable'
 import RangeInput from 'components/RangeInput'
@@ -93,6 +94,27 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 					onChange={v => setDateIndex(parseInt(v))}
 					renderOption={dateToString}
 				/>
+				<Suspense fallback={<Loader />}>
+					<Grid.Row>
+						<Grid.Column xs={16} lg={8}>
+							<SummaryCard<StateEntry>
+								prop={caseProp}
+								data={total}
+								chartData={Object.values(totals)}
+								dates={dates}
+							/>
+						</Grid.Column>
+						<Grid.Column xs={16} lg={8}>
+							<SummaryCard<StateEntry>
+								prop={deathProp}
+								data={total}
+								chartData={Object.values(totals)}
+								dates={dates}
+							/>
+						</Grid.Column>
+					</Grid.Row>
+				</Suspense>
+				<Spacer.V xs={2} />
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
 						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
