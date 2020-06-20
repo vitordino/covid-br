@@ -15,6 +15,8 @@ import Grid from 'components/Grid'
 import Text from 'components/Text'
 import RangeInput from 'components/RangeInput'
 import TitleHeader from 'components/TitleHeader'
+import SummaryCard from 'components/SummaryCard'
+import Spacer from 'components/Spacer'
 import SEO from 'components/SEO'
 
 const CountryMap = lazy(() => import('../components/CountryMap'))
@@ -88,6 +90,35 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 					onChange={v => setDateIndex(parseInt(v))}
 					renderOption={dateToString}
 				/>
+				<Suspense fallback={<Loader />}>
+					<Grid.Row>
+						<Grid.Column xs={16} lg={16 / 3}>
+							<SummaryCard<StateEntry>
+								prop={caseProp}
+								data={total}
+								chartData={Object.values(totals)}
+								dates={dates}
+							/>
+						</Grid.Column>
+						<Grid.Column xs={16} lg={16 / 3}>
+							<SummaryCard<StateEntry>
+								prop={deathProp}
+								data={total}
+								chartData={Object.values(totals)}
+								dates={dates}
+							/>
+						</Grid.Column>
+						<Grid.Column xs={16} lg={16 / 3}>
+							<SummaryCard<StateEntry>
+								prop={recoveredProp}
+								data={total}
+								chartData={Object.values(totals)}
+								dates={dates}
+							/>
+						</Grid.Column>
+					</Grid.Row>
+				</Suspense>
+				<Spacer.V xs={2} />
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10} xg={12}>
 						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
