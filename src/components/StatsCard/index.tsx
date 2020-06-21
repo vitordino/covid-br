@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import useStore from 'store'
+import numToString from 'utils/numToString'
 import { getColorOf } from 'utils/colorScale'
 import Text from 'components/Text'
 import Spacer from 'components/Spacer'
@@ -74,7 +75,7 @@ const FlexText = styled(Text)`
 
 type StatsCardProps<T> = {
 	prop: keyof T
-	dates: DatesEnum[]
+	dates: string[]
 	data?: T
 	chartData?: T[]
 }
@@ -154,13 +155,13 @@ const RenderValue = ({ value, isNew, kind }: RenderValueProps) => {
 		return (
 			<>
 				{isNew && value > 0 ? '+ ' : ''}
-				{(value * MULTIPLIER).toFixed(2)}‱
+				{numToString(value * MULTIPLIER, true)}‱
 			</>
 		)
 	return (
 		<>
 			{isNew && value > 0 ? '+ ' : ''}
-			{value}
+			{numToString(value)}
 		</>
 	)
 }

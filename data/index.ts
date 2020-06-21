@@ -1,13 +1,18 @@
-const main = () => {
-	Promise.all([require('./copyStatesMeta')()]).finally(() =>
-		Promise.all([require('./getCountryData')()]).finally(() =>
-			Promise.all([require('./downloadTopo')()]).finally(() =>
-				Promise.all([require('./getStatesData')()]),
-			),
-		),
-	)
+const paths = [
+	'./copyStatesMeta',
+	'./getCountryData',
+	'./downloadTopo',
+	'./getStatesData',
+]
+
+const main = async () => {
+	for (let i = 0; i < paths.length; ) {
+		const x = await import(paths[i])
+		await x.default()
+		i++
+	}
 }
 
 main()
 
-module.exports = main
+export default main

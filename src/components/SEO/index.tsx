@@ -2,12 +2,12 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 
 const siteMetadata = {
-	siteUrl: 'https://covid.vitordino.com/',
+	siteUrl: 'https://covid-br.com/',
 	author: 'vitordino',
 	title: 'COVID — BR',
 	description: 'Mapa da Covid-19 no Brasil, com dados de estados e municípios',
 	keywords: ['covid19', 'coronavirus', 'brazil', 'brasil'],
-	image: 'https://covid.vitordino.com/og-image.png',
+	image: 'https://covid-br.com/og-image.png',
 }
 
 type Meta = {

@@ -1,10 +1,8 @@
-type HashMapOf<T> = { [key: string]: T }
-
 // prettier-ignore
 enum StatesEnum { SP, MG, RJ, BA, PR, RS, PE, CE, PA, SC, MA, GO, AM, ES, PB, RN, MT, AL, PI, DF, MS, SE, RO, TO, AC, AP, RR }
 
 type StateEntry = {
-	date: DatesEnum
+	date: string
 	st: keyof typeof StatesEnum | 'TOTAL'
 	td: number
 	nd: number
@@ -24,6 +22,7 @@ type StateEntry = {
 }
 
 type CityEntry = {
+	date: string
 	ct?: string
 	id?: number
 	tc: number
@@ -35,10 +34,9 @@ type CityEntry = {
 	dbc?: number
 }
 
-type DateMapOf<T> = { [K in DatesEnum]: T }
+type EntryUnion = StateEntry | CityEntry
+type EntryArrayUnion = (StateEntry | CityEntry)[]
 
-type Main = DateMapOf<StateEntry[]>
-type Totals = DateMapOf<StateEntry>
 type StateMeta = {
 	p: number
 	n: string
@@ -50,4 +48,4 @@ type StatesMeta = {
 
 type ValuesOf<T extends string[]> = T[number]
 
-type DatesEnum = ValuesOf<typeof data.dates>
+type string = ValuesOf<typeof data.dates>

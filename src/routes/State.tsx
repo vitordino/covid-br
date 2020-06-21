@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo, useLayoutEffect, lazy, Suspense } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
@@ -20,6 +19,7 @@ import RelativeAndDailySwitcher from 'components/RelativeAndDailySwitcher'
 import StateTable from 'components/Table/StateTable'
 import RangeInput from 'components/RangeInput'
 
+// @ts-ignore
 const StatsCard = lazy(() => import('../components/StatsCard'))
 
 const Sidebar = styled(Grid.Column)`
@@ -35,13 +35,9 @@ type StateProps = {
 const getStateName = (id: keyof typeof StatesEnum) => statesMeta?.[id]?.n
 
 type StateDataType = {
-	main: {
-		[key: string]: CityEntry[]
-	}
-	totals: {
-		[key: string]: CityEntry
-	}
-	dates: DatesEnum[]
+	main: Record<string, CityEntry[]>
+	totals: Record<string, CityEntry>
+	dates: string[]
 }
 
 interface InnerProps extends StateDataType {
@@ -148,7 +144,7 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 					</Sidebar>
 				</Grid.Row>
 			</Container>
-			<RangeInput<CityEntry> dates={dates} totals={totals} />
+			<RangeInput dates={dates} totals={totals} />
 		</>
 	)
 }

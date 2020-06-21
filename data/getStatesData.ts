@@ -1,9 +1,7 @@
-// @ts-nocheck
-const { get } = require('https')
-const { writeFile } = require('fs')
-const { parse } = require('@fast-csv/parse')
-
-const { main, dates } = require('./country.json')
+import { writeFile } from 'fs'
+import { get } from 'https'
+import { parse } from '@fast-csv/parse'
+import { main, dates } from './country.json'
 
 const selectKeys = (keys: string[]) => (obj: Record<string, any>) =>
 	Object.entries(obj).reduce((acc, [k, v]) => {
@@ -15,10 +13,11 @@ const keysToMaintainFromMain = ['date', 'tc', 'nc', 'ptc', 'td', 'nd', 'ptd']
 
 const clearMainKeys = selectKeys(keysToMaintainFromMain)
 
-const getTotals = id =>
+const getTotals = (id: string) =>
 	Object.entries(main).reduce(
 		(acc, [k, v]) => ({
 			...acc,
+			// @ts-ignore
 			[k]: v.filter(({ st }) => st === id).map(clearMainKeys)[0],
 		}),
 		{},
@@ -74,11 +73,11 @@ const outputs: Outputs = { SP: {}, MG: {}, RJ: {}, BA: {}, PR: {}, RS: {}, PE: {
 const write = (
 	destinies: Array<string> = [],
 	content: any,
-	handle: Function,
+	handle: (x: boolean, directory: string, index: number) => void,
 ) => {
 	const json = JSON.stringify(content)
-	destinies.forEach((d, i) =>
-		writeFile(d, json, (x: ErrorType) => handle(x, d, i)),
+	destinies.forEach((directory, index) =>
+		writeFile(directory, json, x => handle(!!x, directory, index)),
 	)
 }
 
@@ -107,10 +106,11 @@ const renameLineData = ({
 })
 
 const pushLineToStateDate = (state: StateKeys, date: string) => (
-	line: object,
+	line: Record<string, any>,
 ) => {
 	if (!(state in outputs)) outputs[state] = {}
 	if (!(date in outputs[state])) outputs[state][date] = []
+	// @ts-ignore
 	outputs[state][date].push(line)
 }
 
@@ -132,7 +132,7 @@ const handleEnd = (rowCount: number) => {
 	)
 }
 
-module.exports = () =>
+export default () =>
 	get(url, (res: any) =>
 		res
 			.pipe(parse({ headers: true }))

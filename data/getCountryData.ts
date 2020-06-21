@@ -1,14 +1,14 @@
-const { get } = require('https')
-const { writeFile } = require('fs')
-const { parse } = require('@fast-csv/parse')
-const { groupBy, uniq, values } = require('ramda')
+import { writeFile } from 'fs'
+import { get } from 'https'
+import { parse } from '@fast-csv/parse'
+import { groupBy, uniq, values } from 'ramda'
 
 const states: StatesMeta = require('./statesMeta.json')
 const totalPopulation = Object.values(states).reduce((a, { p }) => a + p, 0)
 
 type HashMapOf<T> = Record<string, T>
 
-type ErrorType = Error | String
+export type ErrorType = Error | String
 
 // prettier-ignore
 enum StatesEnum { SP, MG, RJ, BA, PR, RS, PE, CE, PA, SC, MA, GO, AM, ES, PB, RN, MT, AL, PI, DF, MS, SE, RO, TO, AC, AP, RR }
@@ -129,11 +129,11 @@ const getNewRecovered = ({ state, recovered }: StateEntry) => {
 const write = (
 	destinies: Array<string> = [],
 	content: any,
-	handle: Function,
+	handle: (x: boolean, directory: string, index: number) => void,
 ) => {
 	const json = JSON.stringify(content)
-	destinies.forEach((d, i) =>
-		writeFile(d, json, (x: ErrorType) => handle(x, d, i)),
+	destinies.forEach((directory, index) =>
+		writeFile(directory, json, x => handle(!!x, directory, index)),
 	)
 }
 
@@ -145,12 +145,8 @@ const handleData = (data: StateEntry) => {
 	lines.push({ ...data, newRecovered: getNewRecovered(data) })
 }
 
-const handleWrite = (err: ErrorType, destiny: string) => {
-	if (err) {
-		console.error(destiny)
-		console.error(err)
-		return
-	}
+const handleWrite = (err: boolean, destiny: string) => {
+	if (err) return console.error(destiny)
 	return console.log(`file ${destiny} was saved`)
 }
 
@@ -183,33 +179,24 @@ const getDate = ({ date }: StateOutput) => date
 const groupByDate = groupBy(getDate)
 const higher = (a: number, b: number) => Math.max(a, b)
 
-type FilterOf<T> = (x: T) => boolean
+type FilterOf<T> = (value: T, index: number, arr: T[]) => boolean
 
 const defaultFilter: FilterOf<any> = x => !!x
 
-const getHighest = <T extends StateOutput>(
-	filter: (value: T) => boolean = defaultFilter,
-) => (prop: NumericKeysOf<T>) => (x: T[]) =>
-	+values(x)
+type GetHighestType = {
+	<T>(filter?: FilterOf<T>): (prop: keyof T) => (x: T[]) => number
+}
+
+const getHighest: GetHighestType = (filter = defaultFilter) => prop => x =>
+	+Object.values(x)
 		.filter(filter)
-		.filter((x: T) => !!x[prop])
-		.map((x: T) => x[prop])
+		.filter(x => isFinite(+x[prop]))
+		.map(x => +x[prop])
 		.reduce(higher, 0)
 		.toFixed(6)
 
-// i f***** hate TS
-const getHighestPop = <T extends PopulationalEnhancedOutput>(
-	filter: (value: T) => boolean = defaultFilter,
-) => (prop: keyof T) => (x: T[]) =>
-	+values(x)
-		.filter(filter)
-		.filter((x: T) => !!x[prop])
-		.map((x: T) => x[prop])
-		.reduce(higher, 0)
-		.toFixed(6)
-
-const getHighestState = getHighest(({ st }) => st !== 'TOTAL')
-const getHighestTotal = getHighest(({ st }) => st === 'TOTAL')
+const getHighestState = getHighest<StateOutput>(({ st }) => st !== 'TOTAL')
+const getHighestTotal = getHighest<StateOutput>(({ st }) => st === 'TOTAL')
 
 const getHighestStateCase = getHighestState('tc')
 const getHighestStateNewCase = getHighestState('nc')
@@ -225,12 +212,12 @@ const getHighestTotalNewDeath = getHighestTotal('nd')
 const getHighestTotalRecovered = getHighestTotal('tr')
 const getHighestTotalNewRecovered = getHighestTotal('nr')
 
-const getHighestPopCase = getHighestPop()('ptc')
-const getHighestPopNewCase = getHighestPop()('pnc')
-const getHighestPopDeath = getHighestPop()('ptd')
-const getHighestPopNewDeath = getHighestPop()('pnd')
-const getHighestPopRecovered = getHighestPop()('ptr')
-const getHighestPopNewRecovered = getHighestPop()('pnr')
+const getHighestPopCase = getHighest<PopulationalEnhancedOutput>()('ptc')
+const getHighestPopNewCase = getHighest<PopulationalEnhancedOutput>()('pnc')
+const getHighestPopDeath = getHighest<PopulationalEnhancedOutput>()('ptd')
+const getHighestPopNewDeath = getHighest<PopulationalEnhancedOutput>()('pnd')
+const getHighestPopRecovered = getHighest<PopulationalEnhancedOutput>()('ptr')
+const getHighestPopNewRecovered = getHighest<PopulationalEnhancedOutput>()('pnr')
 
 type EnhanceReducerFn = (
 	arr: Outputs,
@@ -240,8 +227,9 @@ type EnhanceReducerFn = (
 	i: number,
 ) => EnhancedOutput
 
-const enhance: EnhanceReducerFn = arr => (acc, k, i) => ({
+const enhance: EnhanceReducerFn = arr => (acc, k) => ({
 	...acc,
+	// @ts-ignore
 	[`r${k}`]: +(acc[k] / getHighest()(k)(arr)).toFixed(6),
 })
 
@@ -384,4 +372,4 @@ const exportedFunction = () =>
 			.on('end', handleEnd),
 	)
 
-module.exports = exportedFunction
+export default exportedFunction

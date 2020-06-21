@@ -6,7 +6,7 @@ import { getRangeFill } from 'utils/colorScale'
 
 type RangeInputProps = {
 	dates: string[]
-	totals: Totals
+	totals: Record<string, EntryUnion>
 }
 
 const Wrapper = styled.label`
@@ -86,11 +86,7 @@ const Strip = styled.div<StripProps>`
 	background: ${p => p.fill};
 `
 
-type RangeInputType = {
-	<T extends object>({ dates, totals }: RangeInputProps): any
-}
-
-const RangeInput: RangeInputType = ({ dates, totals }) => {
+const RangeInput = ({ dates, totals }: RangeInputProps) => {
 	const sort = useStore(s => s.sort)
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
 	const rangeFill = getRangeFill(Object.values(totals))(sort)
@@ -105,11 +101,7 @@ const RangeInput: RangeInputType = ({ dates, totals }) => {
 				onChange={({ target }) => setDateIndex(parseInt(target.value))}
 			/>
 			{dates.map(x => (
-				<Strip
-					key={x}
-					total={dates.length}
-					fill={rangeFill(totals[x])}
-				/>
+				<Strip key={x} total={dates.length} fill={rangeFill(totals[x])} />
 			))}
 		</Wrapper>
 	)

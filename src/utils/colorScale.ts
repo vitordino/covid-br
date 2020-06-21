@@ -1,6 +1,5 @@
 import { scaleLinear } from 'd3-scale'
 import { schemeReds, schemeGreys, schemeGreens } from 'd3-scale-chromatic'
-import { values }  from 'ramda'
 
 import range from 'utils/range'
 
@@ -110,7 +109,7 @@ export const scales = {
 
 const scaleKeys = Object.keys(scales)
 
-type IsPropSafe = (p: keyof StateEntry) => boolean
+type IsPropSafe = (p: string) => boolean
 
 const isPropSafe: IsPropSafe = p =>
 	domainsKeys.includes(p) &&
@@ -123,10 +122,7 @@ export type PropUnion = keyof typeof domains &
 	keyof typeof multipliers &
 	keyof typeof scales
 
-type GetSafeProp = (
-	prop: keyof StateEntry,
-	fallbackProp: PropUnion,
-) => PropUnion
+type GetSafeProp = (prop: string, fallbackProp?: PropUnion) => PropUnion
 
 // @ts-ignore
 const getSafeProp: GetSafeProp = (prop, fallbackProp) => {
@@ -141,34 +137,30 @@ const higher = (a: number, b: number) => Math.max(a, b)
 
 const defaultFilter = (x: any) => !!x
 
+type FilterOf<T> = (x: T) => boolean
+
 type GetHighestType = {
-	<T extends object>(filter?: (x: any) => boolean): (prop: keyof T) => (x: T[]) => number
+	<T>(filter?: FilterOf<T>): (prop: keyof T) => (x: T[]) => number
 }
 
 const getHighest: GetHighestType = (filter = defaultFilter) => prop => x =>
-	+values(x)
+	+Object.values(x)
 		.filter(filter)
-		// @ts-ignore
-		.filter(x => !!x?.[prop])
-		// @ts-ignore
-		.map(x => x?.[prop])
+		.map(x => (isFinite(+x[prop]) ? +x[prop] : 0))
 		.reduce(higher, 0)
 		.toFixed(6)
 
-type GetRangeFill = {
-  <T>(data: T[]): (prop: keyof T, fallbackProp?: string) => (entry: T) => string
-}
+type GetRangeFill = (
+	data: EntryArrayUnion,
+) => (prop: string, fallbackProp?: string) => (entry: EntryUnion) => string
 
 export const getRangeFill: GetRangeFill = data => prop => entry => {
-	// @ts-ignore
 	const safeProp = getSafeProp(prop, 'tc')
-	
 	// @ts-ignore
-	const x = entry?.[safeProp]
+	const x = entry[safeProp]
 	if (typeof x !== 'number') return '#eee'
-	
 	// @ts-ignore
-	const highest = getHighest()(safeProp)(data)
+	const highest = getHighest<EntryUnion>()(safeProp)(data)
 
 	return colorScale(
 		getDomain(highest * multipliers[safeProp]),
@@ -176,9 +168,8 @@ export const getRangeFill: GetRangeFill = data => prop => entry => {
 	)(x * multipliers[safeProp])
 }
 
-
 export const getMapFill = (data: StateEntry[], id?: string) => (
-	prop: keyof StateEntry,
+	prop: string,
 	fallbackProp: PropUnion = 'tc',
 ) => {
 	const safeProp = getSafeProp(prop, fallbackProp)
@@ -191,6 +182,7 @@ export const getMapFill = (data: StateEntry[], id?: string) => (
 	)(x * multipliers[safeProp])
 }
 
-type GetColorOfType = (p: keyof StateEntry, n?: number) => string
-// @ts-ignore
-export const getColorOf: GetColorOfType = (p, n = 4) => scales?.[p]?.[n]
+type GetColorOfType = (prop: string, n?: number) => string
+
+export const getColorOf: GetColorOfType = (prop, n = 4) =>
+	scales[getSafeProp(prop)][n]

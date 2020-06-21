@@ -1,10 +1,10 @@
-// @ts-nocheck
 import React, { useMemo, useEffect } from 'react'
 import { useTable, useSortBy, Column } from 'react-table'
 
 import useStore from 'store'
+import { isCityProp } from 'utils/isPropOf'
 
-import type { RowProps, CellProps } from './shared'
+import type { CellProps } from './shared'
 
 import {
 	Cell,
@@ -20,13 +20,6 @@ import {
 	getCellRender,
 	EmptyCells,
 } from './shared'
-
-type Cell = {
-	row: RowProps
-	column: { id: keyof CityEntry }
-	data: CityEntry[]
-	[key: string]: any
-}
 
 type StateMeta = {
 	p: number
@@ -62,7 +55,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 					</Header>
 				),
 				sortInverted: true,
-				Cell: ({ row }: CellProps) => (
+				Cell: ({ row }: CellProps<CityEntry>) => (
 					<Cell>
 						<span
 							// @ts-ignore
@@ -80,7 +73,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 						Confirmados
 					</Header>
 				),
-				Cell: ({ row, column }: Cell) => (
+				Cell: ({ row, column }: CellProps<CityEntry>) => (
 					<DynamicCell
 						row={row}
 						column={column}
@@ -100,7 +93,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 						Óbitos
 					</Header>
 				),
-				Cell: ({ row, column }: Cell) => (
+				Cell: ({ row, column }: CellProps<CityEntry>) => (
 					<DynamicCell
 						row={row}
 						column={column}
@@ -120,7 +113,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 						Confirmados
 					</Header>
 				),
-				Cell: ({ row, column }: Cell) => (
+				Cell: ({ row, column }: CellProps<CityEntry>) => (
 					<DynamicCell
 						row={row}
 						column={column}
@@ -140,7 +133,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 						Óbitos
 					</Header>
 				),
-				Cell: ({ row, column }: Cell) => (
+				Cell: ({ row, column }: CellProps<CityEntry>) => (
 					<DynamicCell
 						row={row}
 						column={column}
@@ -186,7 +179,8 @@ const StateTable = ({ data, total }: StateTableProps) => {
 	}, [sort])
 
 	useEffect(() => {
-		setSort(initialState.sortBy[0].id)
+		const id = initialState.sortBy[0].id
+		if (isCityProp(id, data[0])) setSort(id)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
@@ -238,12 +232,22 @@ const StateTable = ({ data, total }: StateTableProps) => {
 						</td>
 						<EmptyCells count={2} isVisible={relative} />
 						<td>
-							<Cell left={getCellRender(relative, true)(total[caseLeftProp])}>
+							<Cell
+								left={
+									caseLeftProp &&
+									getCellRender(relative, true)(total[caseLeftProp])
+								}
+							>
 								{getCellRender(relative)(total[caseProp])}
 							</Cell>
 						</td>
 						<td>
-							<Cell left={getCellRender(relative, true)(total[deathLeftProp])}>
+							<Cell
+								left={
+									deathLeftProp &&
+									getCellRender(relative, true)(total[deathLeftProp])
+								}
+							>
 								{getCellRender(relative)(total[deathProp])}
 							</Cell>
 						</td>
