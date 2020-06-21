@@ -93,28 +93,13 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 				<Suspense fallback={<Loader />}>
 					<Grid.Row>
 						<Grid.Column xs={16} lg={16 / 3}>
-							<SummaryCard<StateEntry>
-								prop={caseProp}
-								data={total}
-								chartData={Object.values(totals)}
-								dates={dates}
-							/>
+							<SummaryCard<StateEntry> prop={caseProp} data={total} />
 						</Grid.Column>
 						<Grid.Column xs={16} lg={16 / 3}>
-							<SummaryCard<StateEntry>
-								prop={deathProp}
-								data={total}
-								chartData={Object.values(totals)}
-								dates={dates}
-							/>
+							<SummaryCard<StateEntry> prop={deathProp} data={total} />
 						</Grid.Column>
 						<Grid.Column xs={16} lg={16 / 3}>
-							<SummaryCard<StateEntry>
-								prop={recoveredProp}
-								data={total}
-								chartData={Object.values(totals)}
-								dates={dates}
-							/>
+							<SummaryCard<StateEntry> prop={recoveredProp} data={total} />
 						</Grid.Column>
 					</Grid.Row>
 				</Suspense>

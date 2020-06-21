@@ -93,20 +93,10 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 				<Suspense fallback={<Loader />}>
 					<Grid.Row>
 						<Grid.Column xs={16} lg={8}>
-							<SummaryCard<StateEntry>
-								prop={caseProp}
-								data={total}
-								chartData={Object.values(totals)}
-								dates={dates}
-							/>
+							<SummaryCard<CityEntry> prop={caseProp} data={total} />
 						</Grid.Column>
 						<Grid.Column xs={16} lg={8}>
-							<SummaryCard<StateEntry>
-								prop={deathProp}
-								data={total}
-								chartData={Object.values(totals)}
-								dates={dates}
-							/>
+							<SummaryCard<CityEntry> prop={deathProp} data={total} />
 						</Grid.Column>
 					</Grid.Row>
 				</Suspense>

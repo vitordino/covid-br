@@ -10,7 +10,7 @@ import Spacer from 'components/Spacer'
 import Chart from 'components/Chart'
 
 type WrapperProps = {
-	prop: keyof StateEntry
+	prop: keyof StateEntry | keyof CityEntry
 	isSorted: boolean
 }
 
@@ -121,11 +121,7 @@ type TypeMap = {
 	kind: keyof typeof Kinds
 }
 
-type TypeMappings = {
-	[K in keyof StateEntry]?: TypeMap
-}
-
-const typeMapping: TypeMappings = {
+const typeMapping: Record<string, TypeMap> = {
 	tc: { scope: 'confirmados', isNew: false, kind: 'absolute' },
 	nc: { scope: 'confirmados', isNew: true, kind: 'absolute' },
 	ptc: { scope: 'confirmados', isNew: false, kind: 'relative' },

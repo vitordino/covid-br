@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { ReactNode } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import useStore from 'store'
@@ -46,15 +46,13 @@ const FlexText = styled(Text)`
 	}
 `
 
-type StatsCardProps<T> = {
+type SummaryCardProps<T> = {
 	prop: keyof T
-	dates: DatesEnum[]
 	data?: T
-	chartData?: T[]
 }
 
-type StatsCardType = {
-	<T extends object>(props: StatsCardProps<T>): ReactNode
+type SummaryCardType = {
+	<T extends object>(props: SummaryCardProps<T>): JSX.Element | null
 }
 
 type DataMappingOf<T> = {
@@ -62,10 +60,6 @@ type DataMappingOf<T> = {
 	mainAlt: keyof T
 	sub: keyof T
 	subAlt: keyof T
-}
-
-type DataMappingsOf<T> = {
-	[K in keyof T]?: DataMappingOf<T>
 }
 
 const dataMappingsBySort = {
@@ -78,9 +72,9 @@ const dataMappingsBySort = {
 } as const
 
 enum Scopes {
-	confirmed,
-	deaths,
-	recovered,
+	confirmados,
+	óbitos,
+	recuperados,
 }
 
 enum Kinds {
@@ -114,7 +108,7 @@ const typeMapping: TypeMappings = {
 }
 
 type RenderValueProps = {
-	value: number | ReactNode
+	value?: number | JSX.Element
 	isNew?: boolean
 	kind?: keyof typeof Kinds
 }
@@ -122,7 +116,7 @@ type RenderValueProps = {
 const MULTIPLIER = 10000
 
 const RenderValue = ({ value, isNew, kind }: RenderValueProps) => {
-	if (!value) return <br />
+	if (!value || typeof value !== 'number') return <br />
 	if (!isFinite(value)) return <>{value}</>
 	if (kind === 'relative')
 		return (
@@ -140,7 +134,7 @@ const RenderValue = ({ value, isNew, kind }: RenderValueProps) => {
 }
 
 type RenderProps = {
-	value: number | ReactNode
+	value?: number | JSX.Element
 	isNew?: boolean
 	kind?: keyof typeof Kinds
 	bold?: boolean
@@ -160,7 +154,7 @@ const Render = ({ bold, ...props }: RenderProps) => {
 	)
 }
 
-const StatsCard: StatsCardType = ({ prop, data, dates, chartData }) => {
+const SummaryCard: SummaryCardType = ({ prop, data }) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const isSorted = sort === prop
 	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[prop] || {}
@@ -195,4 +189,4 @@ const StatsCard: StatsCardType = ({ prop, data, dates, chartData }) => {
 	)
 }
 
-export default StatsCard
+export default SummaryCard
