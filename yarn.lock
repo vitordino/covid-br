@@ -1852,6 +1852,27 @@
     classnames "^2.2.5"
     prop-types "^15.6.2"
 
+"@vx/group@0.0.197":
+  version "0.0.197"
+  resolved "https://registry.yarnpkg.com/@vx/group/-/group-0.0.197.tgz#5dc06d21ccf1d519981545536f277b1c99faba46"
+  integrity sha512-7gzM0+WjwrGN5HzRzECm3xAKl5570ez30kx/jVYHX/M/ikHb6ytwkR2edZmQnmYNoZ0/6bdpSPi5ReGTP5jYPg==
+  dependencies:
+    "@types/classnames" "^2.2.9"
+    "@types/react" "*"
+    classnames "^2.2.5"
+    prop-types "^15.6.2"
+
+"@vx/heatmap@^0.0.197":
+  version "0.0.197"
+  resolved "https://registry.yarnpkg.com/@vx/heatmap/-/heatmap-0.0.197.tgz#e7d16bf6c965200fc3a65d8153d80c2be403b86c"
+  integrity sha512-v6GnHkVLsPMal8aOyI/Lt5aXJ5EiDJhXrJHij+XQyEP0C7g+arbm6K1+3MEPIWEI9CgYGDbN5sLCUg+uJ+bDlA==
+  dependencies:
+    "@types/classnames" "^2.2.9"
+    "@types/react" "*"
+    "@vx/group" "0.0.197"
+    classnames "^2.2.5"
+    prop-types "^15.6.1"
+
 "@vx/mock-data@^0.0.196":
   version "0.0.196"
   resolved "https://registry.yarnpkg.com/@vx/mock-data/-/mock-data-0.0.196.tgz#d4bc04f2a8c72197a07d1cd254822daad8a8d081"
@@ -1871,10 +1892,10 @@
     prop-types "^15.6.1"
     resize-observer-polyfill "1.5.1"
 
-"@vx/scale@^0.0.196":
-  version "0.0.196"
-  resolved "https://registry.yarnpkg.com/@vx/scale/-/scale-0.0.196.tgz#c34e08984ac91bd4cc085ee3b782a1cabcaf0dd3"
-  integrity sha512-s3lVbwEni0F9AGACaJG3m071uXVryoOgogiU6+yXv1O1gUoZMMm6AjzCndcz9jq1sCFDNcIrxyf5LomOA2tQaQ==
+"@vx/scale@^0.0.197":
+  version "0.0.197"
+  resolved "https://registry.yarnpkg.com/@vx/scale/-/scale-0.0.197.tgz#7a6acb2ad28b17d640f325d0d3fc47ab0e434db1"
+  integrity sha512-FF0POm9rh66I3Om5DsuxynwWU+Q645aTF47vgP2dVDeOOq3Oet7CZzmXLDh3W6nVcxvzq1UdPwu94dto2PUfhg==
   dependencies:
     "@types/d3-scale" "^2.1.1"
     d3-scale "^2.2.2"

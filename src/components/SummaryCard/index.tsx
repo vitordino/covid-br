@@ -1,16 +1,14 @@
 // @ts-nocheck
-import React, { ReactNode } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import useStore from 'store'
-import numToString from 'utils/numToString'
 import { getColorOf } from 'utils/colorScale'
 import Text from 'components/Text'
 import Spacer from 'components/Spacer'
-import Chart from 'components/Chart'
 
 type WrapperProps = {
-	prop: keyof StateEntry | keyof CityEntry
+	prop: keyof StateEntry
 	isSorted: boolean
 }
 
@@ -18,48 +16,23 @@ type WrapperProps = {
 const Wrapper = styled.button<WrapperProps>`
 	display: block;
 	width: 100%;
-	padding: 0.25rem 1rem 0.75rem;
+	padding: 0.5rem;
+	margin: 1rem 0;
 	position: relative;
-	margin: 1rem 1rem 1rem 0;
-	${p => p.theme.above('md')`
-		margin: 1rem 0;
-	`}
-	&:before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		width: 2px;
-		background: ${({ prop }) => getColorOf(prop)};
-	}
-	&:after {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 2px;
-		height: 0.75rem;
-		background: ${({ prop }) => getColorOf(prop)};
-		transform: rotate(-35deg);
-		transform-origin: top right;
-		opacity: ${p => (p.isSorted ? 1 : 0)};
-	}
 	${p => p.isSorted && `
 		cursor: default;
 	`}
 `
 
-const ChartContainer = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-`
-
-const Content = styled.div`
-	position: relative;
+// prettier-ignore
+const Title = styled(Text)`
+	text-align: left;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid var(--color-base11);
+	${p => p.isSorted && `
+		cursor: default;
+		border-color: ${getColorOf(p.prop)};
+	`}
 `
 
 const FlexText = styled(Text)`
@@ -73,15 +46,13 @@ const FlexText = styled(Text)`
 	}
 `
 
-type StatsCardProps<T> = {
+type SummaryCardProps<T> = {
 	prop: keyof T
-	dates: string[]
 	data?: T
-	chartData?: T[]
 }
 
-type StatsCardType = {
-	<T extends object>(props: StatsCardProps<T>): ReactNode
+type SummaryCardType = {
+	<T extends object>(props: SummaryCardProps<T>): JSX.Element | null
 }
 
 type DataMappingOf<T> = {
@@ -89,10 +60,6 @@ type DataMappingOf<T> = {
 	mainAlt: keyof T
 	sub: keyof T
 	subAlt: keyof T
-}
-
-type DataMappingsOf<T> = {
-	[K in keyof T]?: DataMappingOf<T>
 }
 
 const dataMappingsBySort = {
@@ -105,9 +72,9 @@ const dataMappingsBySort = {
 } as const
 
 enum Scopes {
-	confirmed,
-	deaths,
-	recovered,
+	confirmados,
+	óbitos,
+	recuperados,
 }
 
 enum Kinds {
@@ -121,7 +88,11 @@ type TypeMap = {
 	kind: keyof typeof Kinds
 }
 
-const typeMapping: Record<string, TypeMap> = {
+type TypeMappings = {
+	[K in keyof StateEntry]?: TypeMap
+}
+
+const typeMapping: TypeMappings = {
 	tc: { scope: 'confirmados', isNew: false, kind: 'absolute' },
 	nc: { scope: 'confirmados', isNew: true, kind: 'absolute' },
 	ptc: { scope: 'confirmados', isNew: false, kind: 'relative' },
@@ -137,7 +108,7 @@ const typeMapping: Record<string, TypeMap> = {
 }
 
 type RenderValueProps = {
-	value: number | ReactNode
+	value?: number | JSX.Element
 	isNew?: boolean
 	kind?: keyof typeof Kinds
 }
@@ -145,25 +116,25 @@ type RenderValueProps = {
 const MULTIPLIER = 10000
 
 const RenderValue = ({ value, isNew, kind }: RenderValueProps) => {
-	if (!value) return <br />
+	if (!value || typeof value !== 'number') return <br />
 	if (!isFinite(value)) return <>{value}</>
 	if (kind === 'relative')
 		return (
 			<>
 				{isNew && value > 0 ? '+ ' : ''}
-				{numToString(value * MULTIPLIER, true)}‱
+				{(value * MULTIPLIER).toFixed(2)}‱
 			</>
 		)
 	return (
 		<>
 			{isNew && value > 0 ? '+ ' : ''}
-			{numToString(value)}
+			{value}
 		</>
 	)
 }
 
 type RenderProps = {
-	value: number | ReactNode
+	value?: number | JSX.Element
 	isNew?: boolean
 	kind?: keyof typeof Kinds
 	bold?: boolean
@@ -183,7 +154,7 @@ const Render = ({ bold, ...props }: RenderProps) => {
 	)
 }
 
-const StatsCard: StatsCardType = ({ prop, data, dates, chartData }) => {
+const SummaryCard: SummaryCardType = ({ prop, data }) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const isSorted = sort === prop
 	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[prop] || {}
@@ -192,32 +163,30 @@ const StatsCard: StatsCardType = ({ prop, data, dates, chartData }) => {
 
 	return (
 		<Wrapper prop={prop} isSorted={isSorted} onClick={() => setSort(prop)}>
-			<ChartContainer>
-				{!!dates && !!prop && !!chartData && (
-					<Chart dates={dates} prop={prop} data={chartData} />
-				)}
-			</ChartContainer>
-			<Content>
-				{main && (
-					<FlexText weight={600} transform='capitalize' xs={0}>
-						{typeMapping[main]?.scope}
-					</FlexText>
-				)}
-				<Spacer.V xs={0.125} />
-				<FlexText xs={2}>
-					<Render bold value={data?.[main]} {...typeMapping[main]} />
-					{!!main && !!mainAlt && ' '}
-					<Render value={data?.[mainAlt]} {...typeMapping[mainAlt]} />
-				</FlexText>
-				<Spacer.V xs={0.125} />
-				<FlexText xs={0}>
-					<Render bold value={data?.[sub]} {...typeMapping[sub]} />
-					{!!sub && !!subAlt && ' '}
-					<Render value={data?.[subAlt]} {...typeMapping[subAlt]} />
-				</FlexText>
-			</Content>
+			<Title
+				prop={prop}
+				isSorted={isSorted}
+				weight={500}
+				transform='capitalize'
+				xs={2}
+				md={3}
+			>
+				{typeMapping[main]?.scope}
+			</Title>
+			<Spacer.V xs={0.5} md={1} />
+			<FlexText xs={2} md={3}>
+				<Render bold value={data?.[main]} {...typeMapping[main]} />
+				{!!mainAlt && ' '}
+				<Render value={data?.[mainAlt]} {...typeMapping[mainAlt]} />
+			</FlexText>
+			<Spacer.V xs={0.25} md={0.5} />
+			<FlexText xs={0} md={1}>
+				<Render bold value={data?.[sub]} {...typeMapping[sub]} />
+				{!!sub && !!subAlt && ' '}
+				<Render value={data?.[subAlt]} {...typeMapping[subAlt]} />
+			</FlexText>
 		</Wrapper>
 	)
 }
 
-export default StatsCard
+export default SummaryCard
