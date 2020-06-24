@@ -2,8 +2,6 @@ import React, { useMemo, useEffect } from 'react'
 import { useTable, useSortBy, Column } from 'react-table'
 
 import useStore from 'store'
-import { isStateProp } from 'utils/isPropOf'
-
 import type { CellProps } from './shared'
 
 import {
@@ -231,7 +229,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 
 	useEffect(() => {
 		const id = initialState.sortBy[0].id
-		if (isStateProp(id, data[0])) setSort(id)
+		if (data?.[0]?.[id]) setSort(id)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
