@@ -2,8 +2,6 @@ import React, { useMemo, useEffect } from 'react'
 import { useTable, useSortBy, Column } from 'react-table'
 
 import useStore from 'store'
-import { isCityProp } from 'utils/isPropOf'
-
 import type { CellProps } from './shared'
 
 import {
@@ -180,7 +178,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 
 	useEffect(() => {
 		const id = initialState.sortBy[0].id
-		if (isCityProp(id, data[0])) setSort(id)
+		if (data?.[0]?.[id]) setSort(id)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 

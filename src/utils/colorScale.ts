@@ -122,14 +122,6 @@ export type PropUnion = keyof typeof domains &
 	keyof typeof multipliers &
 	keyof typeof scales
 
-type GetSafeProp = (prop: string, fallbackProp?: PropUnion) => PropUnion
-
-// @ts-ignore
-const getSafeProp: GetSafeProp = (prop, fallbackProp) => {
-	if (isPropSafe(prop)) return prop
-	return fallbackProp
-}
-
 // @ts-ignore
 const colorScale = (domain, range) => scaleLinear(domain, range)
 
@@ -155,34 +147,26 @@ type GetRangeFill = (
 ) => (prop: string, fallbackProp?: string) => (entry: EntryUnion) => string
 
 export const getRangeFill: GetRangeFill = data => prop => entry => {
-	const safeProp = getSafeProp(prop, 'tc')
 	// @ts-ignore
-	const x = entry[safeProp]
-	if (typeof x !== 'number') return '#eee'
+	const x = entry?.[prop]
+	if (!isPropSafe(prop) || typeof x !== 'number') return '#eee'
 	// @ts-ignore
-	const highest = getHighest<EntryUnion>()(safeProp)(data)
+	const highest = getHighest<EntryUnion>()(prop)(data)
 
 	return colorScale(
-		getDomain(highest * multipliers[safeProp]),
-		scales[safeProp],
-	)(x * multipliers[safeProp])
+		getDomain(highest * multipliers[prop]),
+		scales[prop],
+	)(x * multipliers[prop])
 }
 
 export const getMapFill = (data: StateEntry[], id?: string) => (
 	prop: string,
-	fallbackProp: PropUnion = 'tc',
 ) => {
-	const safeProp = getSafeProp(prop, fallbackProp)
-
-	const x = data.find(({ st }) => st === id)?.[safeProp]
-	if (typeof x !== 'number') return '#eee'
-	return colorScale(
-		domains[safeProp],
-		scales[safeProp],
-	)(x * multipliers[safeProp])
+	const x = data.find(({ st }) => st === id)?.[prop]
+	if (!isPropSafe(prop) || typeof x !== 'number') return '#eee'
+	return colorScale(domains[prop], scales[prop])(x * multipliers[prop])
 }
 
 type GetColorOfType = (prop: string, n?: number) => string
 
-export const getColorOf: GetColorOfType = (prop, n = 4) =>
-	scales[getSafeProp(prop)][n]
+export const getColorOf: GetColorOfType = (prop, n = 4) => scales?.[prop]?.[n]
