@@ -63,7 +63,7 @@ type CityOutput = {
 const noop = () => ({})
 
 const url =
-	'https://cdn.jsdelivr.net/gh/wcota/covid19br@master/cases-brazil-cities-time.csv'
+	'https://raw.githubusercontent.com/wcota/covid19br/master/cases-brazil-cities-time.csv'
 
 type Outputs = StateMapOf<Record<string, CityOutput[] | undefined>>
 

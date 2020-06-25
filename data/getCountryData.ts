@@ -117,7 +117,7 @@ const numberDestinies = [
 ]
 
 const url =
-	'https://cdn.jsdelivr.net/gh/wcota/covid19br@master/cases-brazil-states.csv'
+	'https://raw.githubusercontent.com/wcota/covid19br/master/cases-brazil-states.csv'
 
 const getNewRecovered = ({ state, recovered }: StateEntry) => {
 	const stateLines = lines.filter(x => x.state === state)
@@ -217,7 +217,9 @@ const getHighestPopNewCase = getHighest<PopulationalEnhancedOutput>()('pnc')
 const getHighestPopDeath = getHighest<PopulationalEnhancedOutput>()('ptd')
 const getHighestPopNewDeath = getHighest<PopulationalEnhancedOutput>()('pnd')
 const getHighestPopRecovered = getHighest<PopulationalEnhancedOutput>()('ptr')
-const getHighestPopNewRecovered = getHighest<PopulationalEnhancedOutput>()('pnr')
+const getHighestPopNewRecovered = getHighest<PopulationalEnhancedOutput>()(
+	'pnr',
+)
 
 type EnhanceReducerFn = (
 	arr: Outputs,
