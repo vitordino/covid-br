@@ -159,7 +159,7 @@ const handleEnd = (rowCount: number) => {
 	Object.entries(latestOutputs).forEach(([k, v]) =>
 		write(
 			[getDestiny(k, '-latest')],
-			{ main: v, totals: getLatestTotals(k), dates },
+			{ main: v, totals: getLatestTotals(k), dates: [latestDate] },
 			handleWrite,
 		),
 	)

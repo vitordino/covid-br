@@ -373,7 +373,7 @@ const getLatestData = ({ main, totals, dates, states }: OutputDataType) => {
 	return {
 		main: { [latestDate]: main[latestDate] },
 		totals: { [latestDate]: totals[latestDate] },
-		dates,
+		dates: [latestDate],
 		states,
 	}
 }
