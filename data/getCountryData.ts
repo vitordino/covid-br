@@ -116,6 +116,8 @@ const numberDestinies = [
 	`${__dirname}/../src/data/numbers.json`,
 ]
 
+const latestDestinies = [`${__dirname}/../public/data/country-latest.json`]
+
 const url =
 	'https://raw.githubusercontent.com/wcota/covid19br/master/cases-brazil-states.csv'
 
@@ -358,11 +360,37 @@ const processLines = (input: StateEntries) => {
 	}
 }
 
+type OutputDataType = {
+	main: Record<string, EnhancedOutputs>
+	totals: Record<string, EnhancedOutput>
+	dates: string[]
+	states: StateMapOf<StateMeta>
+}
+
+const convertDateString = (s: string) => parseInt(s.replace(/-/g, ''))
+
+const compareDates = (a: string, b: string) =>
+	convertDateString(b) > convertDateString(a) ? b : a
+
+const getLatestDate = (dates: string[]) => dates.reduce(compareDates, '0')
+
+const getLatestData = ({ main, totals, dates, states }: OutputDataType) => {
+	const latestDate = getLatestDate(dates)
+	return {
+		main: { [latestDate]: main[latestDate] },
+		totals: { [latestDate]: totals[latestDate] },
+		dates,
+		states,
+	}
+}
+
 const handleEnd = (rowCount: number) => {
 	console.log(`Parsed ${rowCount} rows`)
 	const { main, totals, dates, states, ...rest } = processLines(lines)
+	const latest = getLatestData({ dates, main, totals, states })
 	write(destinies, { main, totals, dates, states }, handleWrite)
 	write(numberDestinies, rest, handleWrite)
+	write(latestDestinies, latest, handleWrite)
 }
 
 const exportedFunction = () =>
