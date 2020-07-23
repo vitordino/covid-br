@@ -1,7 +1,8 @@
 import { writeFile } from 'fs'
 import { get } from 'https'
 import { parse } from '@fast-csv/parse'
-import { groupBy, uniq, values } from 'ramda'
+import { groupBy, uniq } from 'ramda'
+import { getLatestDate } from './utils'
 
 const states: StatesMeta = require('./statesMeta.json')
 const totalPopulation = Object.values(states).reduce((a, { p }) => a + p, 0)
@@ -366,13 +367,6 @@ type OutputDataType = {
 	dates: string[]
 	states: StateMapOf<StateMeta>
 }
-
-const convertDateString = (s: string) => parseInt(s.replace(/-/g, ''))
-
-const compareDates = (a: string, b: string) =>
-	convertDateString(b) > convertDateString(a) ? b : a
-
-const getLatestDate = (dates: string[]) => dates.reduce(compareDates, '0')
 
 const getLatestData = ({ main, totals, dates, states }: OutputDataType) => {
 	const latestDate = getLatestDate(dates)
