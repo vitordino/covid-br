@@ -224,7 +224,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 					})}
 				</tbody>
 				<tfoot>
-					<TotalRow>
+					<TotalRow hasRange>
 						<td>
 							<Cell transform='capitalize'>Total</Cell>
 						</td>
