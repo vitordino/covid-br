@@ -189,11 +189,12 @@ const StatsCard: StatsCardType = ({ prop, data, dates, chartData }) => {
 	const { main, mainAlt, sub, subAlt } = dataMappingsBySort?.[prop] || {}
 
 	if (!main || !data) return null
+	const shouldRenderChart = dates.length > 1 && !!prop && !!chartData
 
 	return (
 		<Wrapper prop={prop} isSorted={isSorted} onClick={() => setSort(prop)}>
 			<ChartContainer>
-				{!!dates && !!prop && !!chartData && (
+				{shouldRenderChart && (
 					<Chart dates={dates} prop={prop} data={chartData} />
 				)}
 			</ChartContainer>

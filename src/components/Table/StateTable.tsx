@@ -27,9 +27,10 @@ type StateMeta = {
 type StateTableProps = {
 	data: CityEntry[]
 	total: CityEntry
+	hasRange: boolean
 }
 
-const StateTable = ({ data, total }: StateTableProps) => {
+const StateTable = ({ data, total, hasRange }: StateTableProps) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const relative = useStore(s => s.relative)
 	const [hoveredState, setHoveredState] = useStore(s => [
@@ -224,7 +225,7 @@ const StateTable = ({ data, total }: StateTableProps) => {
 					})}
 				</tbody>
 				<tfoot>
-					<TotalRow>
+					<TotalRow hasRange={hasRange}>
 						<td>
 							<Cell transform='capitalize'>Total</Cell>
 						</td>

@@ -45,6 +45,7 @@ interface InnerProps extends StateDataType {
 }
 
 const Inner = ({ id, main, totals, dates }: InnerProps) => {
+	const datesLength = dates.length
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
 	const relative = useStore(s => s.relative)
 	const hoveredState = useStore(s => s.hoveredState)
@@ -64,18 +65,24 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 						.flatMap(x => x)
 						.filter(x => x.ct === hoveredState)
 				: Object.values(totals),
-		[hoveredState],
+		[hoveredState, datesLength],
 	)
 	/* eslint-enable react-hooks/exhaustive-deps */
 
 	const caseProp = relative ? 'ptc' : 'tc'
 	const deathProp = relative ? 'ptd' : 'td'
 
+	const hasRange = datesLength > 1
+
 	useLayoutEffect(() => {
 		reset()
-		setDateIndex(dates.length - 1)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+
+	useLayoutEffect(() => {
+		setDateIndex(datesLength - 1)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [datesLength])
 
 	useRelativeSortSync()
 
@@ -104,7 +111,9 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
 						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
-						<StateTable data={data} total={total} />
+						{data && (
+							<StateTable data={data} total={total} hasRange={hasRange} />
+						)}
 					</Grid.Column>
 					<Sidebar xs={16} lg={6}>
 						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
@@ -140,11 +149,14 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 }
 
 const State = ({ id }: StateProps) => {
-	const { data, error } = useSWR<any>(`/data/${id}.json`, fetcher, {
-		suspense: true,
-	})
-	if (!data || error) return null
-	const { main, dates, totals } = data
+	const { data: latestData, error } = useSWR<any>(
+		`/data/${id}-latest.json`,
+		fetcher,
+		{ suspense: true },
+	)
+	const { data } = useSWR<any>(`/data/${id}.json`, fetcher)
+	if (!latestData || error) return null
+	const { main, dates, totals } = data || latestData
 	return <Inner id={id} main={main} dates={dates} totals={totals} />
 }
 

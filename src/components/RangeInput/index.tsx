@@ -9,15 +9,26 @@ type RangeInputProps = {
 	totals: Record<string, EntryUnion>
 }
 
-const Wrapper = styled.label`
+type WrapperProps = {
+	isVisible: boolean
+}
+
+// prettier-ignore
+const Wrapper = styled.label<WrapperProps>`
 	display: flex;
 	position: fixed;
 	width: 100%;
 	bottom: 0;
 	z-index: 1;
 	height: 0.75rem;
-	transition: height 0.2s;
 	box-shadow: 0 0 0 0.125rem var(--color-base00);
+	transform: translateY(200%);
+	transition: height 0.2s, 0.5s transform;
+	pointer-events: none;
+	${p => p.isVisible && css`
+		transform: translateY(0);
+		pointer-events: auto;
+	`}
 	&:hover {
 		overflow: visible;
 		height: 1.25rem;
@@ -91,7 +102,7 @@ const RangeInput = ({ dates, totals }: RangeInputProps) => {
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
 	const rangeFill = getRangeFill(Object.values(totals))(sort)
 	return (
-		<Wrapper aria-label='time slider'>
+		<Wrapper aria-label='time slider' isVisible={dates.length > 1}>
 			<Field
 				type='range'
 				min={0}

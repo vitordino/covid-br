@@ -1,7 +1,8 @@
 import { writeFile } from 'fs'
 import { get } from 'https'
 import { parse } from '@fast-csv/parse'
-import { groupBy, uniq, values } from 'ramda'
+import { groupBy, uniq } from 'ramda'
+import { getLatestDate } from './utils'
 
 const states: StatesMeta = require('./statesMeta.json')
 const totalPopulation = Object.values(states).reduce((a, { p }) => a + p, 0)
@@ -115,6 +116,8 @@ const numberDestinies = [
 	`${__dirname}/../public/data/numbers.json`,
 	`${__dirname}/../src/data/numbers.json`,
 ]
+
+const latestDestinies = [`${__dirname}/../public/data/country-latest.json`]
 
 const url =
 	'https://raw.githubusercontent.com/wcota/covid19br/master/cases-brazil-states.csv'
@@ -358,11 +361,30 @@ const processLines = (input: StateEntries) => {
 	}
 }
 
+type OutputDataType = {
+	main: Record<string, EnhancedOutputs>
+	totals: Record<string, EnhancedOutput>
+	dates: string[]
+	states: StateMapOf<StateMeta>
+}
+
+const getLatestData = ({ main, totals, dates, states }: OutputDataType) => {
+	const latestDate = getLatestDate(dates)
+	return {
+		main: { [latestDate]: main[latestDate] },
+		totals: { [latestDate]: totals[latestDate] },
+		dates: [latestDate],
+		states,
+	}
+}
+
 const handleEnd = (rowCount: number) => {
 	console.log(`Parsed ${rowCount} rows`)
 	const { main, totals, dates, states, ...rest } = processLines(lines)
+	const latest = getLatestData({ dates, main, totals, states })
 	write(destinies, { main, totals, dates, states }, handleWrite)
 	write(numberDestinies, rest, handleWrite)
+	write(latestDestinies, latest, handleWrite)
 }
 
 const exportedFunction = () =>

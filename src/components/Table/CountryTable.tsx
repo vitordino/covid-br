@@ -26,9 +26,15 @@ type CountryTableProps = {
 	data: StateEntry[]
 	total: StateEntry
 	statesMeta: StatesMeta
+	hasRange: boolean
 }
 
-const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
+const CountryTable = ({
+	data,
+	total,
+	statesMeta,
+	hasRange,
+}: CountryTableProps) => {
 	const [sort, setSort] = useStore(s => [s.sort, s.setSort])
 	const relative = useStore(s => s.relative)
 	const daily = useStore(s => s.daily)
@@ -275,7 +281,7 @@ const CountryTable = ({ data, total, statesMeta }: CountryTableProps) => {
 					})}
 				</tbody>
 				<tfoot>
-					<TotalRow>
+					<TotalRow hasRange={hasRange}>
 						<td>
 							<Cell transform='capitalize'>{total.st.toLowerCase()}</Cell>
 						</td>

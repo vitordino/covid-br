@@ -36,10 +36,12 @@ type CountryDataType = {
 }
 
 const Inner = ({ main, totals, dates, states }: CountryDataType) => {
+	const datesLength = dates.length
 	const hoveredState = useStore(s => s.hoveredState)
 	const relative = useStore(s => s.relative)
 	const reset = useStore(s => s.reset)
 	const [dateIndex, setDateIndex] = useStore(s => [s.dateIndex, s.setDateIndex])
+
 	/* eslint-disable react-hooks/exhaustive-deps */
 	const data: StateEntry[] = useMemo(() => main[dates[dateIndex]], [
 		dateIndex,
@@ -58,12 +60,14 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 						.flatMap(x => x)
 						.filter(x => x.st === hoveredState)
 				: Object.values(totals),
-		[hoveredState, main, totals],
+		[hoveredState, main, totals, datesLength],
 	)
 	/* eslint-enable react-hooks/exhaustive-deps */
 	const caseProp = relative ? 'ptc' : 'tc'
 	const deathProp = relative ? 'ptd' : 'td'
 	const recoveredProp = relative ? 'ptr' : 'tr'
+
+	const hasRange = datesLength > 1
 
 	// @ts-ignore
 	const hoveredTitle = states[hoveredState]?.n || 'Total'
@@ -73,9 +77,12 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 
 	useLayoutEffect(() => {
 		reset()
-		setDateIndex(dates.length - 1)
+	}, [reset])
+
+	useLayoutEffect(() => {
+		setDateIndex(datesLength - 1)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+	}, [setDateIndex, datesLength])
 
 	useRelativeSortSync()
 
@@ -107,7 +114,14 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10} xg={12}>
 						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
-						<CountryTable data={data} total={total} statesMeta={states} />
+						{data && (
+							<CountryTable
+								data={data}
+								total={total}
+								statesMeta={states}
+								hasRange={hasRange}
+							/>
+						)}
 					</Grid.Column>
 					<Sidebar xs={16} lg={6} xg={4}>
 						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
@@ -149,13 +163,14 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 }
 
 const Home = () => {
-	const { data, error } = useSWR<CountryDataType>(
-		'/data/country.json',
+	const { data: latestData, error } = useSWR<CountryDataType>(
+		'/data/country-latest.json',
 		fetcher,
 		{ suspense: true },
 	)
-	if (!data || error) return null
-	const { main, totals, dates, states } = data
+	const { data } = useSWR<CountryDataType>('/data/country.json', fetcher)
+	if (!latestData || error) return null
+	const { main, totals, dates, states } = data || latestData
 	return <Inner main={main} totals={totals} dates={dates} states={states} />
 }
 

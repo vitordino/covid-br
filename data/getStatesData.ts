@@ -1,7 +1,11 @@
 import { writeFile } from 'fs'
 import { get } from 'https'
 import { parse } from '@fast-csv/parse'
+import { MULTIPLIER, getLatestDate } from './utils'
+// @ts-ignore
 import { main, dates } from './country.json'
+
+const latestDate = getLatestDate(dates)
 
 const selectKeys = (keys: string[]) => (obj: Record<string, any>) =>
 	Object.entries(obj).reduce((acc, [k, v]) => {
@@ -22,6 +26,12 @@ const getTotals = (id: string) =>
 		}),
 		{},
 	)
+
+const getLatestTotals = (id: string) => ({
+	[latestDate]: main[latestDate]
+		.filter(({ st }) => st === id)
+		.map(clearMainKeys)[0],
+})
 
 // prettier-ignore
 enum StatesEnum { SP,	MG,	RJ,	BA,	PR,	RS,	PE,	CE,	PA,	SC,	MA,	GO,	AM,	ES,	PB,	RN,	MT,	AL,	PI,	DF,	MS,	SE,	RO,	TO,	AC,	AP,	RR }
@@ -60,8 +70,6 @@ type CityOutput = {
 	dbc: number
 }
 
-const noop = () => ({})
-
 const url =
 	'https://raw.githubusercontent.com/wcota/covid19br/master/cases-brazil-cities-time.csv'
 
@@ -69,6 +77,9 @@ type Outputs = StateMapOf<Record<string, CityOutput[] | undefined>>
 
 // prettier-ignore
 const outputs: Outputs = { SP: {}, MG: {}, RJ: {}, BA: {}, PR: {}, RS: {}, PE: {}, CE: {}, PA: {}, SC: {}, MA: {}, GO: {}, AM: {}, ES: {}, PB: {}, RN: {}, MT: {}, AL: {}, PI: {}, DF: {}, MS: {}, SE: {}, RO: {}, TO: {}, AC: {}, AP: {}, RR: {} }
+
+// prettier-ignore
+const latestOutputs: Outputs = { SP: {}, MG: {}, RJ: {}, BA: {}, PR: {}, RS: {}, PE: {}, CE: {}, PA: {}, SC: {}, MA: {}, GO: {}, AM: {}, ES: {}, PB: {}, RN: {}, MT: {}, AL: {}, PI: {}, DF: {}, MS: {}, SE: {}, RO: {}, TO: {}, AC: {}, AP: {}, RR: {} }
 
 const write = (
 	destinies: Array<string> = [],
@@ -79,6 +90,11 @@ const write = (
 	destinies.forEach((directory, index) =>
 		writeFile(directory, json, x => handle(!!x, directory, index)),
 	)
+}
+
+const handleWrite = (err: boolean, destiny: string) => {
+	if (err) return console.error(destiny)
+	return console.log(`file ${destiny} was saved`)
 }
 
 const renameLineData = ({
@@ -100,35 +116,52 @@ const renameLineData = ({
 	nc: parseInt(newCases),
 	td: parseInt(deaths),
 	nd: parseInt(newDeaths),
-	ptd: +(parseFloat(deaths_per_100k_inhabitants) / 100000).toFixed(6),
-	ptc: +(parseFloat(totalCases_per_100k_inhabitants) / 100000).toFixed(6),
+	ptd: +(parseFloat(deaths_per_100k_inhabitants) / MULTIPLIER).toFixed(6),
+	ptc: +(parseFloat(totalCases_per_100k_inhabitants) / MULTIPLIER).toFixed(6),
 	dbc: +parseFloat(deaths_by_totalCases).toFixed(6),
 })
 
-const pushLineToStateDate = (state: StateKeys, date: string) => (
-	line: Record<string, any>,
-) => {
-	if (!(state in outputs)) outputs[state] = {}
-	if (!(date in outputs[state])) outputs[state][date] = []
+const pushStateDateLineToCollection = (collection: Outputs) => (
+	state: StateKeys,
+	date: string,
+) => (line: Record<string, any>) => {
+	if (!(state in collection)) collection[state] = {}
+	if (!(date in collection[state])) collection[state][date] = []
 	// @ts-ignore
-	outputs[state][date].push(line)
+	collection[state][date].push(line)
 }
+
+const pushToOutputs = pushStateDateLineToCollection(outputs)
+const pushToLatestOutputs = pushStateDateLineToCollection(latestOutputs)
 
 const handleError = (err: string) => {
 	throw new Error(err)
 }
 
 const handleData = ({ state, date, ...line }: CityEntry) => {
-	pushLineToStateDate(state, date)(renameLineData({ state, date, ...line }))
+	pushToOutputs(state, date)(renameLineData({ state, date, ...line }))
+	if (date !== latestDate) return
+	pushToLatestOutputs(state, date)(renameLineData({ state, date, ...line }))
 }
 
-const getDestiny = (x: string) =>
-	`${__dirname}/../public/data/${x.toLowerCase()}.json`
+const getDestiny = (x: string, suffix: string = '') =>
+	`${__dirname}/../public/data/${x.toLowerCase()}${suffix}.json`
 
 const handleEnd = (rowCount: number) => {
 	console.log(`Parsed ${rowCount} rows`)
 	Object.entries(outputs).forEach(([k, v]) =>
-		write([getDestiny(k)], { main: v, totals: getTotals(k), dates }, noop),
+		write(
+			[getDestiny(k)],
+			{ main: v, totals: getTotals(k), dates },
+			handleWrite,
+		),
+	)
+	Object.entries(latestOutputs).forEach(([k, v]) =>
+		write(
+			[getDestiny(k, '-latest')],
+			{ main: v, totals: getLatestTotals(k), dates: [latestDate] },
+			handleWrite,
+		),
 	)
 }
 

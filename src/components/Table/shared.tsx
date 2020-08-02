@@ -135,12 +135,17 @@ export const Header = ({ children, column, isVisible }: HeaderProps) => {
 	)
 }
 
-export const TotalRow = styled.tr`
+type TotalRowProps = {
+	hasRange: boolean
+}
+
+export const TotalRow = styled.tr<TotalRowProps>`
 	td {
 		background: transparent !important;
 		position: sticky;
-		bottom: 0.5rem;
+		bottom: ${p => (p.hasRange ? '0.5rem' : 0)};
 		padding-top: 0.5rem;
+		transition: 0.3s bottom;
 	}
 	& > * > * {
 		background: var(--color-base00);
