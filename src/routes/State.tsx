@@ -111,7 +111,9 @@ const Inner = ({ id, main, totals, dates }: InnerProps) => {
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10}>
 						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
-						<StateTable data={data} total={total} hasRange={hasRange} />
+						{data && (
+							<StateTable data={data} total={total} hasRange={hasRange} />
+						)}
 					</Grid.Column>
 					<Sidebar xs={16} lg={6}>
 						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />

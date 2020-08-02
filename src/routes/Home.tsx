@@ -114,12 +114,14 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 				<Grid.Row>
 					<Grid.Column xs={16} lg={10} xg={12}>
 						<RelativeAndDailySwitcher visibleOn={['xs', 'sm', 'md']} />
-						<CountryTable
-							data={data}
-							total={total}
-							statesMeta={states}
-							hasRange={hasRange}
-						/>
+						{data && (
+							<CountryTable
+								data={data}
+								total={total}
+								statesMeta={states}
+								hasRange={hasRange}
+							/>
+						)}
 					</Grid.Column>
 					<Sidebar xs={16} lg={6} xg={4}>
 						<RelativeAndDailySwitcher visibleOn={['lg', 'xg']} />
