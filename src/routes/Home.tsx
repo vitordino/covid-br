@@ -60,14 +60,14 @@ const Inner = ({ main, totals, dates, states }: CountryDataType) => {
 						.flatMap(x => x)
 						.filter(x => x.st === hoveredState)
 				: Object.values(totals),
-		[hoveredState, main, totals],
+		[hoveredState, main, totals, datesLength],
 	)
 	/* eslint-enable react-hooks/exhaustive-deps */
 	const caseProp = relative ? 'ptc' : 'tc'
 	const deathProp = relative ? 'ptd' : 'td'
 	const recoveredProp = relative ? 'ptr' : 'tr'
 
-	const hasRange = dates.length > 1
+	const hasRange = datesLength > 1
 
 	// @ts-ignore
 	const hoveredTitle = states[hoveredState]?.n || 'Total'
