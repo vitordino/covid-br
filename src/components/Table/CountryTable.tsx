@@ -90,6 +90,7 @@ const CountryTable = ({
 						mainRender={getCellRender(relative, daily)}
 						isVisible={!relative}
 						to={`/${row.values.st.toLowerCase()}`}
+						tabIndex={-1}
 					/>
 				),
 			},
@@ -111,6 +112,7 @@ const CountryTable = ({
 						mainRender={getCellRender(relative, daily)}
 						isVisible={!relative}
 						to={`/${row.values.st.toLowerCase()}`}
+						tabIndex={-1}
 					/>
 				),
 			},
@@ -132,6 +134,7 @@ const CountryTable = ({
 						mainRender={getCellRender(relative, daily)}
 						isVisible={!relative}
 						to={`/${row.values.st.toLowerCase()}`}
+						tabIndex={-1}
 					/>
 				),
 			},
@@ -154,6 +157,7 @@ const CountryTable = ({
 						mainRender={getCellRender(relative, daily)}
 						isVisible={relative}
 						to={`/${row.values.st.toLowerCase()}`}
+						tabIndex={-1}
 					/>
 				),
 			},
@@ -176,6 +180,7 @@ const CountryTable = ({
 						mainRender={getCellRender(relative, daily)}
 						isVisible={relative}
 						to={`/${row.values.st.toLowerCase()}`}
+						tabIndex={-1}
 					/>
 				),
 			},
@@ -198,6 +203,7 @@ const CountryTable = ({
 						mainRender={getCellRender(relative, daily)}
 						isVisible={relative}
 						to={`/${row.values.st.toLowerCase()}`}
+						tabIndex={-1}
 					/>
 				),
 			},

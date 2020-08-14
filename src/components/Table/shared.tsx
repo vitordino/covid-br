@@ -35,6 +35,7 @@ type StaticCellProps = {
 	bold?: boolean
 	transform?: Transform
 	to?: string | null
+	tabIndex?: number
 }
 
 export const CellWrapper = styled(Text)`
@@ -60,9 +61,15 @@ export const Cell = ({
 	transform,
 	bold = true,
 	to,
+	tabIndex,
 }: StaticCellProps) => (
-	// @ts-ignore
-	<CellWrapper as={to ? Link : null} to={to} transform={transform}>
+	<CellWrapper
+		// @ts-ignore
+		as={to ? Link : null}
+		to={to}
+		transform={transform}
+		tabIndex={tabIndex}
+	>
 		{!!left && <Left>{left}</Left>}
 		{!!left && '\t'}
 		{bold && <strong>{children || <br />}</strong>}
@@ -81,6 +88,7 @@ type DynamicCellProps<T> = {
 	children?: ReactNode
 	isVisible: boolean
 	to?: string | null
+	tabIndex?: number
 }
 
 type DynamicCellType = {
@@ -98,10 +106,15 @@ export const DynamicCell: DynamicCellType = ({
 	children,
 	isVisible = true,
 	to,
+	tabIndex,
 }) => {
 	if (!isVisible) return null
 	return (
-		<Cell to={to} left={leftProp && leftRender(data?.[row.index]?.[leftProp])}>
+		<Cell
+			to={to}
+			left={leftProp && leftRender(data?.[row.index]?.[leftProp])}
+			tabIndex={tabIndex}
+		>
 			{children || mainRender(row.values?.[prop || column.id])}
 		</Cell>
 	)
