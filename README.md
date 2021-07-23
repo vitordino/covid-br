@@ -1,4 +1,7 @@
 # covid — br
+> this app was previously hosted at [`covid-br.com`](https://covid-br.com) but i lended the domain to a vaccination dashboard because it’s more useful now.
+
+> all the information this dashboard shows is best presented elsewhere now, i did this when our government stopped disclosuring official data about covid cases/deaths.
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/08af73cb-e15a-43b4-8c2f-705810c7888a/deploy-status)](https://app.netlify.com/sites/covid-br/deploys)
 
